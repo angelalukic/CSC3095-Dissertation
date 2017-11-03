@@ -23,12 +23,12 @@ public class TwitterIntegration {
 	
 	Message message;
 	
-	private static final long TWITTER_ID = /**/;
-	private static final String BOT_FEED_CHANNEL = /**/;
-	private static final String TWITTER_CONSUMER_KEY = /**/;
-	private static final String TWITTER_CONSUMER_SECRET = /**/;
-	private static final String TWITTER_ACCESS_TOKEN = /**/;
-	private static final String ACCESS_TOKEN_SECRET = /**/;
+	private static final long TWITTER_ID = 780352244080336896L;
+	private static final String BOT_FEED_CHANNEL = "375672676859248660";
+	private static final String TWITTER_CONSUMER_KEY = "cZQadRi06HSjbKtf2z4fl1GF4";
+	private static final String TWITTER_CONSUMER_SECRET = "WrNh89Q2C23ZcL3GDPezRJjlAN9uIRmkLENgXIteOwlchom7lL";
+	private static final String TWITTER_ACCESS_TOKEN = "780352244080336896-MmKjV98lPekthHQVtpUoFgr6gOJzUm1";
+	private static final String ACCESS_TOKEN_SECRET = "zbxhxkKXHzR56l2WfYmzfSHNuaSH2zuPhV58DHvEwNHOQ";
 	
 	public TwitterIntegration(Message message) {
 		this.message = message;
@@ -58,8 +58,10 @@ public class TwitterIntegration {
 	private StatusListener createListener() {
 		return new StatusListener(){
             public void onStatus(Status status) {
-            	message.getChannelReceiver().getServer().getChannelById(BOT_FEED_CHANNEL)
-            		.sendMessage("", postStatus(status));
+            	if(!status.isRetweet()) {
+	            	message.getChannelReceiver().getServer().getChannelById(BOT_FEED_CHANNEL)
+	            		.sendMessage("", postStatus(status));
+            	}
             }
             public void onException(Exception ex) {
             	log.error(ex.getMessage());
@@ -75,9 +77,10 @@ public class TwitterIntegration {
 		
 		EmbedBuilder output = new EmbedBuilder();
 		
-		output.setTitle("Twitter: @" + status.getUser().getScreenName());
+		output.setAuthor("Twitter: @" + status.getUser().getScreenName(), 
+				"https://twitter.com/NewcastleGaming/status/" + status.getId(), 
+				status.getUser().getProfileImageURL());
 		output.setDescription(status.getText());
-		output.setFooter(status.getCreatedAt().toString(), status.getUser().getProfileImageURL());
 		output.setColor(new Color(0,132,180));
 		
 		return output;
