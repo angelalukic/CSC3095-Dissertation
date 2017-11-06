@@ -1,6 +1,5 @@
 package com.bot.app;
 
-import com.bot.filter.WordFilter;
 import com.bot.twitter.TwitterIntegration;
 
 import de.btobastian.javacord.DiscordAPI;
@@ -12,7 +11,7 @@ public class BotApp {
 
 	public static void main(String[] args) {
 
-		DiscordAPI api = Javacord.getApi("", true);
+		DiscordAPI api = Javacord.getApi("Mzc0ODUwOTAzNjQ5NDE5MjY0.DN4uSA.C24-ARGtnRglzu58abtHl5RvGQU", true);
 		api.connectBlocking();
 		
 		final TwitterIntegration twitter = new TwitterIntegration(null);
@@ -22,13 +21,9 @@ public class BotApp {
 			public void onMessageCreate(DiscordAPI api, Message message) {
 				
 				twitter.setMessage(message);
-
-				if (message.getContent().contains("rf!music")) {
-					message.reply("Soon...");
-				} else {
-					WordFilter filter = new WordFilter(message);
-					filter.checkMessage();
-				}
+				
+				Command command = new Command(message);
+				command.execute();
 			}
 		});
 	}
