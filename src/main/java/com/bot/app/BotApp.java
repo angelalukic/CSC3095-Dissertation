@@ -1,6 +1,9 @@
 package com.bot.app;
 
 import com.bot.filter.WordFilter;
+import com.bot.fun.Action;
+import com.bot.fun.Give;
+import com.bot.fun.Hug;
 import com.bot.twitter.TwitterIntegration;
 
 import de.btobastian.javacord.DiscordAPI;
@@ -23,9 +26,31 @@ public class BotApp {
 				
 				twitter.setMessage(message);
 
-				if (message.getContent().contains("rf!music")) {
+				if (message.getContent().toLowerCase().contains("rf!music")) {
 					message.reply("Soon...");
-				} else {
+				} 
+				
+				else if(message.getContent().toLowerCase().contains("rf!give")) {
+					try {
+						String[] args = message.getContent().split(" ");
+						Action give = new Give(message, message.getMentions().get(0), args[1]);
+						give.reply();
+					} catch(IndexOutOfBoundsException e) {
+						message.reply("You didn't give me someone to give this item to..");
+					}
+				}
+				
+				else if(message.getContent().toLowerCase().contains("rf!hug")) {
+					try {
+						Action hug = new Hug(message, message.getMentions().get(0));
+						hug.reply();
+					} catch(IndexOutOfBoundsException e) {
+						message.reply("You didn't give me someone to hug..");
+					}
+				}
+				
+				
+				else {
 					WordFilter filter = new WordFilter(message);
 					filter.checkMessage();
 				}
