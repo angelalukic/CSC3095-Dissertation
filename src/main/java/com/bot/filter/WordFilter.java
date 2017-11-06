@@ -16,7 +16,6 @@ import de.btobastian.javacord.entities.message.Message;
 public class WordFilter {	
 	
 	private Message message;
-	private String[] input;
 	private Map<String, String> flaggedWords;
 	FilterNotification adminNotif;
 	FilterNotification userNotif;
@@ -26,14 +25,17 @@ public class WordFilter {
 
 	public WordFilter(Message message) {
 		this.message = message;
-		this.input = message.getContent().toLowerCase().split("\\s+");
 	}
 	
 	public void checkMessage() {
 		
-		checkHighUrgencyWords(new HighUrgencyWords());
-		checkMediumUrgencyWords(new MediumUrgencyWords());
-		checkLowPriorityWords(new LowUrgencyWords());
+		Filter filter = new Filter();
+		String noDupes = filter.removeDuplicateChars(message.toString().toLowerCase());
+		String[] inputWords = filter.splitIntoWordArray(noDupes);
+		
+		checkHighUrgencyWords(new HighUrgencyWords(), inputWords);
+		checkMediumUrgencyWords(new MediumUrgencyWords(), inputWords);
+		checkLowPriorityWords(new LowUrgencyWords(), inputWords);
 		
 		if(message.getContent().toLowerCase().contains("genji")
 				|| message.getContent().toLowerCase().contains("robotfucker")) {
@@ -42,9 +44,9 @@ public class WordFilter {
 		}
 	}
 
-	private void checkHighUrgencyWords(HighUrgencyWords words) {
+	private void checkHighUrgencyWords(HighUrgencyWords words, String[] inputWords) {
 		
-		flaggedWords = words.checkWords(Arrays.asList(input));
+		flaggedWords = words.checkWords(Arrays.asList(inputWords));
 		
 		if(!flaggedWords.isEmpty()) {
 			
@@ -64,9 +66,9 @@ public class WordFilter {
 		}
 	}
 	
-	private void checkMediumUrgencyWords(MediumUrgencyWords words) {
+	private void checkMediumUrgencyWords(MediumUrgencyWords words, String[] inputWords) {
 		
-		flaggedWords = words.checkWords(Arrays.asList(input));
+		flaggedWords = words.checkWords(Arrays.asList(inputWords));
 		
 		if(!flaggedWords.isEmpty()) {
 			
@@ -84,9 +86,9 @@ public class WordFilter {
 		}
 	}
 	
-	private void checkLowPriorityWords(LowUrgencyWords words) {
+	private void checkLowPriorityWords(LowUrgencyWords words, String[] inputWords) {
 
-		flaggedWords = words.checkWords(Arrays.asList(input));
+		flaggedWords = words.checkWords(Arrays.asList(inputWords));
 		
 		if(!flaggedWords.isEmpty()) {
 			
