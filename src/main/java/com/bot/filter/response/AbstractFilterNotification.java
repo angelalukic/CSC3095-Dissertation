@@ -1,4 +1,4 @@
-package com.bot.response;
+package com.bot.filter.response;
 
 import java.awt.Color;
 
@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class AbstractFilterNotification implements Notification {
+public abstract class AbstractFilterNotification implements FilterNotification {
 	
 	private Message message;
 	private String flaggedWord;

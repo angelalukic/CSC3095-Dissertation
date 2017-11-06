@@ -1,10 +1,10 @@
-package com.bot.response;
+package com.bot.filter.response;
 
 import java.awt.Color;
 
 import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 
-public interface Notification {
+public interface FilterNotification {
 	
 	public void sendCaution();
 	

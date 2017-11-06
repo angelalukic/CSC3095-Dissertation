@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.bot.response.AdminFilterNotification;
-import com.bot.response.UserFilterNotification;
+import com.bot.filter.response.AdminFilterNotification;
+import com.bot.filter.response.UserFilterNotification;
 
 import de.btobastian.javacord.entities.message.Message;
 
