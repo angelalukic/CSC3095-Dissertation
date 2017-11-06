@@ -8,6 +8,8 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.bot.filter.words.HighUrgencyWords;
+
 public class WordsTest {
 	
 	HighUrgencyWords words;

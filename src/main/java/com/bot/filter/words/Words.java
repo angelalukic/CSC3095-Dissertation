@@ -1,4 +1,4 @@
-package com.bot.filter;
+package com.bot.filter.words;
 
 public interface Words {
 	

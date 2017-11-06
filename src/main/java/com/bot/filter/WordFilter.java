@@ -1,12 +1,15 @@
 package com.bot.filter;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import com.bot.filter.response.AdminFilterNotification;
 import com.bot.filter.response.FilterNotification;
 import com.bot.filter.response.UserFilterNotification;
+import com.bot.filter.words.HighUrgencyWords;
+import com.bot.filter.words.LowUrgencyWords;
+import com.bot.filter.words.MediumUrgencyWords;
+import com.bot.filter.words.Words;
 
 import de.btobastian.javacord.entities.message.Message;
 

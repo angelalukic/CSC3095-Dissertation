@@ -1,4 +1,4 @@
-package com.bot.filter;
+package com.bot.filter.words;
 
 import java.util.HashMap;
 import java.util.List;
