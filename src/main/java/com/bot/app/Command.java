@@ -20,7 +20,8 @@ public class Command {
 		WordFilter filter = new WordFilter(message);
 		filter.checkMessage();
 		
-		if(message.getContent().substring(0,3).equalsIgnoreCase("rf!")) {
+		if(message.getContent().length() > 2 && 
+				message.getContent().substring(0,3).equalsIgnoreCase("rf!")) {
 			String input = message.getContent().replace("rf!", "");
 			determineCommand(splitArguments(input));
 		}		

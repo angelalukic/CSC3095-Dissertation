@@ -11,7 +11,7 @@ public class BotApp {
 
 	public static void main(String[] args) {
 
-		DiscordAPI api = Javacord.getApi("Mzc0ODUwOTAzNjQ5NDE5MjY0.DN4uSA.C24-ARGtnRglzu58abtHl5RvGQU", true);
+		DiscordAPI api = Javacord.getApi("", true);
 		api.connectBlocking();
 		
 		final TwitterIntegration twitter = new TwitterIntegration(null);
