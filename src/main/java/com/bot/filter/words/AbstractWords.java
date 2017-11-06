@@ -1,8 +1,11 @@
 package com.bot.filter.words;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.bot.filter.Filter;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,16 +16,35 @@ public abstract class AbstractWords implements Words {
 	
 	private List<String> words;
 	private List<String> exceptions;
+	Map<String, String> flaggedWords;
 	
-	public Map<String, String> checkWords(List<String> input) {
+	public String checkWords(String[] input) {
 		
-		Map<String, String> flaggedWords = new HashMap<String, String>();
+		flaggedWords = findWordsToFlag(Arrays.asList(input));
+		
+		if(!flaggedWords.isEmpty()) {
+			
+			for(String word : flaggedWords.keySet()) {
+				
+				if(checkExceptions(word) != null) {
+					return word;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public Map<String, String> findWordsToFlag(List<String> input) {
+		
+		flaggedWords = new HashMap<String, String>();
 		
 		for(String word : getWords()) {
 			
+			String noDupes = new Filter().removeDuplicateChars(word);
+			
 			for(String inputWord : input) {
 				
-				if(inputWord.contains(word)) {
+				if(inputWord.contains(noDupes)) {
 					flaggedWords.put(inputWord, word);
 				}
 			}
@@ -34,7 +56,7 @@ public abstract class AbstractWords implements Words {
 		
 		for(String exception : getExceptions()) {
 			
-			if(flaggedWord.replaceAll("[^a-zA-Z ]", "").contains(exception)) {
+			if(flaggedWord.replaceAll("[^a-zA-Z ]", "").contains(new Filter().removeDuplicateChars(exception))) {
 				return null;
 			}
 		}

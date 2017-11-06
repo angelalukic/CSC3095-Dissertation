@@ -2,6 +2,12 @@ package com.bot.filter.words;
 
 import java.util.Arrays;
 
+import com.bot.filter.response.AdminFilterNotification;
+import com.bot.filter.response.FilterNotification;
+import com.bot.filter.response.UserFilterNotification;
+
+import de.btobastian.javacord.entities.message.Message;
+
 
 /*
  * Words which will almost certainly cause offence 
@@ -22,5 +28,15 @@ public class HighUrgencyWords extends AbstractWords {
 	
 	public void addExceptions() {
 		setExceptions(Arrays.asList("cofagrigus", "scrape"));
+	}
+
+	public void sendFlaggedWordNotification(Message message, String word) {		
+		FilterNotification userNotif = new UserFilterNotification(message, getFlaggedWords().get(word));
+		userNotif.sendWarning();
+		
+		FilterNotification adminNotif = new AdminFilterNotification(message, getFlaggedWords().get(word));
+		adminNotif.sendWarning();
+		
+		message.delete();
 	}
 }
