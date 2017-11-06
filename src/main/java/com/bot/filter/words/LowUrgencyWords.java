@@ -1,7 +1,11 @@
-package com.bot.filter;
+package com.bot.filter.words;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+
+import com.bot.filter.response.AdminFilterNotification;
+import com.bot.filter.response.FilterNotification;
+
+import de.btobastian.javacord.entities.message.Message;
 
 /*
  * Words which are very unlikely to cause offence
@@ -21,7 +25,11 @@ public class LowUrgencyWords extends AbstractWords {
 	}
 
 	public void addExceptions() {
-		// No exceptions here for now
-		setExceptions(new ArrayList<String>());
+		setExceptions(Arrays.asList("jewel", "spoof"));
+	}
+
+	public void sendFlaggedWordNotification(Message message, String word) {
+		FilterNotification adminNotif = new AdminFilterNotification(message, word);
+		adminNotif.sendNotification();
 	}
 }

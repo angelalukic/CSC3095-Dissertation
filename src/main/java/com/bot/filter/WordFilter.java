@@ -1,36 +1,32 @@
 package com.bot.filter;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import com.bot.filter.response.AdminFilterNotification;
 import com.bot.filter.response.FilterNotification;
-import com.bot.filter.response.UserFilterNotification;
+import com.bot.filter.words.HighUrgencyWords;
+import com.bot.filter.words.LowUrgencyWords;
+import com.bot.filter.words.MediumUrgencyWords;
+import com.bot.filter.words.Words;
 
 import de.btobastian.javacord.entities.message.Message;
 
 public class WordFilter {	
 	
 	private Message message;
-	private String[] input;
-	private Map<String, String> flaggedWords;
 	FilterNotification adminNotif;
 	FilterNotification userNotif;
-	Words highUrgencyWords;
-	Words mediumUrgencyWords;
-	Words lowUrgencyWords;
 
 	public WordFilter(Message message) {
 		this.message = message;
-		this.input = message.getContent().toLowerCase().split("\\s+");
 	}
 	
 	public void checkMessage() {
 		
-		checkHighUrgencyWords(new HighUrgencyWords());
-		checkMediumUrgencyWords(new MediumUrgencyWords());
-		checkLowPriorityWords(new LowUrgencyWords());
+		Filter filter = new Filter();
+		String noDupes = filter.removeDuplicateChars(message.toString().toLowerCase());
+		String cleanInput = filter.removeSymbols(noDupes);
+		
+		checkHighUrgencyWords(cleanInput);
+		checkMediumUrgencyWords(cleanInput);
+		checkLowUrgencyWords(cleanInput);
 		
 		if(message.getContent().toLowerCase().contains("genji")
 				|| message.getContent().toLowerCase().contains("robotfucker")) {
@@ -39,62 +35,30 @@ public class WordFilter {
 		}
 	}
 
-	private void checkHighUrgencyWords(HighUrgencyWords words) {
+	private void checkHighUrgencyWords(String input) {
+		Words highUrgencyWords = new HighUrgencyWords();
+		String flaggedWord = highUrgencyWords.checkWords(input);
 		
-		flaggedWords = words.checkWords(Arrays.asList(input));
-		
-		if(!flaggedWords.isEmpty()) {
-			
-			for(String word : flaggedWords.keySet()) {
-				
-				if(words.checkExceptions(word) != null) {
-					
-					message.delete();
-					
-					userNotif = new UserFilterNotification(message, flaggedWords.get(word));
-					userNotif.sendWarning();
-					
-					adminNotif = new AdminFilterNotification(message, flaggedWords.get(word));
-					adminNotif.sendWarning();
-				}				
-			}
+		if(flaggedWord != null) {
+			highUrgencyWords.sendFlaggedWordNotification(message, flaggedWord);
 		}
 	}
 	
-	private void checkMediumUrgencyWords(MediumUrgencyWords words) {
+	private void checkMediumUrgencyWords(String input) {
+		Words mediumUrgencyWords = new MediumUrgencyWords();
+		String flaggedWord = mediumUrgencyWords.checkWords(input);
 		
-		flaggedWords = words.checkWords(Arrays.asList(input));
-		
-		if(!flaggedWords.isEmpty()) {
-			
-			for(String word : flaggedWords.keySet()) {
-				
-				if(words.checkExceptions(word) != null) {
-					
-					userNotif = new UserFilterNotification(message, flaggedWords.get(word));
-					userNotif.sendCaution();
-					
-					adminNotif = new AdminFilterNotification(message, flaggedWords.get(word));
-					adminNotif.sendCaution();
-				}
-			}		
+		if(flaggedWord != null) {
+			mediumUrgencyWords.sendFlaggedWordNotification(message, flaggedWord);
 		}
 	}
 	
-	private void checkLowPriorityWords(LowUrgencyWords words) {
-
-		flaggedWords = words.checkWords(Arrays.asList(input));
+	private void checkLowUrgencyWords(String input) {
+		Words lowUrgencyWords = new LowUrgencyWords();
+		String flaggedWord = lowUrgencyWords.checkWords(input);
 		
-		if(!flaggedWords.isEmpty()) {
-			
-			for(String word : flaggedWords.keySet()) {
-				
-				if(words.checkExceptions(word) != null) {
-			
-					adminNotif = new AdminFilterNotification(message, flaggedWords.get(word));
-					adminNotif.sendNotification();
-				}	
-			}
+		if(flaggedWord != null) {
+			lowUrgencyWords.sendFlaggedWordNotification(message, flaggedWord);
 		}
 	}
 }
