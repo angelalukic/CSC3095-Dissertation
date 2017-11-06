@@ -6,6 +6,8 @@ import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 
 public interface FilterNotification {
 	
+	public void sendNotification();
+	
 	public void sendCaution();
 	
 	public void sendWarning();

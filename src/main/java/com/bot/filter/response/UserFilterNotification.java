@@ -13,6 +13,10 @@ public class UserFilterNotification extends AbstractFilterNotification {
 		super(message, flaggedWord);
 	}
 	
+	public void sendNotification() {
+		// Do not currently notify users when catching low urgency words
+	}
+	
 	public void sendCaution() {
 		EmbedBuilder userEmbed = makeEmbed(getOrange(),
 				"This is a word identified to potentially cause offense if used out of context, "

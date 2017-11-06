@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.bot.filter.response.AdminFilterNotification;
+import com.bot.filter.response.FilterNotification;
 import com.bot.filter.response.UserFilterNotification;
 
 import de.btobastian.javacord.entities.message.Message;
@@ -14,8 +15,8 @@ public class WordFilter {
 	private Message message;
 	private String[] input;
 	private Map<String, String> flaggedWords;
-	AdminFilterNotification adminNotif;
-	UserFilterNotification userNotif;
+	FilterNotification adminNotif;
+	FilterNotification userNotif;
 	Words highUrgencyWords;
 	Words mediumUrgencyWords;
 	Words lowUrgencyWords;

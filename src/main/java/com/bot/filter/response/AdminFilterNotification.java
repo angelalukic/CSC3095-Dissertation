@@ -7,25 +7,25 @@ import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 
 public class AdminFilterNotification extends AbstractFilterNotification {
 	
-	private static final String ADMIN_CHANNEL = "";
+	private static final String BOT_REPORTS_CHANNEL = "";
 	
 	public AdminFilterNotification(Message message, String flaggedWord) {
 		super(message, flaggedWord);
 	}
 	
 	public void sendNotification() {
-		EmbedBuilder adminEmbed = makeEmbed(getYellow(), "");
-		getMessage().getChannelReceiver().getServer().getChannelById(ADMIN_CHANNEL).sendMessage("", adminEmbed);
+		getMessage().getChannelReceiver().getServer().getChannelById(BOT_REPORTS_CHANNEL)
+			.sendMessage("", makeEmbed(getYellow(), ""));
 	}
 	
 	public void sendCaution() {
-		EmbedBuilder adminEmbed = makeEmbed(getOrange(), "");
-		getMessage().getChannelReceiver().getServer().getChannelById(ADMIN_CHANNEL).sendMessage("", adminEmbed);
+		getMessage().getChannelReceiver().getServer().getChannelById(BOT_REPORTS_CHANNEL)
+			.sendMessage("", makeEmbed(getOrange(), ""));
 	}
 	
-	public void sendWarning() {
-		EmbedBuilder adminEmbed = makeEmbed(getRed(), "");		
-		getMessage().getChannelReceiver().getServer().getChannelById(ADMIN_CHANNEL).sendMessage("", adminEmbed);
+	public void sendWarning() {	
+		getMessage().getChannelReceiver().getServer().getChannelById(BOT_REPORTS_CHANNEL)
+			.sendMessage("", makeEmbed(getRed(), ""));
 	}
 	
 	public EmbedBuilder makeEmbed(Color color, String text) {
