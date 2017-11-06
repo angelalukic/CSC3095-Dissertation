@@ -34,7 +34,7 @@ public abstract class AbstractWords implements Words {
 		
 		for(String exception : getExceptions()) {
 			
-			if(exception.equals(flaggedWord.replaceAll("[^a-zA-Z ]", ""))) {
+			if(flaggedWord.replaceAll("[^a-zA-Z ]", "").contains(exception)) {
 				return null;
 			}
 		}

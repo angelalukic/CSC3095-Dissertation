@@ -21,6 +21,6 @@ public class HighUrgencyWords extends AbstractWords {
 	}
 	
 	public void addExceptions() {
-		setExceptions(Arrays.asList("cofagrigus"));
+		setExceptions(Arrays.asList("cofagrigus", "scrape"));
 	}
 }
