@@ -2,10 +2,6 @@ package com.bot.filter;
 
 public class Filter {
 	
-	public String[] splitIntoWordArray(String input) {
-		return input.split("\\s+");
-	}
-	
 	public String removeDuplicateChars(String input) {
 		
 		StringBuilder noDupes = new StringBuilder();
@@ -17,5 +13,9 @@ public class Filter {
 	        }
 	    }
 	    return noDupes.toString();
+	}
+	
+	public String removeSymbols(String input) {
+		return input.replaceAll("[^a-zA-Z ]", "");
 	}
 }

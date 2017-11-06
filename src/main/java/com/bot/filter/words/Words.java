@@ -8,7 +8,7 @@ public interface Words {
 	
 	public void addExceptions();
 	
-	public String checkWords(String[] input);
+	public String checkWords(String input);
 	
 	public void sendFlaggedWordNotification(Message message, String word);
 }

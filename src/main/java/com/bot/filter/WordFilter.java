@@ -22,11 +22,11 @@ public class WordFilter {
 		
 		Filter filter = new Filter();
 		String noDupes = filter.removeDuplicateChars(message.toString().toLowerCase());
-		String[] inputWords = filter.splitIntoWordArray(noDupes);
+		String cleanInput = filter.removeSymbols(noDupes);
 		
-		checkHighUrgencyWords(inputWords);
-		checkMediumUrgencyWords(inputWords);
-		checkLowUrgencyWords(inputWords);
+		checkHighUrgencyWords(cleanInput);
+		checkMediumUrgencyWords(cleanInput);
+		checkLowUrgencyWords(cleanInput);
 		
 		if(message.getContent().toLowerCase().contains("genji")
 				|| message.getContent().toLowerCase().contains("robotfucker")) {
@@ -35,27 +35,27 @@ public class WordFilter {
 		}
 	}
 
-	private void checkHighUrgencyWords(String[] inputWords) {
+	private void checkHighUrgencyWords(String input) {
 		Words highUrgencyWords = new HighUrgencyWords();
-		String flaggedWord = highUrgencyWords.checkWords(inputWords);
+		String flaggedWord = highUrgencyWords.checkWords(input);
 		
 		if(flaggedWord != null) {
 			highUrgencyWords.sendFlaggedWordNotification(message, flaggedWord);
 		}
 	}
 	
-	private void checkMediumUrgencyWords(String[] inputWords) {
+	private void checkMediumUrgencyWords(String input) {
 		Words mediumUrgencyWords = new MediumUrgencyWords();
-		String flaggedWord = mediumUrgencyWords.checkWords(inputWords);
+		String flaggedWord = mediumUrgencyWords.checkWords(input);
 		
 		if(flaggedWord != null) {
 			mediumUrgencyWords.sendFlaggedWordNotification(message, flaggedWord);
 		}
 	}
 	
-	private void checkLowUrgencyWords(String[] inputWords) {
+	private void checkLowUrgencyWords(String input) {
 		Words lowUrgencyWords = new LowUrgencyWords();
-		String flaggedWord = lowUrgencyWords.checkWords(inputWords);
+		String flaggedWord = lowUrgencyWords.checkWords(input);
 		
 		if(flaggedWord != null) {
 			lowUrgencyWords.sendFlaggedWordNotification(message, flaggedWord);

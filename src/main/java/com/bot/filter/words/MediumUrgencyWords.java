@@ -33,10 +33,10 @@ public class MediumUrgencyWords extends AbstractWords {
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {
-		FilterNotification userNotif = new UserFilterNotification(message, getFlaggedWords().get(word));
+		FilterNotification userNotif = new UserFilterNotification(message, word);
 		userNotif.sendCaution();
 		
-		FilterNotification adminNotif = new AdminFilterNotification(message, getFlaggedWords().get(word));
+		FilterNotification adminNotif = new AdminFilterNotification(message, word);
 		adminNotif.sendCaution();
 	}
 }

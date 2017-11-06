@@ -1,9 +1,8 @@
 package com.bot.filter.words;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import com.bot.filter.Filter;
 
@@ -16,50 +15,54 @@ public abstract class AbstractWords implements Words {
 	
 	private List<String> words;
 	private List<String> exceptions;
-	Map<String, String> flaggedWords;
+	private Set<String> flaggedWords = new HashSet<String>();
 	
-	public String checkWords(String[] input) {
+	public String checkWords(String input) {
 		
-		flaggedWords = findWordsToFlag(Arrays.asList(input));
+		flaggedWords.clear();
 		
-		if(!flaggedWords.isEmpty()) {
-			
-			for(String word : flaggedWords.keySet()) {
-				
-				if(checkExceptions(word) != null) {
-					return word;
-				}
-			}
+		if(countFlaggedWords(input) > countExceptions(input)) {
+			return String.join(", ", flaggedWords);
 		}
 		return null;
 	}
 	
-	public Map<String, String> findWordsToFlag(List<String> input) {
-		
-		flaggedWords = new HashMap<String, String>();
+	public int countFlaggedWords(String input) {
+
+		int count = 0;
 		
 		for(String word : getWords()) {
-			
-			String noDupes = new Filter().removeDuplicateChars(word);
-			
-			for(String inputWord : input) {
-				
-				if(inputWord.contains(noDupes)) {
-					flaggedWords.put(inputWord, word);
-				}
-			}
+			count += countOccurences(input, word);
 		}
-		return flaggedWords;
+		return count;		
 	}
-
-	public String checkExceptions(String flaggedWord) {
+	
+	public int countExceptions(String input) {
+		
+		int count = 0;
 		
 		for(String exception : getExceptions()) {
+			count += countOccurences(input, exception);
+		}
+		return count;	
+	}
+	
+	private int countOccurences(String input, String word) {
+		
+		int count = 0;
+		int lastIndex = 0;
+		String noDupes = new Filter().removeDuplicateChars(word);
 			
-			if(flaggedWord.replaceAll("[^a-zA-Z ]", "").contains(new Filter().removeDuplicateChars(exception))) {
-				return null;
+		while(lastIndex != -1) {
+			lastIndex = input.indexOf(noDupes,lastIndex);
+			if(lastIndex != -1) {
+				if(getWords().contains(word)) {
+					flaggedWords.add(word);
+				}
+				count++;
+				lastIndex += noDupes.length();
 			}
 		}
-		return flaggedWord;
-	}	
+		return count;
+	}
 }

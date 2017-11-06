@@ -31,7 +31,7 @@ public class LowUrgencyWords extends AbstractWords {
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {
-		FilterNotification adminNotif = new AdminFilterNotification(message, getFlaggedWords().get(word));
+		FilterNotification adminNotif = new AdminFilterNotification(message, word);
 		adminNotif.sendNotification();
 	}
 }

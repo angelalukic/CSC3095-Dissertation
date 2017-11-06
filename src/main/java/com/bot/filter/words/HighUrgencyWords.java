@@ -27,14 +27,16 @@ public class HighUrgencyWords extends AbstractWords {
 	}
 	
 	public void addExceptions() {
-		setExceptions(Arrays.asList("cofagrigus", "scrape"));
+		setExceptions(Arrays.asList("cofagrigus", "scrape", "therapeu", "grape",
+				"drape", "trapez", "extrape", "leafage", "staffage", "torpedo", 
+				"pedometer", "pedolog"));
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {		
-		FilterNotification userNotif = new UserFilterNotification(message, getFlaggedWords().get(word));
+		FilterNotification userNotif = new UserFilterNotification(message, word);
 		userNotif.sendWarning();
 		
-		FilterNotification adminNotif = new AdminFilterNotification(message, getFlaggedWords().get(word));
+		FilterNotification adminNotif = new AdminFilterNotification(message, word);
 		adminNotif.sendWarning();
 		
 		message.delete();
