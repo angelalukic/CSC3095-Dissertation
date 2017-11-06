@@ -1,9 +1,10 @@
 package com.bot.twitter;
 
-import java.awt.Color;
+import com.bot.twitter.response.FacebookUpdateNotification;
+import com.bot.twitter.response.TwitterUpdateNotification;
+import com.bot.twitter.response.UpdateNotification;
 
 import de.btobastian.javacord.entities.message.Message;
-import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +22,9 @@ import twitter4j.conf.ConfigurationBuilder;
 @Slf4j
 public class TwitterIntegration {
 	
-	Message message;
+	Message message;	
 	
 	private static final long TWITTER_ID = 0L;
-	private static final String BOT_FEED_CHANNEL = "";
 	private static final String TWITTER_CONSUMER_KEY = "";
 	private static final String TWITTER_CONSUMER_SECRET = "";
 	private static final String TWITTER_ACCESS_TOKEN = "";
@@ -35,7 +35,6 @@ public class TwitterIntegration {
 	}
 	
 	public void retrieveStream() {
-		
 		TwitterStream twitterStream = buildTwitterStream();
         
         StatusListener listener = createListener();
@@ -54,15 +53,19 @@ public class TwitterIntegration {
         
 		return new TwitterStreamFactory(configurationBuilder.build()).getInstance();
 	}
+	
+	private void addFilterQuery(TwitterStream twitterStream) {
+		FilterQuery filterQuery = new FilterQuery();
+        filterQuery.follow(TWITTER_ID);
+        twitterStream.filter(filterQuery);
+	}
 
 	private StatusListener createListener() {
 		return new StatusListener(){
             public void onStatus(Status status) {
-            	if(!status.isRetweet()) {
-	            	message.getChannelReceiver().getServer().getChannelById(BOT_FEED_CHANNEL)
-	            		.sendMessage("", postStatus(status));
-            	}
+            	checkStatus(status);
             }
+			
             public void onException(Exception ex) {
             	log.error(ex.getMessage());
             }
@@ -73,32 +76,21 @@ public class TwitterIntegration {
         };
 	}
 	
-	private EmbedBuilder postStatus(Status status) {
-		
-		EmbedBuilder output = new EmbedBuilder();
-		
-		if(status.getText().contains("New Facebook Post from")) {
-			output.setAuthor("Facebook: Newcastle University Gaming Society",
-					"https://www.facebook.com/groups/159328470823126/", 
-					status.getUser().getProfileImageURL());
-			output.setDescription(status.getText().replace("New Facebook Post from ", ""));
-			output.setColor(new Color(59, 89, 152));
-		}
-		
-		else {
-			output.setAuthor("Twitter: @" + status.getUser().getScreenName(), 
-					"https://twitter.com/NewcastleGaming/status/" + status.getId(), 
-					status.getUser().getProfileImageURL());
-			output.setDescription(status.getText());
-			output.setColor(new Color(0,132,180));
-		}
-		
-		return output;
+	private void checkStatus(Status status) {
+		if(status.getInReplyToStatusId() != status.getId()
+    			|| status.isRetweet() && status.getCurrentUserRetweetId() == status.getId()) {
+        	postStatus(status);
+    	}
 	}
 	
-	private void addFilterQuery(TwitterStream twitterStream) {
-		FilterQuery filterQuery = new FilterQuery();
-        filterQuery.follow(TWITTER_ID);
-        twitterStream.filter(filterQuery);
+	private void postStatus(Status status) {
+		
+		if(status.getText().contains("New Facebook Post from")) {
+			UpdateNotification facebookUpdate = new FacebookUpdateNotification(getMessage(), status);
+			facebookUpdate.sendNotification();
+		} else {
+			UpdateNotification twitterUpdate = new TwitterUpdateNotification(getMessage(), status);
+			twitterUpdate.sendNotification();
+		}
 	}
 }

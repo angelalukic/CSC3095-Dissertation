@@ -1,4 +1,4 @@
-package com.bot.response;
+package com.bot.filter.response;
 
 import java.awt.Color;
 
@@ -7,7 +7,7 @@ import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 
 public class UserFilterNotification extends AbstractFilterNotification {
 	
-	private static final String WELCOME_CHANNEL = /*RULES CHANNEL HERE*/;
+	private static final String WELCOME_CHANNEL = "";
 	
 	public UserFilterNotification(Message message, String flaggedWord) {
 		super(message, flaggedWord);
