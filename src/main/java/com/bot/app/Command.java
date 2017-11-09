@@ -1,7 +1,5 @@
 package com.bot.app;
 
-import java.util.StringJoiner;
-
 import com.bot.filter.WordFilter;
 import com.bot.fun.Action;
 import com.bot.fun.Give;
@@ -59,12 +57,12 @@ public class Command {
 			
 			if(command.equalsIgnoreCase("give")) {
 				
-				StringJoiner item = new StringJoiner(" ");
+				StringBuilder item = new StringBuilder();
 				for(int i = 2; i < args.length; i++) {
-					item.add(args[i]);
+					item.append(args[i] + " ");
 				}
 				
-				action = new Give(message, user, item.toString());
+				action = new Give(message, user, item.toString().trim());
 				action.reply();
 			} else {
 				action = new Hug(message, user);
