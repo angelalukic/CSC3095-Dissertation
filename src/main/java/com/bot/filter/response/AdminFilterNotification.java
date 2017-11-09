@@ -2,30 +2,36 @@ package com.bot.filter.response;
 
 import java.awt.Color;
 
+import de.btobastian.javacord.entities.Channel;
 import de.btobastian.javacord.entities.message.Message;
 import de.btobastian.javacord.entities.message.embed.EmbedBuilder;
 
 public class AdminFilterNotification extends AbstractFilterNotification {
 	
+	private Channel channel;
+	private Channel botReportsChannel;
+	
 	private static final String BOT_REPORTS_CHANNEL = "";
 	
 	public AdminFilterNotification(Message message, String flaggedWord) {
 		super(message, flaggedWord);
+		this.channel = message.getChannelReceiver();
+		this.botReportsChannel = channel.getServer().getChannelById(BOT_REPORTS_CHANNEL);
 	}
 	
 	public void sendNotification() {
-		getMessage().getChannelReceiver().getServer().getChannelById(BOT_REPORTS_CHANNEL)
-			.sendMessage("", makeEmbed(getYellow(), ""));
+		EmbedBuilder embed = makeEmbed(getYellow(), "");
+		botReportsChannel.sendMessage("", embed);
 	}
 	
 	public void sendCaution() {
-		getMessage().getChannelReceiver().getServer().getChannelById(BOT_REPORTS_CHANNEL)
-			.sendMessage("", makeEmbed(getOrange(), ""));
+		EmbedBuilder embed = makeEmbed(getOrange(), "");
+		botReportsChannel.sendMessage("", embed);
 	}
 	
 	public void sendWarning() {	
-		getMessage().getChannelReceiver().getServer().getChannelById(BOT_REPORTS_CHANNEL)
-			.sendMessage("", makeEmbed(getRed(), ""));
+		EmbedBuilder embed = makeEmbed(getRed(), "");
+		botReportsChannel.sendMessage("", embed);
 	}
 	
 	public EmbedBuilder makeEmbed(Color color, String text) {
@@ -35,7 +41,7 @@ public class AdminFilterNotification extends AbstractFilterNotification {
 		output.setColor(color);
 		output.setDescription( getMessage().getAuthor().getMentionTag()
 				+ " caught saying \"" + getFlaggedWord() + "\" in channel "
-				+ getMessage().getChannelReceiver().getMentionTag());
+				+ channel.getMentionTag());
 		output.addField("Orignal Message", getMessage().getContent(), true);
 		
 		return output;

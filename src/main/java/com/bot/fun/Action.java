@@ -9,5 +9,4 @@ public interface Action {
 	public String complyStatement();
 	
 	public String defyStatement();
-
 }

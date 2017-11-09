@@ -1,10 +1,13 @@
 package com.bot.app;
 
+import java.util.StringJoiner;
+
 import com.bot.filter.WordFilter;
 import com.bot.fun.Action;
 import com.bot.fun.Give;
 import com.bot.fun.Hug;
 
+import de.btobastian.javacord.entities.User;
 import de.btobastian.javacord.entities.message.Message;
 
 public class Command {
@@ -20,10 +23,12 @@ public class Command {
 		WordFilter filter = new WordFilter(message);
 		filter.checkMessage();
 		
-		if(message.getContent().length() > 2 && 
-				message.getContent().substring(0,3).equalsIgnoreCase("rf!")) {
-			String input = message.getContent().replace("rf!", "");
-			determineCommand(splitArguments(input));
+		String messageContent = message.getContent();
+		
+		if(messageContent.length() > 2 && 
+				messageContent.substring(0,3).equalsIgnoreCase("rf!")) {
+			String query = messageContent.replace("rf!", "");
+			determineCommand(splitArguments(query));
 		}		
 	}
 	
@@ -33,11 +38,13 @@ public class Command {
 	
 	private void determineCommand(String[] args) {
 		
-		if (args[0].equalsIgnoreCase("music")) {
+		String command = args[0];
+		
+		if (command.equalsIgnoreCase("music")) {
 			message.reply("Soon...");
 		} 
 		
-		else if(args[0].equalsIgnoreCase("give") || args[0].equalsIgnoreCase("hug")) {
+		else if(command.equalsIgnoreCase("give") || command.equalsIgnoreCase("hug")) {
 			performAction(args);
 		}
 	}
@@ -45,27 +52,26 @@ public class Command {
 	private void performAction(String[] args) {
 		
 		Action action;
+		String command = args[0];
 		
-		if(args[0].equalsIgnoreCase("give")) {
+		try {
+			User user = message.getMentions().get(0);
 			
-			StringBuilder item = new StringBuilder();
-			for(int i = 2; i < args.length; i++) {
-				item.append(args[i] + " ");
-			}
-			
-			try {
-				action = new Give(message, message.getMentions().get(0), item.toString());
+			if(command.equalsIgnoreCase("give")) {
+				
+				StringJoiner item = new StringJoiner(" ");
+				for(int i = 2; i < args.length; i++) {
+					item.add(args[i]);
+				}
+				
+				action = new Give(message, user, item.toString());
 				action.reply();
-			} catch (IndexOutOfBoundsException e) {
-				message.reply("I don't know who to give this item to..");
-			}
-		} else {
-			try {
-				action = new Hug(message, message.getMentions().get(0));
+			} else {
+				action = new Hug(message, user);
 				action.reply();
-			} catch (IndexOutOfBoundsException e) {
-				message.reply("You didn't tell me who to hug..");
 			}
+		} catch (IndexOutOfBoundsException e) {
+			message.reply("I cannot do this if you do not give me a user!");
 		}
 	}
 }

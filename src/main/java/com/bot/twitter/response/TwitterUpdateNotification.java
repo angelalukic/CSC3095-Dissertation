@@ -6,7 +6,6 @@ import twitter4j.Status;
 
 public class TwitterUpdateNotification extends AbstractUpdateNotification {
 	
-
 	public TwitterUpdateNotification(Message message, Status status) {
 		super(message, status);
 	}

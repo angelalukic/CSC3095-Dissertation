@@ -9,17 +9,20 @@ import de.btobastian.javacord.entities.message.Message;
 
 public class Hug extends AbstractAction {
 	
-	public static final int LOW = 0;
+	private User user;
+	
+	private static final int LOW = 0;
 
 	public Hug(Message message, User user) {
-		super(message, user);
+		super(message);
+		this.user = user;
 	}
 	
 	public String complyStatement() {
 		List<String> statements = Arrays.asList(
 				"Big hugs for " + user.getMentionTag() + "!!",
 				"Gives " + user.getMentionTag() + " a big cuddle!",
-				"It's a three way hug between " + message.getAuthor().getMentionTag() + ", " + user.getMentionTag() + " and me! Yay!",
+				"It's a three way hug between " + getMessage().getAuthor().getMentionTag() + ", " + user.getMentionTag() + " and me! Yay!",
 				"Snuggles down with " + user.getMentionTag() + " <3"
 				);
 		

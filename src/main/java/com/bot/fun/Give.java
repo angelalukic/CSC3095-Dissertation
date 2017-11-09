@@ -9,21 +9,23 @@ import de.btobastian.javacord.entities.message.Message;
 
 public class Give extends AbstractAction {
 	
-	String item;
+	private String item;
+	private User user;
 	
-	public static final int LOW = 0;
+	private static final int LOW = 0;
 
 	public Give(Message message, User user, String item) {
-		super(message, user);
+		super(message);
+		this.user = user;
 		this.item = item;
 	}
 
 	public String complyStatement() {
 		
 		List<String> statements = Arrays.asList(
-				"Gives " + user.getMentionTag() + " the " + item + "!",
-				"Begrugingly gives " + user.getMentionTag() + " the " + item + "...",
-				"Throws the " + item + " at " + user.getMentionTag() + ", looking disgusted."
+				"Gives " + user.getMentionTag() + " " + item + "!",
+				"Begrugingly gives " + user.getMentionTag() + " " + item + "...",
+				"Throws " + item + " at " + user.getMentionTag() + ", looking disgusted."
 				);
 		
 		Random r = new Random();
@@ -34,8 +36,8 @@ public class Give extends AbstractAction {
 		
 		List<String> statements = Arrays.asList(
 				"Would a non-robot even need this?",
-				"The " + item + " is mine!! *hisses*",
-				"Oh? The " + item + "? I already ate it.",
+				item + " is mine!! *hisses*",
+				"Oh? " + item + "? I already ate it.",
 				"Oh! is this for me? Thank you! *snatches it and runs away*"
 				);
 

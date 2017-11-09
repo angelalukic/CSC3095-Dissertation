@@ -24,7 +24,7 @@ public class TwitterIntegration {
 	
 	Message message;	
 	
-	private static final long TWITTER_ID = 0L;
+	private static final long TWITTER_ID = 780352244080336896L;
 	private static final String TWITTER_CONSUMER_KEY = "";
 	private static final String TWITTER_CONSUMER_SECRET = "";
 	private static final String TWITTER_ACCESS_TOKEN = "";

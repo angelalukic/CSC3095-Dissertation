@@ -1,6 +1,5 @@
 package com.bot.filter;
 
-import com.bot.filter.response.FilterNotification;
 import com.bot.filter.words.HighUrgencyWords;
 import com.bot.filter.words.LowUrgencyWords;
 import com.bot.filter.words.MediumUrgencyWords;
@@ -11,8 +10,6 @@ import de.btobastian.javacord.entities.message.Message;
 public class WordFilter {	
 	
 	private Message message;
-	FilterNotification adminNotif;
-	FilterNotification userNotif;
 
 	public WordFilter(Message message) {
 		this.message = message;
@@ -20,16 +17,18 @@ public class WordFilter {
 	
 	public void checkMessage() {
 		
+		String messageContent = message.getContent().toLowerCase();
+		
 		Filter filter = new Filter();
-		String noDupes = filter.removeDuplicateChars(message.toString().toLowerCase());
+		String noDupes = filter.removeDuplicateChars(messageContent);
 		String cleanInput = filter.removeSymbols(noDupes);
 		
 		checkHighUrgencyWords(cleanInput);
 		checkMediumUrgencyWords(cleanInput);
 		checkLowUrgencyWords(cleanInput);
 		
-		if(message.getContent().toLowerCase().contains("genji")
-				|| message.getContent().toLowerCase().contains("robotfucker")) {
+		if(messageContent.contains("genji") || messageContent.contains("robotfucker")
+				|| messageContent.contains("dragonblade")) {
 			message.addCustomEmojiReaction(
 					message.getChannelReceiver().getServer().getCustomEmojiByName("RobotFucker"));
 		}
