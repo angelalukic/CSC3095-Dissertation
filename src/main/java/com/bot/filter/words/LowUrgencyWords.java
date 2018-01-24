@@ -21,11 +21,12 @@ public class LowUrgencyWords extends AbstractWords {
 	public void addWords() {
 		setWords(Arrays.asList("tumblr", "4chan", "jew", "muslim", 
 				"gay", "feminist", "feminism", "egalitarian", "bitch", 
-				"poof", "whore", "slut", "immigrant", "midget"));
+				"poof", "whore", "slut", "immigrant", "midget", "cunt",
+				"dick", "asshole"));
 	}
 
 	public void addExceptions() {
-		setExceptions(Arrays.asList("jewel", "spoof"));
+		setExceptions(Arrays.asList("jewel", "spoof", "dickens"));
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {

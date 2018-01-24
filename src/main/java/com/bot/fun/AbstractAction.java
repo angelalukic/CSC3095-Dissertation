@@ -2,7 +2,6 @@ package com.bot.fun;
 
 import java.util.Random;
 
-import de.btobastian.javacord.entities.User;
 import de.btobastian.javacord.entities.message.Message;
 import lombok.Getter;
 

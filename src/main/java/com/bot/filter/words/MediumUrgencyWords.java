@@ -27,7 +27,7 @@ public class MediumUrgencyWords extends AbstractWords {
 	}
 
 	public void addExceptions() {
-		setExceptions(Arrays.asList("kiloli", "lolith", "styloli"));
+		setExceptions(Arrays.asList("kiloli", "lolith", "styloli", "lollipop", "conquer"));
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {
