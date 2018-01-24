@@ -20,18 +20,18 @@ public class BotApp {
 		api.registerListener(new MessageCreateListener() {
 			public void onMessageCreate(DiscordAPI api, Message message) {
 				
+				Command command = new Command(message);
+				command.execute();
+				
 				if(!connectedToSocialMedia) {
 					connectedToSocialMedia = true;
 					
-					TwitchIntegration twitch = new TwitchIntegration(message);
-					twitch.connect();
-					
 					TwitterIntegration twitter = new TwitterIntegration(message);
 					twitter.retrieveStream();
+					
+					TwitchIntegration twitch = new TwitchIntegration(message);
+					twitch.connect();
 				}
-
-				Command command = new Command(message);
-				command.execute();
 			}
 		});
 	}

@@ -1,6 +1,8 @@
 package com.bot.twitch;
 
 import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.bot.twitch.eventlisteners.NotificationOnHost;
 import com.bot.twitch.eventlisteners.NotificationOnUnhost;
@@ -15,9 +17,9 @@ public class TwitchIntegration {
 	
 	@Setter private Message message;
 	
-	private static final String CLIENT_ID = "";
-	private static final String CLIENT_SECRET = "";
-	private static final String CREDENTIALS = "";
+	private static final String CLIENT_ID = "3r70uj12i74tnn86ibirq23tvq0fjy";
+	private static final String CLIENT_SECRET = "ccqb4bioa103m7qw87tup7snvx1cgf";
+	private static final String CREDENTIALS = "t1r39ljpa2gqw96h6w5ww1on00oe8h";
 	private static final String USERNAME = "nclgamingsociety";
 	
 	public TwitchIntegration(Message message) {
@@ -52,7 +54,9 @@ public class TwitchIntegration {
 	}
 	
 	private void checkIfLive(TwitchClient client) {
-		StreamChecker checker = new StreamChecker(message, client, USERNAME);
-		checker.start();
+		
+		Timer timer = new Timer();		
+		TimerTask task = new StreamChecker(message, client, USERNAME);
+		timer.schedule(task, 0, 60000);
 	}
 }
