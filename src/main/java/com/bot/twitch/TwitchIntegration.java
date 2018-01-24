@@ -17,9 +17,9 @@ public class TwitchIntegration {
 	
 	@Setter private Message message;
 	
-	private static final String CLIENT_ID = "3r70uj12i74tnn86ibirq23tvq0fjy";
-	private static final String CLIENT_SECRET = "ccqb4bioa103m7qw87tup7snvx1cgf";
-	private static final String CREDENTIALS = "t1r39ljpa2gqw96h6w5ww1on00oe8h";
+	private static final String CLIENT_ID = "";
+	private static final String CLIENT_SECRET = "";
+	private static final String CREDENTIALS = "";
 	private static final String USERNAME = "nclgamingsociety";
 	
 	public TwitchIntegration(Message message) {
