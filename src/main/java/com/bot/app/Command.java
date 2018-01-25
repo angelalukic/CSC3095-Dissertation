@@ -1,5 +1,7 @@
 package com.bot.app;
 
+import java.util.Random;
+
 import com.bot.filter.WordFilter;
 import com.bot.fun.Action;
 import com.bot.fun.Give;
@@ -10,7 +12,7 @@ import de.btobastian.javacord.entities.message.Message;
 
 public class Command {
 	
-	Message message;
+	private Message message;
 	
 	public Command(Message message) {
 		this.message = message;
@@ -36,14 +38,24 @@ public class Command {
 	
 	private void determineCommand(String[] args) {
 		
-		String command = args[0];
+		String command = args[0]; 
 		
-		if (command.equalsIgnoreCase("music")) {
-			message.reply("Soon...");
-		} 
+		if(command.equalsIgnoreCase("cactuspie")) {
+			
+			Random random = new Random();
+			int max = 3999;
+			int min = 0;
+			
+			int scp = random.nextInt((max - min) + 1) + min;
+			message.reply("http://www.scp-wiki.net/scp-" + scp);
+		}
 		
 		else if(command.equalsIgnoreCase("give") || command.equalsIgnoreCase("hug")) {
 			performAction(args);
+		}
+		
+		else {
+			message.reply("I don't know how to do that, sorry :[");
 		}
 	}
 	
