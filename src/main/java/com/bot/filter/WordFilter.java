@@ -27,10 +27,15 @@ public class WordFilter {
 		checkMediumUrgencyWords(cleanInput);
 		checkLowUrgencyWords(cleanInput);
 		
-		if(messageContent.contains("genji") || messageContent.contains("robotfucker")
+		if (messageContent.startsWith("i'm ") || messageContent.startsWith("im ")) {
+			String dadName = messageContent.replaceFirst("[iI]'?[mM]\\s*", "");
+			message.reply("Hi " + dadName + " I'm RobotFucker!");
+		}
+		
+		if (messageContent.contains("genji") || messageContent.contains("robotfucker")
 				|| messageContent.contains("dragonblade")) {
 			message.addCustomEmojiReaction(
-					message.getChannelReceiver().getServer().getCustomEmojiByName("RobotFucker"));
+					message.getChannelReceiver().getServer().getCustomEmojiByName("robotfucker"));
 		}
 	}
 
