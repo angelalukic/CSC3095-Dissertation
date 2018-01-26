@@ -5,6 +5,14 @@
   <version>0.0.1-SNAPSHOT</version>
   
   <repositories>
+  	  <repository>
+      	<id>jcenter</id>
+      	<url>https://jcenter.bintray.com/</url>
+      </repository>
+  	  <repository>
+  		<id>javacord-repo</id>
+  		<url>http://repo.bastian-oppermann.de</url>
+	  </repository>
       <repository>
          <id>twitter4j.org</id>
          <name>twitter4j.org Repository</name>
@@ -44,6 +52,17 @@
     		<groupId>org.twitter4j</groupId>
     		<artifactId>twitter4j-stream</artifactId>
    			<version>4.0.6</version>
+		</dependency>
+		<dependency>
+  			<groupId>de.btobastian.javacord</groupId>
+  			<artifactId>javacord</artifactId>
+  			<version>2.0.17</version>
+  			<classifier>shaded</classifier>
+		</dependency>
+		<dependency>
+    		<groupId>com.github.twitch4j</groupId>
+    		<artifactId>twitch4j</artifactId>
+    		<version>v0.10.1</version>
 		</dependency>
   </dependencies>
 </project>
