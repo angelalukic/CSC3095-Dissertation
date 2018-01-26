@@ -3,6 +3,7 @@ package com.bot.twitter;
 import com.bot.twitter.response.FacebookUpdateNotification;
 import com.bot.twitter.response.TwitterUpdateNotification;
 import com.bot.twitter.response.UpdateNotification;
+import com.bot.twitter.response.YouTubeUpdateNotification;
 
 import de.btobastian.javacord.entities.message.Message;
 import lombok.Getter;
@@ -93,11 +94,19 @@ public class TwitterIntegration {
 		/*
 		 * Twitter account automatically gets updates from the NUGS Facebook Group through zapier.com
 		 * All these updates will have "New Facebook Post" appended to the front
-		 * We want the message to be formatted differently if it was originally from Facebook
 		 */
 		if(status.getText().startsWith("New Facebook Post")) {
 			UpdateNotification facebookUpdate = new FacebookUpdateNotification(message, status);
 			facebookUpdate.sendNotification();
+		} 
+		
+		/*
+		 * Twitter account automatically gets updates from the NUGS YouTube page through YouTube
+		 * All these updates will have "via @YouTube" appended to the end
+		 */
+		else if(status.getText().endsWith("via @YouTube")) {
+			UpdateNotification youTubeUpdate = new YouTubeUpdateNotification(message, status);
+			youTubeUpdate.sendNotification();
 		} else {
 			UpdateNotification twitterUpdate = new TwitterUpdateNotification(message, status);
 			twitterUpdate.sendNotification();

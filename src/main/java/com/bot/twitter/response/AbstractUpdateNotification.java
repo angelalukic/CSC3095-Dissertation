@@ -15,8 +15,9 @@ public abstract class AbstractUpdateNotification implements UpdateNotification {
 	Status status;
 	private Color twitterBlue = new Color(0,132,180);
 	private Color facebookBlue = new Color(59,89,152);
+	private Color youTubeRed = new Color(255, 0, 0);
 	
-	private static final String BOT_FEED_CHANNEL = "";
+	private static final String BOT_FEED_CHANNEL = "375672676859248660";
 	
 	public AbstractUpdateNotification(Message message, Status status) {
 		this.message = message;
