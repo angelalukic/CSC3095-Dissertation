@@ -43,8 +43,8 @@ public class TwitchIntegration {
 	
 	private void registerListeners(TwitchClient client) {
 		client.getDispatcher().registerListener(this);
-		client.getDispatcher().registerListener(new NotificationOnHost());
-		client.getDispatcher().registerListener(new NotificationOnUnhost());
+		client.getDispatcher().registerListener(new NotificationOnHost(message, client));
+		client.getDispatcher().registerListener(new NotificationOnUnhost(message, client));
 	}
 	
 	private void connectToChannel(TwitchClient client) {

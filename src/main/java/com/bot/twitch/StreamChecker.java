@@ -32,16 +32,12 @@ public class StreamChecker extends TimerTask {
 		StreamEndpoint stream = client.getStreamEndpoint();
 		TwitchNotification notification;
 			
-		if(stream.isLive(channel) && !wasOnline) {
-			log.info("Stream has gone online");	
-				
+		if(stream.isLive(channel) && !wasOnline) {	
 			wasOnline = true;
 			notification = new OnlineTwitchNotification(message, client);
 			notification.sendNotification();
 
-		} else if (!stream.isLive(channel) && wasOnline) {
-			log.info("Stream has gone offline");
-				
+		} else if (!stream.isLive(channel) && wasOnline) {				
 			wasOnline = false;
 			notification = new OfflineTwitchNotification(message, client);
 			notification.sendNotification();
