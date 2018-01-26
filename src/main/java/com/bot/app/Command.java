@@ -48,10 +48,22 @@ public class Command {
 			int min = 0;
 			
 			int scp = random.nextInt((max - min) + 1) + min;
-			message.reply("http://www.scp-wiki.net/scp-" + scp);
-		}
-		
-		else {
+			message.reply("http://www.scp-wiki.net/scp-" +  String.format("%03d", scp));
+		} else if(command.equalsIgnoreCase("youtube")) {
+			message.reply("https://www.youtube.com/channel/UC7PeKnuBCx5MDPj_f1V90sQ");
+		} else if(command.equalsIgnoreCase("facebook")) {
+			message.reply("https://www.facebook.com/groups/nugamesoc");
+		} else if(command.equalsIgnoreCase("twitch")) {
+			message.reply("https://www.twitch.tv/nclgamingsociety");
+		} else if(command.equalsIgnoreCase("twitter")) {
+			message.reply("https://twitter.com/NewcastleGaming");
+		} else if(command.equalsIgnoreCase("nusu")) {
+			message.reply("https://www.nusu.co.uk/getinvolved/societies/society/GamingSoc/");
+		} else if(command.equalsIgnoreCase("nuel")) {
+			message.reply("https://thenuel.com/university/3244");
+		} else if(command.equalsIgnoreCase("battlenet")) {
+			message.reply("https://blizzard.com/invite/P7jEjiXd");
+		} else {
 			performAction(args);
 		}
 	}
