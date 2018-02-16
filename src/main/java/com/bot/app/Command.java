@@ -1,12 +1,14 @@
 package com.bot.app;
 
 import java.util.Random;
+import java.util.StringJoiner;
 
 import com.bot.filter.WordFilter;
 import com.bot.fun.Action;
 import com.bot.fun.Die;
 import com.bot.fun.Give;
 import com.bot.fun.Hug;
+import com.bot.utils.RoleAssigner;
 
 import de.btobastian.javacord.entities.User;
 import de.btobastian.javacord.entities.message.Message;
@@ -41,7 +43,18 @@ public class Command {
 		
 		String command = args[0]; 
 		
-		if(command.equalsIgnoreCase("cactuspie")) {
+		if(command.equalsIgnoreCase("role")) {
+			
+			RoleAssigner roleAssigner = new RoleAssigner(message);				
+			StringJoiner joiner = new StringJoiner(" ");
+				
+			for(int i = 1; i < args.length; i++) {
+				joiner.add(args[i]);
+			}
+			
+			roleAssigner.assignRole(joiner.toString());
+			
+		} else if(command.equalsIgnoreCase("cactuspie")) {
 			
 			Random random = new Random();
 			int max = 3999;
@@ -61,8 +74,6 @@ public class Command {
 			message.reply("https://www.nusu.co.uk/getinvolved/societies/society/GamingSoc/");
 		} else if(command.equalsIgnoreCase("nuel")) {
 			message.reply("https://thenuel.com/university/3244");
-		} else if(command.equalsIgnoreCase("battlenet")) {
-			message.reply("https://blizzard.com/invite/P7jEjiXd");
 		} else {
 			performAction(args);
 		}
