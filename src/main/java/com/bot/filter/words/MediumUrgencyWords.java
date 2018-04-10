@@ -23,11 +23,12 @@ public class MediumUrgencyWords extends AbstractWords {
 		setWords(Arrays.asList("trigger", "sjw", "loli", "shota", "communist", 
 				"communism", "ukip", "bnp", "hitler", "adolf", "terrorist", 
 				"terrorism", "chink", "allahu akbar", "autistic", "autism",
-				"queer", "dyke", "spastic"));
+				"queer", "dyke", "spastic", "cancer", "trap"));
 	}
 
 	public void addExceptions() {
-		setExceptions(Arrays.asList("kiloli", "lolith", "styloli", "lollipop", "conquer"));
+		setExceptions(Arrays.asList("kiloli", "lolith", "styloli", "lollipop", "conquer",
+				"query", "queries", "trapped"));
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {

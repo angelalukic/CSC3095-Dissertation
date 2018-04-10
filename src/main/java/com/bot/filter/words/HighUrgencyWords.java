@@ -23,13 +23,13 @@ public class HighUrgencyWords extends AbstractWords {
 	public void addWords() {
 		setWords(Arrays.asList("fag", "nigger", "negro", "nazi", "pedo",
 				"retard", "paki", "kike", "spaz", "tranny", "shemale", 
-				"she-male", "mongoloid", "rape"));
+				"she-male", "mongoloid", "rape", "molest"));
 	}
 	
 	public void addExceptions() {
 		setExceptions(Arrays.asList("cofagrigus", "scrape", "therapeu", "grape",
 				"drape", "trapez", "extrape", "leafage", "staffage", "torpedo", 
-				"pedometer", "pedolog"));
+				"pedometer", "pedolog", "rapped", "speedo", "niger"));
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {		

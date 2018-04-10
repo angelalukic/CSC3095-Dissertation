@@ -26,7 +26,7 @@ public class LowUrgencyWords extends AbstractWords {
 	}
 
 	public void addExceptions() {
-		setExceptions(Arrays.asList("jewel", "spoof", "dickens"));
+		setExceptions(Arrays.asList("jewel", "spoof", "dickens", "scunthorpe"));
 	}
 
 	public void sendFlaggedWordNotification(Message message, String word) {
