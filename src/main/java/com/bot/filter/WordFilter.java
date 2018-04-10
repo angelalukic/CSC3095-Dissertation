@@ -27,11 +27,6 @@ public class WordFilter {
 		checkMediumUrgencyWords(cleanInput);
 		checkLowUrgencyWords(cleanInput);
 		
-		if (messageContent.startsWith("i'm ") || messageContent.startsWith("im ")) {
-			String dadName = messageContent.replaceFirst("[iI]'?[mM]\\s*", "");
-			message.reply("Hi " + dadName + " I'm RobotFucker!");
-		}
-		
 		if (messageContent.contains("genji") || messageContent.contains("robotfucker")
 				|| messageContent.contains("dragonblade")) {
 			message.addCustomEmojiReaction(
