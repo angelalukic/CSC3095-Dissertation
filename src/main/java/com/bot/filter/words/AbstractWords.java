@@ -12,18 +12,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public abstract class AbstractWords implements Words {
 	
 	private List<String> flaggedWords = new ArrayList<String>();
-	private List<String> blacklist;
+	@Setter private List<String> blacklist;
 	private List<String> whitelist;
+	private Message message;
 	
-	protected void setWhitelist(List<Map<String, List<String>>> words) {
+	public AbstractWords(Message message, List<Map<String, List<String>>> words) {
 		this.whitelist = words.get(3).get("whitelist");
+		this.message = message;
 	}
 	
-	public List<String> retrieveFlaggedWords(Message message) {
+	public List<String> retrieveFlaggedWords() {
 		
 		String messageContent = message.getContent();
 		
@@ -48,8 +49,7 @@ public abstract class AbstractWords implements Words {
 		for(String word : getBlacklist()) {
 			count += countOccurencesOfWord(input, word);
 		}
-		return count;	
-		
+		return count;		
 	}
 	
 	private int countWhitelistedWords(String input) {

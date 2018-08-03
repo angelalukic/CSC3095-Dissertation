@@ -37,31 +37,31 @@ public class WordFilter {
 	
 	private void checkHighUrgencyWords(List<Map<String, List<String>>> yaml) {
 		
-		Words words = new HighUrgencyWords(yaml);
-		List<String> flaggedHighUrgencyWords = words.retrieveFlaggedWords(message);
+		Words words = new HighUrgencyWords(message, yaml);
+		List<String> flaggedHighUrgencyWords = words.retrieveFlaggedWords();
 		
 		if(flaggedHighUrgencyWords != null) {
-			message.getChannel().sendMessage("You said a VERY BAD word!!");
+			words.sendNotification();
 		}
 	}
 	
 	private void checkMediumUrgencyWords(List<Map<String, List<String>>> yaml) {
 		
-		Words words = new MediumUrgencyWords(yaml);
-		List<String> flaggedMediumUrgencyWords = words.retrieveFlaggedWords(message);
+		Words words = new MediumUrgencyWords(message, yaml);
+		List<String> flaggedMediumUrgencyWords = words.retrieveFlaggedWords();
 		
 		if(flaggedMediumUrgencyWords != null) {
-			message.getChannel().sendMessage("You said a somewhat bad word!!");
+			words.sendNotification();
 		}
 	}
 	
 	private void checkLowUrgencyWords(List<Map<String, List<String>>> yaml) {
 		
-		Words words = new LowUrgencyWords(yaml);
-		List<String> flaggedLowUrgencyWords = words.retrieveFlaggedWords(message);
+		Words words = new LowUrgencyWords(message, yaml);
+		List<String> flaggedLowUrgencyWords = words.retrieveFlaggedWords();
 	
 		if(flaggedLowUrgencyWords != null) {
-			message.getChannel().sendMessage("You said a word which is barely bad!!");
+			words.sendNotification();
 		}
 	}
 }
