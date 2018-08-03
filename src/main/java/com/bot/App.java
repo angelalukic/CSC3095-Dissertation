@@ -9,7 +9,7 @@ import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.message.Message;
 
-
+import com.bot.discord.MessageReader;
 import com.bot.discord.ServerConfigurationLoader;
 import com.bot.yaml.YamlReader;
 
@@ -27,13 +27,19 @@ public class App {
 	        api.addMessageCreateListener(event -> {
 	        	
 	        	Message message = event.getMessage();
-	        	ServerConfigurationLoader configLoader = new ServerConfigurationLoader(message);
 	        	
-	        	try {       		
-					Map<String, Object> config = configLoader.retrieveConfiguration();					
-				} catch (IOException e) {
-					log.info("An error was caught when trying to retrieve configuration file:" + e.getMessage());
-				}
+	        	// If message is from the bot, do not do anything
+	        	if(!message.getAuthor().isYourself()) {
+		        	ServerConfigurationLoader configLoader = new ServerConfigurationLoader(message);
+		        	
+		        	try {
+						Map<String, Object> config = configLoader.retrieveConfiguration();		
+		        		MessageReader reader = new MessageReader(message, config);
+		        		reader.read();
+					} catch (IOException e) {
+						log.info("An error was caught when trying to retrieve configuration file:" + e.getMessage());
+					}
+	        	}
 	        });
 	        
 		} catch (FileNotFoundException e) {
