@@ -56,6 +56,6 @@ public class ServerConfigurationLoader {
 	}
 	
 	private String introductoryMessage() {
-		return "New server detected! Introductory message with instructions as to how to set up bot will be put here ... eventually.";
+		return "New server detected! Please specify channel to send important notifications to using `rf@adminchannel <channel>`";
 	}
 }

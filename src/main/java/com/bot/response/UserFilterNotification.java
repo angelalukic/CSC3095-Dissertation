@@ -14,12 +14,16 @@ public class UserFilterNotification extends AbstractNotification {
 
 	public void send(Color color) {
 		
+		String flaggedWords = getFlaggedWords().toString();
+		String serverName = getMessage().getServer().get().getName();
+		String messageContent = getMessage().getContent();
+		
 		EmbedBuilder output = new EmbedBuilder();
 		
 		output.setColor(color);
-		output.setDescription("You have been caught saying " + getFlaggedWords().toString()
-				+ " in server\"" + getMessage().getServer().get().getName() + "\".");
-		output.addField("Original Message", getMessage().getContent());
+		output.setDescription("You have been caught saying " + flaggedWords
+				+ " in server\"" + serverName + "\".");
+		output.addField("Original Message", messageContent);
 		
 		getMessage().getAuthor().asUser().get().sendMessage(output);
 	}
