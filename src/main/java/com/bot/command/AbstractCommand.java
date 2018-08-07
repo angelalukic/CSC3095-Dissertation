@@ -16,7 +16,6 @@ public abstract class AbstractCommand implements Command {
 	protected String retrieveCommand() {
 		
 		String messageContent = message.getContent();
-		
 		return messageContent.replaceFirst("rf[@!]", ""); 
 	}
 }

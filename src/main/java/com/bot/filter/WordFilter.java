@@ -37,7 +37,7 @@ public class WordFilter {
 	
 	private void checkHighUrgencyWords(List<Map<String, List<String>>> yaml) {
 		
-		Words words = new HighUrgencyWords(message, yaml);
+		Words words = new HighUrgencyWords(message, config, yaml);
 		List<String> flaggedHighUrgencyWords = words.retrieveFlaggedWords();
 		
 		if(flaggedHighUrgencyWords != null) {
@@ -47,7 +47,7 @@ public class WordFilter {
 	
 	private void checkMediumUrgencyWords(List<Map<String, List<String>>> yaml) {
 		
-		Words words = new MediumUrgencyWords(message, yaml);
+		Words words = new MediumUrgencyWords(message, config, yaml);
 		List<String> flaggedMediumUrgencyWords = words.retrieveFlaggedWords();
 		
 		if(flaggedMediumUrgencyWords != null) {
@@ -57,7 +57,7 @@ public class WordFilter {
 	
 	private void checkLowUrgencyWords(List<Map<String, List<String>>> yaml) {
 		
-		Words words = new LowUrgencyWords(message, yaml);
+		Words words = new LowUrgencyWords(message, config, yaml);
 		List<String> flaggedLowUrgencyWords = words.retrieveFlaggedWords();
 	
 		if(flaggedLowUrgencyWords != null) {

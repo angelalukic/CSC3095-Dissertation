@@ -17,10 +17,12 @@ public abstract class AbstractWords implements Words {
 	private List<String> flaggedWords = new ArrayList<String>();
 	@Setter private List<String> blacklist;
 	private List<String> whitelist;
+	private Map<String, Object> config;
 	private Message message;
 	
-	public AbstractWords(Message message, List<Map<String, List<String>>> words) {
+	public AbstractWords(Message message, Map<String, Object> config, List<Map<String, List<String>>> words) {
 		this.whitelist = words.get(3).get("whitelist");
+		this.config = config;
 		this.message = message;
 	}
 	

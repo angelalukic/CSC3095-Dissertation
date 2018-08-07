@@ -2,14 +2,15 @@ package com.bot.response;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.Map;
 
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 public class UserFilterNotification extends AbstractNotification {
 
-	public UserFilterNotification(Message message, List<String> flaggedWords) {
-		super(message, flaggedWords);
+	public UserFilterNotification(Message message,Map<String, Object> config, List<String> flaggedWords) {
+		super(message, config, flaggedWords);
 	}
 
 	public void send(Color color) {

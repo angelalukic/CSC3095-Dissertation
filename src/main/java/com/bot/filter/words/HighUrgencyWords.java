@@ -6,13 +6,14 @@ import java.util.Map;
 
 import org.javacord.api.entity.message.Message;
 
+import com.bot.response.AdminFilterNotification;
 import com.bot.response.Notification;
 import com.bot.response.UserFilterNotification;
 
 public class HighUrgencyWords extends AbstractWords {
 	
-	public HighUrgencyWords(Message message, List<Map<String, List<String>>> words) {
-		super(message, words);
+	public HighUrgencyWords(Message message, Map<String, Object> config, List<Map<String, List<String>>> words) {
+		super(message, config, words);
 		List<String> blacklist = retrieveBlacklist(words);
 		setBlacklist(blacklist);
 	}
@@ -25,7 +26,10 @@ public class HighUrgencyWords extends AbstractWords {
 		
 		getMessage().delete();
 		
-		Notification notification = new UserFilterNotification(getMessage(), getFlaggedWords());
-		notification.send(new Color(255,0,0));
+		Notification userNotification = new UserFilterNotification(getMessage(), getConfig(), getFlaggedWords());
+		userNotification.send(new Color(255,0,0));
+		
+		Notification adminNotification = new AdminFilterNotification(getMessage(), getConfig(), getFlaggedWords());
+		adminNotification.send(new Color(255,0,0));
 	}
 }
