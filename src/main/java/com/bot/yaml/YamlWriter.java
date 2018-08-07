@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
@@ -17,12 +18,23 @@ public class YamlWriter {
 		this.filePath = filePath;
 	}
 	
-	public void write(Map<String, Object> newData) throws IOException {
+	public void replace(Map<String, Object> newData) throws IOException {
 		
 		Yaml yaml = new Yaml();
 		
 		Map<String, Object> oldData = loadFile();
-		Map<String,Object> updatedData = updateData(newData, oldData);
+		Map<String,Object> updatedData = replaceData(newData, oldData);
+		
+		FileWriter writer = new FileWriter(filePath);
+		yaml.dump(updatedData, writer);
+	}
+	
+	public void add(Map<String, Object> newData) throws IOException {
+		
+		Yaml yaml = new Yaml();
+		
+		Map<String, Object> oldData = loadFile();
+		Map<String,Object> updatedData = addData(newData, oldData);
 		
 		FileWriter writer = new FileWriter(filePath);
 		yaml.dump(updatedData, writer);
@@ -40,11 +52,11 @@ public class YamlWriter {
 	}
 	
 	/*
-	 * Currently all data which is used by this program is formatted Map<String, List<Map<String,String>>>
+	 * Currently all data which can be replaced is formatted Map<String, List<Map<String,String>>>
 	 * This method will work for this data format recursively, unsure if I want to make it able to be more general yet
 	 */
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> updateData(Map<String, Object> newData, Map<String, Object> data) {
+	private Map<String, Object> replaceData(Map<String, Object> newData, Map<String, Object> data) {
 		
 		for (Map.Entry<String, Object> newEntry : newData.entrySet()) {
 			
@@ -57,7 +69,7 @@ public class YamlWriter {
 						for(Map<String, Object> map : (ArrayList<Map<String, Object>>) serverEntry.getValue()) {
 							
 							Map<String, Object> subMap = (Map<String, Object>) newEntry.getValue();
-							updateData(subMap, map);							
+							replaceData(subMap, map);							
 						}
 					}
 					
@@ -65,6 +77,43 @@ public class YamlWriter {
 						
 						data.put(serverEntry.getKey(), newEntry.getValue());
 						return data;
+					}
+				}
+			}
+		}		
+		return data;
+	}
+	
+	/*
+	 * Currently all data which can be replaced is formatted Map<String, List<Map<String,List<String>>>
+	 * This method will work for this data format recursively, unsure if I want to make it able to be more general yet
+	 */
+	@SuppressWarnings("unchecked")
+	private Map<String, Object> addData(Map<String, Object> newData, Map<String, Object> data) {
+		
+		for (Map.Entry<String, Object> newEntry : newData.entrySet()) {
+			
+			for (Map.Entry<String, Object> serverEntry : data.entrySet()) {
+				
+				if (serverEntry.getKey().equals(newEntry.getKey())) {
+					
+					if (serverEntry.getValue() instanceof ArrayList) {
+						
+						try {
+							for(Map<String, Object> map : (ArrayList<Map<String, Object>>) serverEntry.getValue()) {
+								
+								Map<String, Object> subMap = (Map<String, Object>) newEntry.getValue();
+								addData(subMap, map);							
+							}
+							
+						} catch(ClassCastException e) {
+							List<String> newList = new ArrayList<String>();
+							newList.addAll( (List<String>) serverEntry.getValue());
+							newList.addAll( (List<String>) newEntry.getValue());
+						
+							data.put(serverEntry.getKey(), newList);
+							return data;
+						}
 					}
 				}
 			}

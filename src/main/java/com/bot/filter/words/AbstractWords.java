@@ -29,8 +29,10 @@ public abstract class AbstractWords implements Words {
 	public List<String> retrieveFlaggedWords() {
 		
 		String messageContent = message.getContent();
+		String cleanMessageContent = removeDuplicateChars(messageContent);
+		String cleanerMessageContent = removeSymbols(cleanMessageContent);
 		
-		if(messageFlagged(messageContent)) {
+		if(messageFlagged(cleanerMessageContent)) {
 			return flaggedWords;
 		}
 		return null;		
@@ -68,13 +70,30 @@ public abstract class AbstractWords implements Words {
 		
 		int count = 0;
 
-		Pattern pattern = Pattern.compile(word);
-		Matcher matcher = pattern.matcher(input);
+		Pattern pattern = Pattern.compile(word.toLowerCase());
+		Matcher matcher = pattern.matcher(input.toLowerCase());
 		
 		while(matcher.find()) {
 			flaggedWords.add(word);
 			count++;
 		}
 		return count;
+	}
+
+	private String removeDuplicateChars(String input) {
+		
+		StringBuilder noDupes = new StringBuilder();
+		
+		for (int i = 0; i < input.length(); i++) {
+	        char letter = input.charAt(i);
+	        if(i == 0 || letter != input.charAt(i-1)) {
+	        	noDupes.append(letter);
+	        }
+	    }
+	    return noDupes.toString();
+	}
+	
+	private String removeSymbols(String input) {
+		return input.replaceAll("[^a-zA-Z\\s]", "");
 	}
 }

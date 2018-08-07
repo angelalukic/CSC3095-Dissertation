@@ -2,11 +2,13 @@ package com.bot.command;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.javacord.api.entity.message.Message;
 
-import com.bot.yaml.YamlWriter;
+import com.bot.command.commands.ChannelChanger;
+import com.bot.command.commands.WordAdder;
 
 public class AdminCommand extends AbstractCommand {
 	
@@ -21,6 +23,11 @@ public class AdminCommand extends AbstractCommand {
 		if(command.startsWith("adminchannel") || command.startsWith("reportschannel")) {
 			changeChannel(command);
 		}
+		
+		else if(command.startsWith("addhighurgencywords") || command.startsWith("addmediumurgencywords") ||
+				command.startsWith("addlowurgencywords") || command.startsWith("addwhitelistwords")) {
+			changeWordFilter(command);
+		}
 	}
 	
 	private void changeChannel(String command) throws IOException {
@@ -31,44 +38,48 @@ public class AdminCommand extends AbstractCommand {
 			Map<String, String> channelData = new HashMap<String, String>();
 			Map<String, Object> serverData = new HashMap<String, Object>();
 			
+			ChannelChanger channelChanger = new ChannelChanger(getMessage(), channelData, serverData);
+			
 			if(command.startsWith("adminchannel")) {
-				changeAdminChannel(channelId, channelData, serverData);
+				channelChanger.changeAdminChannel(channelId);
 			}
 			
 			else if(command.startsWith("reportschannel")) {
-				changeReportsChannel(channelId, channelData, serverData);
+				channelChanger.changeReportsChannel(channelId);
 			}
 			
 		} catch (IndexOutOfBoundsException e) {
 			getMessage().getChannel().sendMessage("You need to provide a valid channel.");
 		}
 	}
-
-	private void changeAdminChannel(String channelId, Map<String, String> channelData, Map<String, Object> serverData) throws IOException {
-		
-		String adminChannelId = getMessage().getMentionedChannels().get(0).getIdAsString();
-		String serverId = getMessage().getServer().get().getIdAsString();
-		
-		channelData.put("admin", adminChannelId);
-		serverData.put("channel", channelData);
-		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
-		yamlWriter.write(serverData); 
-		
-		getMessage().getChannel().sendMessage("Admin channel has been changed to <#" + adminChannelId + ">");
-	}
 	
-	private void changeReportsChannel(String channelId, Map<String, String> channelData, Map<String, Object> serverData) throws IOException {
+	private void changeWordFilter(String command) throws IOException {
 		
-		String reportsChannelId = getMessage().getMentionedChannels().get(0).getIdAsString();
-		String serverId = getMessage().getServer().get().getIdAsString();
+		String words = command.replaceFirst("(addhighurgencywords)?(addmediumurgencywords)?(addlowurgencywords)?(addwhitelistwords)?\\s?", "");
 		
-		channelData.put("reports", reportsChannelId);
-		serverData.put("channel", channelData);
+		Map<String, List<String>> wordData = new HashMap<String, List<String>>();
+		Map<String, Object> serverData = new HashMap<String, Object>();
 		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
-		yamlWriter.write(serverData);
+		WordAdder wordAdder = new WordAdder(getMessage(), wordData, serverData);
 		
-		getMessage().getChannel().sendMessage("Reports channel has been changed to <#" + reportsChannelId + ">");
+		if(command.startsWith("addhighurgencywords") && words.length() != 0) {
+			wordAdder.addHighUrgencyWords(words);
+		}
+		
+		else if(command.startsWith("addmediumurgencywords") && words.length() != 0) {
+			wordAdder.addMediumUrgencyWords(words);
+		}
+		
+		else if(command.startsWith("addlowurgencywords") && words.length() != 0) {
+			wordAdder.addLowUrgencyWords(words);
+		}
+		
+		else if (command.startsWith("addwhitelistwords") && words.length() != 0) {
+			wordAdder.addWhitelistWords(words);
+		}
+		
+		else {
+			getMessage().getChannel().sendMessage("You need to provide words.");
+		}
 	}
 }
