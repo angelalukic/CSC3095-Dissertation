@@ -21,15 +21,11 @@ public class YamlWriter {
 		
 		Yaml yaml = new Yaml();
 		
-		Map<String, Object> serverData = loadFile();
-		
-		Map<String,Object> updatedData = updateData(newData, serverData);
+		Map<String, Object> oldData = loadFile();
+		Map<String,Object> updatedData = updateData(newData, oldData);
 		
 		FileWriter writer = new FileWriter(filePath);
-		
-		if(updatedData != null) {
-			yaml.dump(updatedData, writer);
-		}
+		yaml.dump(updatedData, writer);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -48,11 +44,11 @@ public class YamlWriter {
 	 * This method will work for this data format recursively, unsure if I want to make it able to be more general yet
 	 */
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> updateData(Map<String, Object> newData, Map<String, Object> serverData) {
+	private Map<String, Object> updateData(Map<String, Object> newData, Map<String, Object> data) {
 		
 		for (Map.Entry<String, Object> newEntry : newData.entrySet()) {
 			
-			for (Map.Entry<String, Object> serverEntry : serverData.entrySet()) {
+			for (Map.Entry<String, Object> serverEntry : data.entrySet()) {
 				
 				if (serverEntry.getKey().equals(newEntry.getKey())) {
 					
@@ -67,12 +63,12 @@ public class YamlWriter {
 					
 					else if(serverEntry.getValue() instanceof String || serverEntry.getValue() == null) {
 						
-						serverData.put(serverEntry.getKey(), newEntry.getValue());
-						return serverData;
+						data.put(serverEntry.getKey(), newEntry.getValue());
+						return data;
 					}
 				}
 			}
 		}		
-		return null;
+		return data;
 	}
 }

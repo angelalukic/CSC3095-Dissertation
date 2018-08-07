@@ -18,25 +18,57 @@ public class AdminCommand extends AbstractCommand {
 
 		String command = retrieveCommand();
 		
-		if(command.startsWith("adminchannel")) {
+		if(command.startsWith("adminchannel") || command.startsWith("reportschannel")) {
+			changeChannel(command);
+		}
+	}
+	
+	private void changeChannel(String command) throws IOException {
+		
+		try {
+			String channelId = getMessage().getMentionedChannels().get(0).getIdAsString();
 			
-			changeAdminChannel();
+			Map<String, String> channelData = new HashMap<String, String>();
+			Map<String, Object> serverData = new HashMap<String, Object>();
+			
+			if(command.startsWith("adminchannel")) {
+				changeAdminChannel(channelId, channelData, serverData);
+			}
+			
+			else if(command.startsWith("reportschannel")) {
+				changeReportsChannel(channelId, channelData, serverData);
+			}
+			
+		} catch (IndexOutOfBoundsException e) {
+			getMessage().getChannel().sendMessage("You need to provide a valid channel.");
 		}
 	}
 
-	private void changeAdminChannel() throws IOException {
-		String serverId = getMessage().getServer().get().getIdAsString();
+	private void changeAdminChannel(String channelId, Map<String, String> channelData, Map<String, Object> serverData) throws IOException {
+		
 		String adminChannelId = getMessage().getMentionedChannels().get(0).getIdAsString();
+		String serverId = getMessage().getServer().get().getIdAsString();
 		
-		Map<String, String> adminChannel = new HashMap<String, String>();
-		Map<String, Object> data = new HashMap<String, Object>();
+		channelData.put("admin", adminChannelId);
+		serverData.put("channel", channelData);
 		
-		adminChannel.put("admin", adminChannelId);
-		data.put("channel", adminChannel);
-		
-		YamlWriter yamlwriter = new YamlWriter("servers\\" + serverId + ".yml");
-		yamlwriter.write(data); 
+		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		yamlWriter.write(serverData); 
 		
 		getMessage().getChannel().sendMessage("Admin channel has been changed to <#" + adminChannelId + ">");
+	}
+	
+	private void changeReportsChannel(String channelId, Map<String, String> channelData, Map<String, Object> serverData) throws IOException {
+		
+		String reportsChannelId = getMessage().getMentionedChannels().get(0).getIdAsString();
+		String serverId = getMessage().getServer().get().getIdAsString();
+		
+		channelData.put("reports", reportsChannelId);
+		serverData.put("channel", channelData);
+		
+		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		yamlWriter.write(serverData);
+		
+		getMessage().getChannel().sendMessage("Reports channel has been changed to <#" + reportsChannelId + ">");
 	}
 }
