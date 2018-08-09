@@ -26,7 +26,7 @@ public class AdminFilterNotification extends AbstractNotification {
 		output.setDescription("<@!" + userId + "> has been caught saying " + flaggedWords
 				+ " in channel <#" + channelId + ">.");
 		output.addField("Original Message", messageContent);
-		output.setFooter("To change the channel these reports get send to use: command rf@reportschannel <channel>");
+		output.setFooter("To change the channel these reports get sent to use: command rf@reportschannel <channel>");
 		
 		String reportsChannel = retrieveReportsChannel().getIdAsString();
 		

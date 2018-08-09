@@ -30,7 +30,9 @@ public class ServerConfigurationLoader {
 			message.getChannel().sendMessage(introduction);
 		}
 		
-    	YamlReader reader = new YamlReader("servers\\" + serverId + ".yml");
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
+		
+    	YamlReader reader = new YamlReader(filePath);
     	Map<String, Object> values = reader.retrieveYaml();
     	
     	return values;
@@ -38,9 +40,11 @@ public class ServerConfigurationLoader {
 	
 	private boolean configExists(String serverId) {
 		
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
+		
 		try {
 			@SuppressWarnings({ "unused", "resource" })
-			FileInputStream stream = new FileInputStream("servers\\" + serverId + ".yml");
+			FileInputStream stream = new FileInputStream(filePath);
 		} catch (FileNotFoundException e) {
 			return false;
 		}
@@ -49,10 +53,23 @@ public class ServerConfigurationLoader {
 	
 	private void createConfigFile(String serverId) throws IOException {
 		
-		File src = new File("servers\\template.yml");
-		File dest = new File("servers\\" + serverId + ".yml");
+		String srcPath = retrieveAbsoluteFilePath("servers/template.yml");
+		String destPath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
+		
+		File src = new File(srcPath);
+		File dest = new File(destPath);
 		
 		Files.copy(src.toPath(), dest.toPath());
+	}
+	
+	private String retrieveAbsoluteFilePath(String filePath) {
+		
+		File homedir = new File(System.getProperty("user.dir"));
+		File file = new File(homedir, filePath);
+		
+		String absolutePath = file.getAbsolutePath();
+		
+		return absolutePath;
 	}
 	
 	private String introductoryMessage() {

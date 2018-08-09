@@ -29,10 +29,8 @@ public abstract class AbstractWords implements Words {
 	public List<String> retrieveFlaggedWords() {
 		
 		String messageContent = message.getContent();
-		String cleanMessageContent = removeDuplicateChars(messageContent);
-		String cleanerMessageContent = removeSymbols(cleanMessageContent);
 		
-		if(messageFlagged(cleanerMessageContent)) {
+		if(messageFlagged(messageContent)) {
 			return flaggedWords;
 		}
 		return null;		

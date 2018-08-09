@@ -1,5 +1,6 @@
 package com.bot.command.commands;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,9 @@ public class WordAdder {
 		wordData.put("high urgency", wordsList);
 		serverData.put("word filter", wordData);
 		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
+		
+		YamlWriter yamlWriter = new YamlWriter(filePath);
 		yamlWriter.add(serverData);
 		
 		message.getChannel().sendMessage(wordsList.toString() + " has been added as high urgency (red) words.");
@@ -43,8 +46,9 @@ public class WordAdder {
 		wordData.put("medium urgency", wordsList);
 		serverData.put("word filter", wordData);
 		
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
 		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		YamlWriter yamlWriter = new YamlWriter(filePath);
 		yamlWriter.add(serverData);
 		
 		message.getChannel().sendMessage(wordsList.toString() + " has been added as medium urgency (orange) words.");
@@ -58,8 +62,9 @@ public class WordAdder {
 		wordData.put("low urgency", wordsList);
 		serverData.put("word filter", wordData);
 		
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
 		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		YamlWriter yamlWriter = new YamlWriter(filePath);
 		yamlWriter.add(serverData);
 		
 		message.getChannel().sendMessage(wordsList.toString() + " has been added as low urgency (yellow) words.");
@@ -73,10 +78,22 @@ public class WordAdder {
 		wordData.put("whitelist", wordsList);
 		serverData.put("word filter", wordData);
 		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
+		
+		YamlWriter yamlWriter = new YamlWriter(filePath);
 		yamlWriter.add(serverData);
 		
 		message.getChannel().sendMessage(wordsList.toString() + " has been added as whitelisted words.");
+	}
+	
+	private String retrieveAbsoluteFilePath(String filePath) {
+		
+		File homedir = new File(System.getProperty("user.dir"));
+		File file = new File(homedir, filePath);
+		
+		String absolutePath = file.getAbsolutePath();
+		
+		return absolutePath;
 	}
 	
 	private List<String> convertToList(String words) {

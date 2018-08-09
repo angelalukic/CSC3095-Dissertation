@@ -100,6 +100,11 @@ public class YamlWriter {
 					if (serverEntry.getValue() instanceof ArrayList) {
 						
 						try {
+							
+							if( ((List<String>) serverEntry.getValue()).isEmpty()) {
+								throw new ClassCastException("");
+							}
+							
 							for(Map<String, Object> map : (ArrayList<Map<String, Object>>) serverEntry.getValue()) {
 								
 								Map<String, Object> subMap = (Map<String, Object>) newEntry.getValue();
@@ -109,6 +114,7 @@ public class YamlWriter {
 						} catch(ClassCastException e) {
 							List<String> newList = new ArrayList<String>();
 							newList.addAll( (List<String>) serverEntry.getValue());
+							
 							newList.addAll( (List<String>) newEntry.getValue());
 						
 							data.put(serverEntry.getKey(), newList);

@@ -1,5 +1,6 @@
 package com.bot.command.commands;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
@@ -27,7 +28,9 @@ public class ChannelChanger {
 		channelData.put("admin", adminChannelId);
 		serverData.put("channel", channelData);
 		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
+		
+		YamlWriter yamlWriter = new YamlWriter(filePath);
 		yamlWriter.replace(serverData); 
 		
 		message.getChannel().sendMessage("Admin channel has been changed to <#" + adminChannelId + ">");
@@ -41,9 +44,21 @@ public class ChannelChanger {
 		channelData.put("reports", reportsChannelId);
 		serverData.put("channel", channelData);
 		
-		YamlWriter yamlWriter = new YamlWriter("Servers\\" + serverId + ".yml");
+		String filePath = retrieveAbsoluteFilePath("servers/" + serverId + ".yml");
+		
+		YamlWriter yamlWriter = new YamlWriter(filePath);
 		yamlWriter.replace(serverData);
 		
 		message.getChannel().sendMessage("Reports channel has been changed to <#" + reportsChannelId + ">");
+	}
+	
+	private String retrieveAbsoluteFilePath(String filePath) {
+		
+		File homedir = new File(System.getProperty("user.dir"));
+		File file = new File(homedir, filePath);
+		
+		String absolutePath = file.getAbsolutePath();
+		
+		return absolutePath;
 	}
 }
