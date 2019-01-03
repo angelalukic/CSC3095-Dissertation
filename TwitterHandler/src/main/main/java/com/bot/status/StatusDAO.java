@@ -14,4 +14,9 @@ public class StatusDAO {
 		Twitter twitter = TwitterFactory.getSingleton();
 		return twitter.showStatus(id);
 	}
+	
+	public Status postStatus(String status) throws TwitterException {
+		Twitter twitter = TwitterFactory.getSingleton();		
+		return twitter.updateStatus(status);
+	}
 }

@@ -15,6 +15,9 @@ import twitter4j.Status;
 @Setter
 public class StatusBean {
 	
+	public StatusBean() {
+	}
+	
 	public StatusBean(Status status) {
 		this.id = status.getId();
 		this.body = status.getText();
