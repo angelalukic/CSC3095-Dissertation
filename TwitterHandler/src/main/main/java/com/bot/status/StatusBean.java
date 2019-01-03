@@ -1,4 +1,4 @@
-package com.bot.bean;
+package com.bot.status;
 
 import java.util.Date;
 

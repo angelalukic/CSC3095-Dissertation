@@ -1,4 +1,4 @@
-package com.bot.bean;
+package com.bot.user;
 
 import lombok.Getter;
 import lombok.Setter;

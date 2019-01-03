@@ -1,4 +1,4 @@
-package com.bot.main;
+package com.bot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
