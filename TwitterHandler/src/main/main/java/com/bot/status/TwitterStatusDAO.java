@@ -8,7 +8,7 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 
 @Component
-public class StatusDAO {
+public class TwitterStatusDAO {
 	
 	public Status getStatus(long id) throws TwitterException {
 		Twitter twitter = TwitterFactory.getSingleton();

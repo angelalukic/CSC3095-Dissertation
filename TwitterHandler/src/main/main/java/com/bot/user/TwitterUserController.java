@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 import twitter4j.TwitterException;
 
 @RestController
-public class UserController {
+public class TwitterUserController {
 	
 	@Autowired
-	private UserDAO service;
+	private TwitterUserDAO service;
 	
-	@GetMapping("/twitter/user/{id}")
-	public UserBean userBean(@PathVariable long id) throws TwitterException {
-		return new UserBean(service.getUser(id));
+	@GetMapping("/twitter/users/{id}")
+	public TwitterUser userBean(@PathVariable long id) throws TwitterException {
+		return new TwitterUser(service.getUser(id));
 	}
 }

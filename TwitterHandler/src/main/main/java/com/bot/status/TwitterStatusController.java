@@ -15,18 +15,18 @@ import twitter4j.Status;
 import twitter4j.TwitterException;
 
 @RestController
-public class StatusController {
+public class TwitterStatusController {
 	
 	@Autowired
-	private StatusDAO service;
+	private TwitterStatusDAO service;
 	
 	@GetMapping("/twitter/status/{id}")
-	public StatusBean statusBean(@PathVariable long id) throws TwitterException {
-		return new StatusBean(service.getStatus(id));
+	public TwitterStatus statusBean(@PathVariable long id) throws TwitterException {
+		return new TwitterStatus(service.getStatus(id));
 	}
 	
 	@PostMapping("twitter/status")
-	public ResponseEntity<Object> createStatus(@RequestBody StatusBean status) throws TwitterException {
+	public ResponseEntity<Object> createStatus(@RequestBody TwitterStatus status) throws TwitterException {
 		Status savedStatus = service.postStatus(status.getBody());
 		
 		URI location = ServletUriComponentsBuilder

@@ -11,18 +11,7 @@ import twitter4j.User;
 
 @Getter
 @Setter
-public class UserBean {
-	
-	public UserBean(User user) {
-		this.id = user.getId();
-		this.name = user.getName();
-		this.screenName = user.getScreenName();
-		this.url = user.getURL();
-		this.description = user.getDescription();
-		this.followers = user.getFollowersCount();
-		this.profilePicture = user.getProfileImageURL();
-		this.profileBanner = user.getProfileBannerURL();
-	}
+public class TwitterUser {
 	
 	private long id;
 	private String name;
@@ -32,4 +21,18 @@ public class UserBean {
 	private int followers;
 	private String profilePicture;
 	private String profileBanner;
+	
+	protected TwitterUser() {
+	}
+	
+	public TwitterUser(User user) {
+		this.id = user.getId();
+		this.name = user.getName();
+		this.screenName = user.getScreenName();
+		this.url = user.getURL();
+		this.description = user.getDescription();
+		this.followers = user.getFollowersCount();
+		this.profilePicture = user.getProfileImageURL();
+		this.profileBanner = user.getProfileBannerURL();
+	}
 }

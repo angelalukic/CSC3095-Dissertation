@@ -13,22 +13,22 @@ import twitter4j.Status;
 
 @Getter
 @Setter
-public class StatusBean {
-	
-	public StatusBean() {
-	}
-	
-	public StatusBean(Status status) {
-		this.id = status.getId();
-		this.body = status.getText();
-		this.date = status.getCreatedAt();
-		this.userId = status.getUser().getId();
-		this.isRetweet = status.isRetweet();
-	}
+public class TwitterStatus {
 	
 	private long id;
 	private String body;
 	private Date date;
 	private long userId;
 	private boolean isRetweet;
+	
+	public TwitterStatus() {
+	}
+	
+	public TwitterStatus(Status status) {
+		this.id = status.getId();
+		this.body = status.getText();
+		this.date = status.getCreatedAt();
+		this.userId = status.getUser().getId();
+		this.isRetweet = status.isRetweet();
+	}
 }
