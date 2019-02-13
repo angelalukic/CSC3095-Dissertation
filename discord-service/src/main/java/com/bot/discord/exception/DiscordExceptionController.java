@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @RestController
 public class DiscordExceptionController extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(ChannelNotFoundException.class)
-	public final ResponseEntity<Object> handleChannelNotFoundException(ChannelNotFoundException ex, WebRequest request) {
+	@ExceptionHandler(ServerNotFoundException.class)
+	public final ResponseEntity<Object> handleChannelNotFoundException(ServerNotFoundException ex, WebRequest request) {
 		DiscordException exceptionResponse = new DiscordException(new Date(), ex.getMessage(), "Channel Not Found");
 		return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_FOUND);
 	}

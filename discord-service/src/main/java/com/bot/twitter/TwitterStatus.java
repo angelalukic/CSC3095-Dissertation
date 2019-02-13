@@ -4,7 +4,6 @@ import java.util.Date;
 
 import lombok.Getter;
 import lombok.Setter;
-import twitter4j.Status;
 
 /*
  * @Getter and @Setter automatically insert Getter and Setter Methods
@@ -19,16 +18,20 @@ public class TwitterStatus {
 	private long id;
 	private String body;
 	private Date date;
+	private String image;
+	private String video;
 	private boolean isRetweet;
 	
 	public TwitterStatus() {
 	}
 	
-	public TwitterStatus(Status status) {
-		this.user = new TwitterUser(status.getUser());
+	public TwitterStatus(TwitterStatus status) {
+		this.user = status.getUser();
 		this.id = status.getId();
-		this.body = status.getText();
-		this.date = status.getCreatedAt();
+		this.body = status.getBody();
+		this.date = status.getDate();
+		this.image = status.getImage();
+		this.video = status.getVideo();
 		this.isRetweet = status.isRetweet();
 	}
 }
