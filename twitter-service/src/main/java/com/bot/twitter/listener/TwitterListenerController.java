@@ -37,12 +37,18 @@ public class TwitterListenerController {
 	
 	@DeleteMapping("/twitter/listeners/{id}")
 	public void deleteUser(@PathVariable long id) {
+		Optional<TwitterListener> listener = listenerRepository.findById(id);
+		
+		if(!listener.isPresent())
+			throw new TwitterListenerNotFoundException("id-" + id);
+		
 		listenerRepository.deleteById(id);
 	}
 	
 	@PostMapping("/twitter/listeners")
-	public ResponseEntity<Object> createListener(@RequestBody TwitterListener twitter) {
-		TwitterListener savedTwitter = listenerRepository.save(twitter);
+	public ResponseEntity<Object> createListener(@RequestBody TwitterListenerDTO twitter) {
+		TwitterListener twitterListener = new TwitterListener(twitter);
+		TwitterListener savedTwitter = listenerRepository.save(twitterListener);
 		
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()

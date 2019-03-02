@@ -5,14 +5,17 @@ import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
-import com.bot.h2.Subscription;
 import com.bot.twitter.listener.TwitterListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
+
+/*
+ * @Getter and @Setter automatically insert Getter and Setter Methods
+ * See: https://projectlombok.org/features/GetterSetter
+ */
 
 @Getter
 @Setter
@@ -35,5 +38,11 @@ public class DiscordServer {
 		this.id = id;
 		this.name = name;
 		this.listeners = listeners;
+	}
+	
+	public DiscordServer(DiscordServerDTO discordServer) {
+		this.id = discordServer.getId();
+		this.name = discordServer.getName();
+		this.listeners = discordServer.getListeners();
 	}
 }

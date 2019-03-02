@@ -1,4 +1,4 @@
-package com.bot.twitter.user;
+package com.bot.twitter;
 
 import lombok.Getter;
 import lombok.Setter;

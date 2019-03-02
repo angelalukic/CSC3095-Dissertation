@@ -1,4 +1,4 @@
-package com.bot.discord.embed;
+package com.bot.discord;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

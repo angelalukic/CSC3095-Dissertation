@@ -7,14 +7,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 
 import com.bot.discord.server.DiscordServer;
-import com.bot.h2.Subscription;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
 import lombok.Setter;
+
+/*
+ * @Getter and @Setter automatically insert Getter and Setter Methods
+ * See: https://projectlombok.org/features/GetterSetter
+ */
 
 @Getter
 @Setter
@@ -41,5 +44,11 @@ public class TwitterListener {
 		this.id = id;
 		this.name = name;
 		this.servers = servers;
+	}
+	
+	public TwitterListener(TwitterListenerDTO listener) {
+		this.id = listener.getId();
+		this.name = listener.getName();
+		this.servers = listener.getServers();
 	}
 }

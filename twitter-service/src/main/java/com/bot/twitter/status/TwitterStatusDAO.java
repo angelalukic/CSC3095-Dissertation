@@ -10,11 +10,6 @@ import twitter4j.TwitterFactory;
 @Component
 public class TwitterStatusDAO {
 	
-	public Status getStatus(long id) throws TwitterException {
-		Twitter twitter = TwitterFactory.getSingleton();
-		return twitter.showStatus(id);
-	}
-	
 	public Status postStatus(String status) throws TwitterException {
 		Twitter twitter = TwitterFactory.getSingleton();		
 		return twitter.updateStatus(status);

@@ -7,7 +7,7 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.bot.discord.embed.DiscordServiceProxy;
+import com.bot.discord.DiscordServiceProxy;
 import com.bot.h2.Subscription;
 import com.bot.h2.SubscriptionRepository;
 import com.bot.twitter.listener.TwitterListener;
@@ -75,8 +75,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 
 			@Override
 			public void onException(Exception ex) {
-				// TODO Auto-generated method stub
-				
+				// TODO Auto-generated method stub	
 			}
 
 			@Override

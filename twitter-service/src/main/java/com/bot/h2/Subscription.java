@@ -30,7 +30,6 @@ public class Subscription {
 	private TwitterListener listener;
 	
 	public Subscription() {
-		
 	}
 
 	public Subscription(int id, DiscordServer server, TwitterListener listener) {
