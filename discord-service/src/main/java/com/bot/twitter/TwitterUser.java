@@ -2,7 +2,6 @@ package com.bot.twitter;
 
 import lombok.Getter;
 import lombok.Setter;
-import twitter4j.User;
 
 /*
  * @Getter and @Setter automatically insert Getter and Setter Methods
@@ -25,14 +24,14 @@ public class TwitterUser {
 	protected TwitterUser() {
 	}
 	
-	public TwitterUser(User user) {
+	public TwitterUser(TwitterUser user) {
 		this.id = user.getId();
 		this.name = user.getName();
 		this.screenName = user.getScreenName();
-		this.url = user.getURL();
+		this.url = user.getUrl();
 		this.description = user.getDescription();
-		this.followers = user.getFollowersCount();
-		this.profilePicture = user.getProfileImageURL();
-		this.profileBanner = user.getProfileBannerURL();
+		this.followers = user.getFollowers();
+		this.profilePicture = user.getProfilePicture();
+		this.profileBanner = user.getProfileBanner();
 	}
 }

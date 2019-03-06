@@ -30,9 +30,9 @@ import twitter4j.TwitterStreamFactory;
 @Component
 public class ApplicationStartup implements ApplicationListener<ApplicationReadyEvent> {
 	
-	@Autowired TwitterListenerRepository listenerRepository;
-	@Autowired SubscriptionRepository subscriptionRepository;
-	@Autowired DiscordServiceProxy proxy;
+	@Autowired private TwitterListenerRepository listenerRepository;
+	@Autowired private SubscriptionRepository subscriptionRepository;
+	@Autowired private DiscordServiceProxy proxy;
 	
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent event) {

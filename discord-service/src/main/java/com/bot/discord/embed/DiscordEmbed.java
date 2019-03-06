@@ -1,16 +1,6 @@
 package com.bot.discord.embed;
 
 import java.awt.Color;
-import java.net.URL;
-import java.util.List;
-
-import org.javacord.api.entity.message.embed.Embed;
-import org.javacord.api.entity.message.embed.EmbedAuthor;
-import org.javacord.api.entity.message.embed.EmbedField;
-import org.javacord.api.entity.message.embed.EmbedFooter;
-import org.javacord.api.entity.message.embed.EmbedImage;
-import org.javacord.api.entity.message.embed.EmbedThumbnail;
-import org.javacord.api.entity.message.embed.EmbedVideo;
 
 import lombok.Getter;
 import lombok.Setter;

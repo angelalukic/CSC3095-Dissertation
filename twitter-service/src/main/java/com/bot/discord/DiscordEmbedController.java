@@ -1,4 +1,4 @@
-	package com.bot.discord;
+package com.bot.discord;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
