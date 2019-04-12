@@ -6,6 +6,7 @@ import java.util.List;
 import com.github.twitch4j.helix.domain.User;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.common.events.domain.EventChannel;
+import com.github.twitch4j.common.events.domain.EventUser;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,15 @@ public class TwitchUser {
 	}
 	
 	public TwitchUser(EventChannel channel, TwitchClient client) {
+		User user = retrieveUser(channel.getName(), client);
+		this.displayName = user.getDisplayName();
+		this.id = user.getId();
+		this.description = user.getDescription();
+		this.image = user.getProfileImageUrl();
+		this.viewCount = user.getViewCount();
+	}
+	
+	public TwitchUser(EventUser channel, TwitchClient client) {
 		User user = retrieveUser(channel.getName(), client);
 		this.displayName = user.getDisplayName();
 		this.id = user.getId();

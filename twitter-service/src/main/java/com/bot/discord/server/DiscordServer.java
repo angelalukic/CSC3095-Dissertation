@@ -39,10 +39,4 @@ public class DiscordServer {
 		this.name = name;
 		this.listeners = listeners;
 	}
-	
-	public DiscordServer(DiscordServerDTO discordServer) {
-		this.id = discordServer.getId();
-		this.name = discordServer.getName();
-		this.listeners = discordServer.getListeners();
-	}
 }

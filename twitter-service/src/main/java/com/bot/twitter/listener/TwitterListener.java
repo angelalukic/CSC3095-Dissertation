@@ -9,6 +9,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.bot.discord.server.DiscordServer;
+import com.bot.twitter.listener.buffer.TwitterListenerBuffer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -46,9 +47,8 @@ public class TwitterListener {
 		this.servers = servers;
 	}
 	
-	public TwitterListener(TwitterListenerDTO listener) {
-		this.id = listener.getId();
-		this.name = listener.getName();
-		this.servers = listener.getServers();
+	public TwitterListener(TwitterListenerBuffer buffer) {
+		this.id = buffer.getTwitterId();
+		this.name = buffer.getTwitterName();
 	}
 }

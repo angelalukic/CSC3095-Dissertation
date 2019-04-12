@@ -19,7 +19,7 @@ public class Command {
 	}
 	
 	private void roleCommand() {
-		RoleCommand command = new RoleCommand(message);
-		command.execute();		
+		RoleCommand roleCommand = new RoleCommand(message);
+		roleCommand.execute();		
 	}
 }

@@ -1,7 +1,5 @@
 package com.bot.twitch.events;
 
-import java.util.Calendar;
-
 import com.bot.twitch.TwitchGame;
 import com.bot.twitch.TwitchStream;
 import com.bot.twitch.TwitchUser;

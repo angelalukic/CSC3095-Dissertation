@@ -17,14 +17,18 @@ public class DiscordServer {
 	private String name;
 	private long notificationChannel;
 	private long adminChannel;
+	private long reportChannel;
+	private long twitchLogChannel;
 	
 	public DiscordServer() {
 	}
 
-	public DiscordServer(long id, String name, long notificationChannel, long adminChannel) {
+	public DiscordServer(long id, String name, long notificationChannel, long adminChannel, long reportChannel, long twitchLogChannel) {
 		this.id = id;
 		this.name = name;
 		this.notificationChannel = notificationChannel;
 		this.adminChannel = adminChannel;
+		this.reportChannel = reportChannel;
+		this.twitchLogChannel = twitchLogChannel;
 	}
 }
