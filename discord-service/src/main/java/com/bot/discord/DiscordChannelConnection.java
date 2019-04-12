@@ -24,7 +24,7 @@ public class DiscordChannelConnection {
 	private DiscordServerRepository serverRepository;
 	
 	public TextChannel connect(long server, String channel) {
-		String token = "Mzc0ODUwOTAzNjQ5NDE5MjY0.DzxuUQ.53kHD4jBLFQCkqJ0T4YsnluzwAQ"; //configuration.getToken();
+		String token = configuration.getToken();
 		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
 		return retrieveTextChannel(server, api, channel);
 	}

@@ -2,46 +2,37 @@ package com.bot.discord.events;
 
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.bot.discord.DiscordUtils;
 import com.bot.discord.command.AdminCommand;
 import com.bot.discord.command.Command;
 import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.server.DiscordServerRepository;
-import com.bot.twitter.TwitterServiceProxy;
 
+@Component
 public class MessageCreateListener {
 	
+	@Autowired Command command;
+	@Autowired AdminCommand adminCommand;
+	@Autowired ErrorEmbed errorEmbed;
+	@Autowired DiscordUtils utils;
 	private MessageCreateEvent event;
-	private DiscordServerRepository repository;
-	private TwitterServiceProxy proxy;
-	
-	public MessageCreateListener(MessageCreateEvent event, DiscordServerRepository repository, TwitterServiceProxy proxy) {
-		this.event = event;
-		this.repository = repository;
-		this.proxy = proxy;
-	}
-	
-	public void execute() {
-		detectCommand();
-	}
-	
-	private void detectCommand() {
-		if (event.getMessageContent().startsWith("rf!")) {
-		    Command command = new Command(event.getMessage());
-		    command.execute();
-		}
+
+	public void execute(MessageCreateEvent event) {
+		this.event= event;
+		if (event.getMessageContent().startsWith("rf!"))
+		    command.execute(event);
 		else if (event.getMessageContent().startsWith("rf@")) {
-			if(event.getMessage().getAuthor().isServerAdmin()) {
-				AdminCommand command = new AdminCommand(event.getMessage(), repository, proxy);
-				command.execute();
-			}
+			if(event.getMessage().getAuthor().isServerAdmin())
+				adminCommand.execute(event);
 			else
-				sendErrorEmbed();
+				sendInvalidPermissionsErrorMessage();
 		}
 	}
 	
-	private void sendErrorEmbed() {
-		EmbedBuilder embed = new ErrorEmbed().createEmbed("**Permission Error**: You need to have Administrative permissions to use this command.");
-		event.getChannel().sendMessage(embed);
+	private void sendInvalidPermissionsErrorMessage() {
+		EmbedBuilder embed = errorEmbed.createEmbed("**Permission Error**: You need to have Administrative permissions to use this command.");
+		utils.sendMessage(embed, event);
 	}
 }

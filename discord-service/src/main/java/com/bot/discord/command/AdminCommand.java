@@ -1,48 +1,50 @@
 package com.bot.discord.command;
 
 import org.javacord.api.entity.message.Message;
+import org.javacord.api.event.message.MessageCreateEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import com.bot.discord.command.commands.NotificationAdminCommand;
-import com.bot.discord.command.commands.RegisterAdminCommand;
-import com.bot.discord.command.commands.TwitterAdminCommand;
-import com.bot.discord.server.DiscordServerRepository;
-import com.bot.twitter.TwitterServiceProxy;
+import com.bot.discord.command.commands.admin.NotificationAdminCommand;
+import com.bot.discord.command.commands.admin.RegisterAdminCommand;
+import com.bot.discord.command.commands.admin.TwitterAdminCommand;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Component
 public class AdminCommand {
 
-	private Message message;
-	private DiscordServerRepository repository;
-	private TwitterServiceProxy proxy;
+	@Autowired private RegisterAdminCommand registerAdminCommand;
+	@Autowired private TwitterAdminCommand twitterAdminCommand;
+	@Autowired private NotificationAdminCommand notificationAdminCommand;
+	private MessageCreateEvent event;
 	
-	public AdminCommand(Message message, DiscordServerRepository repository, TwitterServiceProxy proxy) {
-		this.message = message;
-		this.repository = repository;
-		this.proxy = proxy;
-	}
-	
-	public void execute() {
+	public void execute(MessageCreateEvent event) {
+		this.event = event;
+		Message message = event.getMessage();
 		if(message.getContent().startsWith("rf@register"))
-			registerCommand();
+			executeRegisterCommand();
 		
 		else if(message.getContent().startsWith("rf@twitter"))
-			twitterCommand();
+			executeTwitterCommand();
 		
 		else if (message.getContent().startsWith("rf@notification"))
-			notificationCommand();
+			executeNotificationCommand();
 	}
 	
-	private void registerCommand() {
-		RegisterAdminCommand registerCommand = new RegisterAdminCommand(message, repository);
-		registerCommand.execute();
+	private void executeRegisterCommand() {
+		log.info("Register Admin Command Detected");
+		registerAdminCommand.execute(event);
 	}
 	
-	private void twitterCommand() {
-		TwitterAdminCommand twitterCommand = new TwitterAdminCommand(message, proxy);
-		twitterCommand.execute();
+	private void executeTwitterCommand() {
+		log.info("Twitter Admin Command Detected");
+		twitterAdminCommand.execute(event);
 	}
 	
-	private void notificationCommand() {
-		NotificationAdminCommand notificationCommand = new NotificationAdminCommand(message, repository);
-		notificationCommand.execute();
+	private void executeNotificationCommand() {
+		log.info("Notification Admin Command Detected");
+		notificationAdminCommand.execute(event);
 	}
 }

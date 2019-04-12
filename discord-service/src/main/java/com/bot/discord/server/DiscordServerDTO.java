@@ -17,4 +17,9 @@ public class DiscordServerDTO {
 		this.id = id;
 		this.name = name;
 	}
+	
+	public DiscordServerDTO(DiscordServer server) {
+		this.id = server.getId();
+		this.name = server.getName();
+	}
 }

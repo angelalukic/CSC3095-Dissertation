@@ -6,80 +6,85 @@ import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.server.ServerJoinEvent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
 import com.bot.discord.server.DiscordServer;
 import com.bot.discord.server.DiscordServerRepository;
 
+
+@Component
 public class ServerJoinListener {
 	
+	@Autowired private DiscordServerRepository repository;
+	@Autowired private DiscordUtils utils;
 	private ServerJoinEvent event;
-	private DiscordServerRepository repository;
+	private EmbedBuilder embed;
+	private ServerTextChannel channel;
 	
-	public ServerJoinListener(ServerJoinEvent event, DiscordServerRepository repository) {
+	public void execute(ServerJoinEvent event) {
 		this.event = event;
-		this.repository = repository;
-	}
-	
-	public void execute() {
-		EmbedBuilder embed = retrieveJoinMessage();
-		DiscordUtils utils = new DiscordUtils();
+		embed = serverJoinEmbed();
 		long channelId = utils.retrieveWritableChannelId(event.getServer());
 
+		// If there is a writable channel within the server then send a message to that channel
 		if (channelId != 0L) {
-			ServerTextChannel channel = utils.retrieveChannelById(event.getServer(), channelId);
-			sendMessageToWritableChannel(channel, embed);
-			sendServerConfigurationMessage(channel, channelId);
+			channel = utils.retrieveChannelById(event.getServer(), channelId);
+			sendMessageToWritableChannel();
+			sendServerConfigurationMessage(channelId);
 		}
-		sendMessageToServerOwner(embed);
+		
+		// Send a message to the server owner
+		sendMessageToServerOwner();
 	}
 
-	private void sendMessageToServerOwner(EmbedBuilder embed) {
+	private void sendMessageToServerOwner() {
 		User serverOwner = event.getServer().getOwner();
 		serverOwner.sendMessage(embed);
 	}
 	
-	private void sendMessageToWritableChannel(ServerTextChannel channel, EmbedBuilder embed) {
+	private void sendMessageToWritableChannel() {
 		if(channel != null) {
 			channel.sendMessage(embed);
 		}
 	}
 	
-	private void sendServerConfigurationMessage(ServerTextChannel channel, long channelId) {
+	private void sendServerConfigurationMessage(long channelId) {
 		long id = event.getServer().getId();
 		String serverName = event.getServer().getName();
 		Optional<DiscordServer> discordOptional = repository.findById(id);
 		
 		if(discordOptional.isPresent())
-			sendDiscordServerConfigurationExists(channel);
+			sendDiscordServerConfigurationExists();
 		else {
 			DiscordServer server = new DiscordServer(id, serverName, channelId, channelId, channelId, channelId);
 			server = repository.save(server);
-			sendDiscordServerConfigurationCreated(channel);
+			sendDiscordServerConfigurationCreated();
 		}
 	}
 	
-	private void sendDiscordServerConfigurationExists(ServerTextChannel channel) {
+	private void sendDiscordServerConfigurationExists() {
 		EmbedBuilder embed = new EmbedBuilder();
 		
 		embed.setTitle(channel.getServer().getName())
 				.setDescription("Server is already registered. Settings have been automatically loaded.");
 		
-		sendMessageToServerOwner(embed);
-		sendMessageToWritableChannel(channel, embed);
+		sendMessageToServerOwner();
+		sendMessageToWritableChannel();
 	}
 	
-	private void sendDiscordServerConfigurationCreated(ServerTextChannel channel) {
+	private void sendDiscordServerConfigurationCreated() {
 		EmbedBuilder embed = new EmbedBuilder();
 		
 		embed.setTitle(channel.getServer().getName())
 				.setDescription("New server detected. Server has been automatically registered.");
 		
-		sendMessageToServerOwner( embed);
-		sendMessageToWritableChannel(channel, embed);
+		sendMessageToServerOwner();
+		sendMessageToWritableChannel();
 	}
 
-	private EmbedBuilder retrieveJoinMessage() {
+	private EmbedBuilder serverJoinEmbed() {
 		EmbedBuilder embed = new EmbedBuilder();
 		
 		embed.setDescription("Hi! My name is RF! I am a bot designed to help with **automatically moderating** and **managing social media accounts**! "
