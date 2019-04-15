@@ -10,6 +10,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.event.server.member.ServerMemberJoinEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -48,8 +49,6 @@ public class DiscordUtils {
 		}
 		throw new ChannelNotFoundException("id="+ channel.getId());
 	}
-	
-	///////////////////////
 	
 	public long retrieveWritableChannelId(Server server) {
 		List<ServerTextChannel> channels = server.getTextChannels();
@@ -95,6 +94,15 @@ public class DiscordUtils {
 			message.getChannel().sendMessage(embed);
 		else {
 			User user = getUserFromUserOptional(message.getUserAuthor(), message.getId());
+			user.sendMessage(embed);
+		}
+	}
+	
+	public void sendMessage(EmbedBuilder embed, ServerMemberJoinEvent event, ServerTextChannel channel) {
+		if(channel.canYouWrite())
+			channel.sendMessage(embed);
+		else {
+			User user = event.getUser();
 			user.sendMessage(embed);
 		}
 	}

@@ -58,7 +58,7 @@ public class ServerJoinListener {
 		if(discordOptional.isPresent())
 			sendDiscordServerConfigurationExists();
 		else {
-			DiscordServer server = new DiscordServer(id, serverName, channelId, channelId, channelId, channelId, null, null);
+			DiscordServer server = new DiscordServer(id, serverName, channelId, channelId, channelId, channelId, channelId, "", "#99aab5");
 			repository.save(server);
 			sendDiscordServerConfigurationCreated();
 		}

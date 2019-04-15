@@ -33,6 +33,7 @@ public class NotificationAdminCommand {
 	private static final String CHANNEL_COMMAND = "\n`rf@notification channel <channel>`";
 	private static final String FILTER_COMMAND = "\n`rf@notification wordfilter <channel>`";
 	private static final String LOGS_COMMAND = "\n`rf@notification twitchlogs <channel>`";
+	private static final String WELCOME_COMMAND = "\n`rf@notification welcome <channel>`";
 	private static final String HELP_COMMAND = "\n\nFor more information use the following command:\n`rf@notification help`";
 	
 	public void execute(MessageCreateEvent event) {
@@ -54,6 +55,8 @@ public class NotificationAdminCommand {
 					updateReportsChannel(discordServer);
 				else if (command.startsWith("twitchlogs")) 
 					updateLoggingChannel(discordServer);
+				else if (command.startsWith("welcome"))
+					updateWelcomeChannel(discordServer);
 				else
 					sendInvalidCommandErrorMessage();
 			}
@@ -100,6 +103,14 @@ public class NotificationAdminCommand {
 		sendSuccessfullyChangedChannelMessage(oldId, newId, "Twitch Logging");
 	}
 	
+	private void updateWelcomeChannel(DiscordServer discordServer) {
+		long oldId = discordServer.getServerJoinChannel();
+		long newId = channel.getId();
+		discordServer.setServerJoinChannel(newId);
+		repository.save(discordServer);
+		sendSuccessfullyChangedChannelMessage(oldId, newId, "Welcome");
+	}
+	
 	private void sendSuccessfullyChangedChannelMessage(long oldId, long newId, String channelName) {
 		log.info("[" + server.getName() + "] " + channelName + " Channel updated to " + channel.getName());
 		EmbedBuilder embed = successEmbed.createEmbed(
@@ -117,6 +128,7 @@ public class NotificationAdminCommand {
 			+ CHANNEL_COMMAND + "\n Changes the channel where Twitter and Twitch updates are posted to.\n" 
 			+ FILTER_COMMAND + "\n Changes the channel where word filter violation notifications are posted to.\n" 
 			+ LOGS_COMMAND + "\n Changes the channel where Twitch Chat Logs are posted to."
+			+ WELCOME_COMMAND + "\n Changes the channel where welcome messages to users who join the Discord server are posted to.\n"
 			+ "\n\nYour server will need to be registered with our database before you can use these commands."
 			+ "To manually register use the following command:\n`rf@register`");
 		utils.sendMessage(embed, event);
@@ -126,7 +138,7 @@ public class NotificationAdminCommand {
 		log.error("[" + server.getName() + "] Invalid Notification Admin Command");
 		EmbedBuilder embed = errorEmbed.createEmbed(
 				"**Invalid Command**: Valid commands are as follows:"
-				+ ADMIN_COMMAND + CHANNEL_COMMAND + FILTER_COMMAND + LOGS_COMMAND + HELP_COMMAND);
+				+ ADMIN_COMMAND + CHANNEL_COMMAND + FILTER_COMMAND + LOGS_COMMAND + WELCOME_COMMAND + HELP_COMMAND);
 		utils.sendMessage(embed, event);
 	}
 	

@@ -17,19 +17,22 @@ public class DiscordServer {
 	private long adminChannel;
 	private long reportChannel;
 	private long twitchLogChannel;
+	private long serverJoinChannel;
 	private String serverJoinMessage;
 	private String roleColour;
 	
 	public DiscordServer() {
 	}
 
-	public DiscordServer(long id, String name, long notificationChannel, long adminChannel, long reportChannel, long twitchLogChannel, String serverJoinMessage, String roleColour) {
+	public DiscordServer(long id, String name, long notificationChannel, long adminChannel, long reportChannel, long twitchLogChannel, 
+			long serverJoinChannel, String serverJoinMessage, String roleColour) {
 		this.id = id;
 		this.name = name;
 		this.notificationChannel = notificationChannel;
 		this.adminChannel = adminChannel;
 		this.reportChannel = reportChannel;
 		this.twitchLogChannel = twitchLogChannel;
+		this.serverJoinChannel = serverJoinChannel;
 		this.serverJoinMessage = serverJoinMessage;
 		this.roleColour = roleColour;
 	}
