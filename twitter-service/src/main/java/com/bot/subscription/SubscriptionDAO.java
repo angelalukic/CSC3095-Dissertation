@@ -15,11 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bot.discord.DiscordServiceProxy;
 import com.bot.discord.server.DiscordServer;
 import com.bot.discord.server.DiscordServerRepository;
+import com.bot.twitter.TwitterStreamConnection;
 import com.bot.twitter.listener.TwitterListener;
 import com.bot.twitter.listener.TwitterListenerDTO;
 import com.bot.twitter.listener.TwitterListenerRepository;
-import com.bot.twitter.listener.buffer.TwitterListenerBuffer;
-import com.bot.twitter.listener.buffer.TwitterListenerBufferRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,8 +29,8 @@ public class SubscriptionDAO {
 	
 	@Autowired private DiscordServerRepository discordRepository;
 	@Autowired private TwitterListenerRepository twitterRepository;
-	@Autowired private TwitterListenerBufferRepository buffer;
 	@Autowired private DiscordServiceProxy proxy;
+	@Autowired private TwitterStreamConnection connection;
 	
 	public ResponseEntity<Object> deleteSubscription(Subscription subscription) {
 		TwitterListener listener = getListenerInRepository(subscription.getListener().getId());
@@ -82,12 +81,7 @@ public class SubscriptionDAO {
 		if(!optionalListener.isPresent()) {
 			twitterRepository.save(listener);
 			log.info("Listener " + listener.getName() + " did not exist in repository. New Entry Created.");
-			buffer.save(new TwitterListenerBuffer(listener, server));
-			log.info("Listener " + listener.getName() + " had been added to the buffer.");
-		}
-		else {
-			TwitterListenerDTO listenerDTO = new TwitterListenerDTO(listener);
-			proxy.sendToDiscord(listenerDTO, server.getId());
+			connection.addToFilter(listener.getId());
 		}
 		
 		if(!optionalServer.isPresent()) {
@@ -114,5 +108,20 @@ public class SubscriptionDAO {
 		if(listener == null)
 			return Collections.emptyList();
 		return new ArrayList<>(listener.getServers());
+	}
+	
+	public List<Subscription> getAllSubscriptions() {
+		List<TwitterListener> listeners = twitterRepository.findAll();
+		List<Subscription> subscriptions = new ArrayList<>();
+		for(int i = 0; i < listeners.size(); i++) {
+			TwitterListener listener = listeners.get(i);
+			Set<DiscordServer> servers = listener.getServers();
+			if(servers!= null) {
+				List<DiscordServer> discordServers = new ArrayList<>(servers);
+				for(int j = 0; j < discordServers.size(); j++) 
+					subscriptions.add(new Subscription(discordServers.get(j), listener));
+			}
+		}
+		return subscriptions;
 	}
 }

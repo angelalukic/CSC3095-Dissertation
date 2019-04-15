@@ -148,9 +148,8 @@ public class TwitterAdminCommand {
 	private void sendCreatedMessage(String username) {
 		log.info("[" + server.getName() + "] Successfully created listener for account: " + user.getName());
 		EmbedBuilder embed = successEmbed.createEmbed(
-				"Listener to Twitter account **" + username + "** has successfully been queued. A message will be sent shortly when the "
-						+ "listener has been created. This may take a few minutes.\n\nMake sure to configure"
-						+ " which channel future tweets are sent to using `rf@notification channel <channel>`");
+				"Listener to Twitter account **" + username + "** has successfully been added.\n\nMake sure to configure"
+				+ " which channel future tweets are sent to using `rf@notification channel <channel>`");
 		utils.sendMessage(embed, event);
 	}
 	

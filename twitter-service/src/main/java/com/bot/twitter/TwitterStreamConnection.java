@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordServiceProxy;
 import com.bot.discord.server.DiscordServer;
+import com.bot.subscription.Subscription;
 import com.bot.subscription.SubscriptionDAO;
 import com.bot.twitter.listener.TwitterListener;
 import com.bot.twitter.listener.TwitterListenerRepository;
@@ -27,35 +28,39 @@ import twitter4j.TwitterStream;
 import twitter4j.TwitterStreamFactory;
 
 @Slf4j
+@Component
 public class TwitterStreamConnection {
 	
+	@Autowired private DiscordServiceProxy proxy;
+	@Autowired private SubscriptionDAO subscriptionDAO;
 	private TwitterStream stream;
-	private DiscordServiceProxy proxy;
-	private SubscriptionDAO subscription;
 	
-	public TwitterStreamConnection(DiscordServiceProxy proxy, SubscriptionDAO subscription) {
-		this.stream = new TwitterStreamFactory().getInstance();
-		this.proxy = proxy;
-		this.subscription = subscription;
+	public void connectToStream() {
+		stream = new TwitterStreamFactory().getInstance();
+		StatusListener listener = retrieveStatusListener();
+		stream.addListener(listener);
 	}
 	
-	public void addFilter(long[] ids) {
-		TwitterStream stream = connectToStream();
+	public void addToFilter(long[] ids) {
 		FilterQuery filter = new FilterQuery(ids);
 		stream.filter(filter);
 	}
 	
-	private TwitterStream connectToStream() {
-		StatusListener listener = retrieveStatusListener();
-		stream.addListener(listener);
-		return stream;
+	public void addToFilter(long id) {
+		List<Subscription> subscriptions = subscriptionDAO.getAllSubscriptions();
+		int newSize = subscriptions.size() + 1;
+		long[] ids = new long[newSize];
+		for(int i = 0; i < subscriptions.size(); i++) 
+			ids[i] = subscriptions.get(i).getListener().getId();
+		ids[newSize-1] = id;
+		addToFilter(ids);
 	}
 	
 	private void postToDiscord(Status status) {
 		
 		TwitterStatus twitterStatus = new TwitterStatus(status);
 		long userId = twitterStatus.getUser().getId();	
-		List<DiscordServer> servers = subscription.retrieveServersFromListener(userId);
+		List<DiscordServer> servers = subscriptionDAO.retrieveServersFromListener(userId);
 		
 		if(!servers.isEmpty() && !twitterStatus.isRetweet()) {
 			for(int i = 0; i < servers.size(); i++) {

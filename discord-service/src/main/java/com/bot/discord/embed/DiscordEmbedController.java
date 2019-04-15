@@ -16,7 +16,6 @@ import com.bot.twitch.TwitchEmbedDAO;
 import com.bot.twitch.events.TwitchStreamHost;
 import com.bot.twitch.events.TwitchChatMessage;
 import com.bot.twitter.TwitterEmbedDAO;
-import com.bot.twitter.TwitterListener;
 import com.bot.twitter.TwitterStatus;
 
 import lombok.extern.slf4j.Slf4j;
@@ -34,19 +33,6 @@ public class DiscordEmbedController {
 	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitterStatus status, @PathVariable long server) throws InterruptedException, ExecutionException {
 		log.info("localhost:8080/twitter/embed/status/{server}");
 		Message savedEmbed = twitterService.postEmbed(status, server);
-		
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path(ID)
-				.buildAndExpand(savedEmbed.getId()).toUri();
-		
-		return ResponseEntity.created(location).build();
-	}
-	
-	@PostMapping("twitter/embed/listener/{server}")
-	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitterListener listener, @PathVariable long server) throws InterruptedException, ExecutionException {
-		log.info("localhost:8080/twitter/embed/listener/{server}");
-		Message savedEmbed = twitterService.postEmbed(listener, server);
 		
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
