@@ -58,36 +58,28 @@ public class ServerJoinListener {
 		if(discordOptional.isPresent())
 			sendDiscordServerConfigurationExists();
 		else {
-			DiscordServer server = new DiscordServer(id, serverName, channelId, channelId, channelId, channelId);
-			server = repository.save(server);
+			DiscordServer server = new DiscordServer(id, serverName, channelId, channelId, channelId, channelId, null, null);
+			repository.save(server);
 			sendDiscordServerConfigurationCreated();
 		}
 	}
 	
 	private void sendDiscordServerConfigurationExists() {
-		EmbedBuilder embed = new EmbedBuilder();
-		
 		embed.setTitle(channel.getServer().getName())
 				.setDescription("Server is already registered. Settings have been automatically loaded.");
-		
 		sendMessageToServerOwner();
 		sendMessageToWritableChannel();
 	}
 	
 	private void sendDiscordServerConfigurationCreated() {
-		EmbedBuilder embed = new EmbedBuilder();
-		
 		embed.setTitle(channel.getServer().getName())
 				.setDescription("New server detected. Server has been automatically registered.");
-		
 		sendMessageToServerOwner();
 		sendMessageToWritableChannel();
 	}
 
 	private EmbedBuilder serverJoinEmbed() {
-		EmbedBuilder embed = new EmbedBuilder();
-		
-		embed.setDescription("Hi! My name is RF! I am a bot designed to help with **automatically moderating** and **managing social media accounts**! "
+		return new EmbedBuilder().setDescription("Hi! My name is RF! I am a bot designed to help with **automatically moderating** and **managing social media accounts**! "
 				+ "I have just been added to your server \"" + event.getServer().getName() + "\"!")
 				.addField("Permissions", "By default I am not set to be an administrator. Please make sure to either set me to be an administrator"
 						+ "or manually add me to the channels you want me to be able to post in!")
@@ -96,7 +88,5 @@ public class ServerJoinListener {
 				.addField("Invite Link", "If you want to invite me to more servers, please use the following link: "
 						+ "<https://discordapp.com/oauth2/authorize?client_id=374850903649419264&scope=bot&permissions=126016>")
 				.setFooter("If you encounter any issues, be sure to send a message to Angeljho#2514 on Discord!");
-		
-		return embed;
 	}
 }

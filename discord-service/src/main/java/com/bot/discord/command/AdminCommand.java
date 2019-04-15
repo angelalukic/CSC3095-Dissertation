@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.bot.discord.command.commands.admin.NotificationAdminCommand;
 import com.bot.discord.command.commands.admin.RegisterAdminCommand;
+import com.bot.discord.command.commands.admin.RoleAdminCommand;
 import com.bot.discord.command.commands.admin.TwitterAdminCommand;
 
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,7 @@ public class AdminCommand {
 	@Autowired private RegisterAdminCommand registerAdminCommand;
 	@Autowired private TwitterAdminCommand twitterAdminCommand;
 	@Autowired private NotificationAdminCommand notificationAdminCommand;
+	@Autowired private RoleAdminCommand roleAdminCommand;
 	private MessageCreateEvent event;
 	
 	public void execute(MessageCreateEvent event) {
@@ -31,6 +33,9 @@ public class AdminCommand {
 		
 		else if (message.getContent().startsWith("rf@notification"))
 			executeNotificationCommand();
+		
+		else if (message.getContent().startsWith("rf@role"))
+			executeRoleCommand();
 	}
 	
 	private void executeRegisterCommand() {
@@ -46,5 +51,10 @@ public class AdminCommand {
 	private void executeNotificationCommand() {
 		log.info("Notification Admin Command Detected");
 		notificationAdminCommand.execute(event);
+	}
+	
+	private void executeRoleCommand() {
+		log.info("Role Admin Command Detected");
+		roleAdminCommand.execute(event);
 	}
 }

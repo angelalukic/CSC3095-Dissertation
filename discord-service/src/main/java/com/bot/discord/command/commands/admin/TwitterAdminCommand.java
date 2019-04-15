@@ -59,7 +59,7 @@ public class TwitterAdminCommand {
 				executeRemove(discordServer);																					// Can throw FeignException
 			}
 			else if (command.startsWith("help"))
-				sendHelpMessage();
+				sendHelpCommandMessage();
 			else
 				sendInvalidCommandErrorMessage();
 		}
@@ -160,7 +160,7 @@ public class TwitterAdminCommand {
 		utils.sendMessage(embed, event);
 	}
 	
-	private void sendHelpMessage() {
+	private void sendHelpCommandMessage() {
 		log.info("[" + server.getName() + "] Sending Twitter Admin Command Help");
 		EmbedBuilder embed = successEmbed.createEmbed(
 				"These commands allow you to add and remove the Twitter channels I listen to."

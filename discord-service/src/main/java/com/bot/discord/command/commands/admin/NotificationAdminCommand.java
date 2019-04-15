@@ -63,7 +63,6 @@ public class NotificationAdminCommand {
 		catch(IndexOutOfBoundsException e) {
 			sendInvalidCommandErrorMessage();
 		}
-			
 		catch(ServerNotFoundException e) {
 			sendServerNotRegisteredErrorMessage();					
 		}
@@ -104,8 +103,7 @@ public class NotificationAdminCommand {
 	private void sendSuccessfullyChangedChannelMessage(long oldId, long newId, String channelName) {
 		log.info("[" + server.getName() + "] " + channelName + " Channel updated to " + channel.getName());
 		EmbedBuilder embed = successEmbed.createEmbed(
-				channelName + " Channel has successfully been updated from <#" + oldId 
-				+ "> to <#" + newId + ">");
+				channelName + " Channel has successfully been updated from <#" + oldId + "> to <#" + newId + ">");
 		utils.sendMessage(embed, event);
 	}
 	
