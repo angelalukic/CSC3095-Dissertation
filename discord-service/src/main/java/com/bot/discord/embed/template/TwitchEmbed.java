@@ -6,6 +6,7 @@ import java.util.Date;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 
 import com.bot.twitch.TwitchUser;
+import com.bot.twitch.events.TwitchChatMessage;
 import com.bot.twitch.events.TwitchStreamHost;
 
 public class TwitchEmbed {
@@ -26,6 +27,23 @@ public class TwitchEmbed {
 				.setThumbnail(event.getGame().getArt())
 				.setColor(new Color(100, 65, 164))
 				.setFooter(new Date().toString());
+		
+		return builder;
+	}
+	
+	public EmbedBuilder createEmbed(TwitchChatMessage message) {
+		
+		EmbedBuilder builder = new EmbedBuilder();
+		
+		TwitchUser channel = message.getChannel();
+		TwitchUser user = message.getUser();
+		String url = "https://twitch.tv/" + channel.getDisplayName();
+		
+		builder.setAuthor(channel.getDisplayName() + ": Chat Log")
+		.setUrl(url)
+		.setDescription("**" + user.getDisplayName() + "**: " + message.getMessage())
+		.setColor(new Color(100, 65, 164))
+		.setFooter(new Date().toString());
 		
 		return builder;
 	}

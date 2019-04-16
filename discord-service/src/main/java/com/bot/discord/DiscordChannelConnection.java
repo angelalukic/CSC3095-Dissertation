@@ -23,14 +23,13 @@ public class DiscordChannelConnection {
 	@Autowired
 	private DiscordServerRepository serverRepository;
 	
-	
-	public TextChannel connect(long server) {
-		String token = "Mzc0ODUwOTAzNjQ5NDE5MjY0.DzxuUQ.53kHD4jBLFQCkqJ0T4YsnluzwAQ"; //configuration.getToken();
+	public TextChannel connect(long server, String channel) {
+		String token = configuration.getToken();
 		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
-		return validateDiscordChannel(server, api);
+		return retrieveTextChannel(server, api, channel);
 	}
 
-	private TextChannel validateDiscordChannel(long server, DiscordApi api) {
+	private TextChannel retrieveTextChannel(long server, DiscordApi api, String channel) {
 		
 		Optional<DiscordServer> optionalServer = serverRepository.findById(server);
 		
@@ -38,7 +37,7 @@ public class DiscordChannelConnection {
 			throw new ServerNotFoundException("id- " + server);
 		
 		DiscordServer discordServer = optionalServer.get();
-		long id = discordServer.getNotificationChannel();
+		long id = retrieveDiscordChannelId(discordServer, channel);
 		
 		Optional<TextChannel> optionalChannel = api.getTextChannelById(id);
 		
@@ -46,5 +45,16 @@ public class DiscordChannelConnection {
 			throw new ChannelNotFoundException("id-" + id);
 		
 		return optionalChannel.get();
+	}
+	
+	private long retrieveDiscordChannelId(DiscordServer server, String channel) {
+		long id = server.getAdminChannel(); // Use Admin Channel by default
+		if(channel.equalsIgnoreCase("notification"))
+			id = server.getNotificationChannel();
+		else if(channel.equalsIgnoreCase("twitchlogs"))
+			id = server.getTwitchLogChannel();	
+		else if (channel.equalsIgnoreCase("wordfilter"))
+			id = server.getReportChannel();
+		return id;
 	}
 }

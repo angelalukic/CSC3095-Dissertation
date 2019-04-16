@@ -2,7 +2,7 @@ package com.bot.twitter.status;
 
 import java.util.Date;
 
-import com.bot.twitter.TwitterUser;
+import com.bot.twitter.user.TwitterUser;
 
 import lombok.Getter;
 import lombok.Setter;

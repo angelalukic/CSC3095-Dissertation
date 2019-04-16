@@ -7,7 +7,12 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import com.bot.twitch.features.NotificationOnHost;
+import com.bot.twitch.features.ChannelNotificationOnCheer;
+import com.bot.twitch.features.ChannelNotificationOnDonation;
+import com.bot.twitch.features.ChannelNotificationOnFollow;
+import com.bot.twitch.features.ChannelNotificationOnSubscription;
+import com.bot.twitch.features.DiscordNotificationOnHost;
+import com.bot.twitch.features.WriteChannelChatToDiscord;
 import com.bot.twitch.listener.TwitchListener;
 import com.bot.twitch.listener.TwitchListenerRepository;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
@@ -20,7 +25,13 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	
 	@Autowired private Configuration configuration;
 	@Autowired private TwitchListenerRepository listenerRepository;
-	@Autowired private NotificationOnHost hostNotification;
+
+	@Autowired private ChannelNotificationOnCheer cheerNotification;
+	@Autowired private ChannelNotificationOnDonation donationNotification;
+	@Autowired private ChannelNotificationOnFollow followNotification;
+	@Autowired private ChannelNotificationOnSubscription subscriptionNotification;
+	@Autowired private DiscordNotificationOnHost hostNotification;
+	@Autowired private WriteChannelChatToDiscord chatNotification;
 	
 	private TwitchClient client;
 
@@ -44,7 +55,12 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	
 	private void registerFeatures() {
 		EventManager manager = client.getEventManager();
+		cheerNotification.register(manager);
+		donationNotification.register(manager);
+		followNotification.register(manager);
+		subscriptionNotification.register(manager);
 		hostNotification.register(manager, client);
+		chatNotification.register(manager, client);
 	}
 
 	private void connectToChannels() {

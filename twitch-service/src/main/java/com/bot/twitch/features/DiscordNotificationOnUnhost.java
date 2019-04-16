@@ -3,9 +3,9 @@ package com.bot.twitch.features;
 import com.github.philippheuer.events4j.EventManager;
 import com.github.twitch4j.chat.events.channel.HostOffEvent;
 
-public class NotificationOnUnhost {
+public class DiscordNotificationOnUnhost {
 	
-	public NotificationOnUnhost(EventManager eventManager) {
+	public DiscordNotificationOnUnhost(EventManager eventManager) {
 		eventManager.onEvent(HostOffEvent.class).subscribe(event -> onUnhost(event));
 	}
 	

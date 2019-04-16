@@ -11,6 +11,6 @@ import com.bot.twitter.status.TwitterStatus;
 @FeignClient(name="discord-service", url="localhost:8080")
 public interface DiscordServiceProxy {
 	
-	@PostMapping("twitter/embed/{server}")
+	@PostMapping("twitter/embed/status/{server}")
 	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitterStatus status, @PathVariable("server") long server);
 }

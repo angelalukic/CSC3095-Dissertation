@@ -15,7 +15,7 @@ public class DiscordEmbedController {
 	@Autowired
 	private DiscordServiceProxy proxy;
 	
-	@PostMapping("/discord/embed/{server}")
+	@PostMapping("/twitter/embed/{server}")
 	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitterStatus status, @PathVariable long server) {
 		return proxy.sendToDiscord(status, server);
 	}

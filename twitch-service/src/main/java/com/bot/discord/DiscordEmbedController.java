@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bot.twitch.features.beans.TwitchChatMessage;
 import com.bot.twitch.features.beans.TwitchStreamHost;
-import com.bot.twitch.stream.TwitchStream;
+import com.bot.twitch.features.beans.TwitchStreamLive;
 
 @RestController
 public class DiscordEmbedController {
@@ -22,7 +23,12 @@ public class DiscordEmbedController {
 	}
 	
 	@PostMapping("twitch/embed/stream/{server}")
-	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitchStream event, @PathVariable("server") long server) {
+	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitchStreamLive event, @PathVariable("server") long server) {
 		return proxy.sendToDiscord(event, server);
+	}
+	
+	@PostMapping("twitch/embed/chat/{server}")
+	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitchChatMessage message, @PathVariable("server") long server) {
+		return proxy.sendToDiscord(message, server);
 	}
 }

@@ -45,10 +45,4 @@ public class TwitterListener {
 		this.name = name;
 		this.servers = servers;
 	}
-	
-	public TwitterListener(TwitterListenerDTO listener) {
-		this.id = listener.getId();
-		this.name = listener.getName();
-		this.servers = listener.getServers();
-	}
 }

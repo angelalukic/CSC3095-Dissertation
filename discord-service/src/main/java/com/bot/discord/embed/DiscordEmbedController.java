@@ -14,22 +14,29 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bot.twitch.TwitchEmbedDAO;
 import com.bot.twitch.events.TwitchStreamHost;
+import com.bot.twitch.events.TwitchChatMessage;
 import com.bot.twitter.TwitterEmbedDAO;
 import com.bot.twitter.TwitterStatus;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class DiscordEmbedController {
 	
 	@Autowired private TwitterEmbedDAO twitterService;
 	@Autowired private TwitchEmbedDAO twitchService;
 	
-	@PostMapping("twitter/embed/{server}")
+	private static final String ID = "/{id}";
+	
+	@PostMapping("twitter/embed/status/{server}")
 	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitterStatus status, @PathVariable long server) throws InterruptedException, ExecutionException {
+		log.info("localhost:8080/twitter/embed/status/{server}");
 		Message savedEmbed = twitterService.postEmbed(status, server);
 		
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
-				.path("/{id}")
+				.path(ID)
 				.buildAndExpand(savedEmbed.getId()).toUri();
 		
 		return ResponseEntity.created(location).build();
@@ -37,13 +44,27 @@ public class DiscordEmbedController {
 	
 	@PostMapping("twitch/embed/host/{server}")
 	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitchStreamHost event, @PathVariable long server) throws InterruptedException, ExecutionException {
+		log.info("localhost:8080/twitch/embed/host/{server}");
 		Message savedEmbed = twitchService.postEmbed(event, server);
 		
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
-				.path("/{id}")
+				.path(ID)
 				.buildAndExpand(savedEmbed.getId()).toUri();
 		
 		return ResponseEntity.created(location).build();
 	}
+	
+	@PostMapping("twitch/embed/chat/{server}")
+	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitchChatMessage message, @PathVariable long server) throws InterruptedException, ExecutionException {
+		log.info("localhost:8080/twitch/embed/chat/{server}");
+		Message savedEmbed = twitchService.postEmbed(message, server);
+		
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path(ID)
+				.buildAndExpand(savedEmbed.getId()).toUri();
+		
+		return ResponseEntity.created(location).build();
+	}		
 }
