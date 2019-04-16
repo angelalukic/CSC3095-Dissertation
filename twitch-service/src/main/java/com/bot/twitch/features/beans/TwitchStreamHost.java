@@ -3,8 +3,9 @@ package com.bot.twitch.features.beans;
 import com.bot.twitch.game.TwitchGame;
 import com.bot.twitch.stream.TwitchStream;
 import com.bot.twitch.user.TwitchUser;
-import com.github.twitch4j.TwitchClient;
-import com.github.twitch4j.chat.events.channel.HostOnEvent;
+import com.github.twitch4j.helix.domain.Game;
+import com.github.twitch4j.helix.domain.Stream;
+import com.github.twitch4j.helix.domain.User;
 
 import lombok.Setter;
 
@@ -22,10 +23,10 @@ public class TwitchStreamHost {
 	public TwitchStreamHost() {
 	}
 	
-	public TwitchStreamHost(HostOnEvent event, TwitchClient client) {
-		this.hostChannel = new TwitchUser(event.getChannel(), client);
-		this.targetChannel = new TwitchUser(event.getTargetChannel(), client);
-		this.stream = new TwitchStream(targetChannel, client);
-		this.game = stream.getGame();
+	public TwitchStreamHost(User hostChannel, User targetChannel, Stream stream, Game game) {
+		this.hostChannel = new TwitchUser(hostChannel);
+		this.targetChannel = new TwitchUser(targetChannel);
+		this.stream = new TwitchStream(stream);
+		this.game = new TwitchGame(game);
 	}
 }

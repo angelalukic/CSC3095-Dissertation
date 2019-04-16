@@ -12,6 +12,8 @@ import com.bot.twitch.features.ChannelNotificationOnDonation;
 import com.bot.twitch.features.ChannelNotificationOnFollow;
 import com.bot.twitch.features.ChannelNotificationOnSubscription;
 import com.bot.twitch.features.DiscordNotificationOnHost;
+import com.bot.twitch.features.DiscordNotificationOnLive;
+import com.bot.twitch.features.DiscordNotificationOnOffline;
 import com.bot.twitch.features.WriteChannelChatToDiscord;
 import com.bot.twitch.listener.TwitchListener;
 import com.bot.twitch.listener.TwitchListenerRepository;
@@ -25,22 +27,20 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	
 	@Autowired private Configuration configuration;
 	@Autowired private TwitchListenerRepository listenerRepository;
-
 	@Autowired private ChannelNotificationOnCheer cheerNotification;
 	@Autowired private ChannelNotificationOnDonation donationNotification;
 	@Autowired private ChannelNotificationOnFollow followNotification;
 	@Autowired private ChannelNotificationOnSubscription subscriptionNotification;
 	@Autowired private DiscordNotificationOnHost hostNotification;
+	@Autowired private DiscordNotificationOnLive liveNotification;
+	@Autowired private DiscordNotificationOnOffline offlineNotification;
 	@Autowired private WriteChannelChatToDiscord chatNotification;
-	
 	private TwitchClient client;
 
 	@Override
 	public void onApplicationEvent(ApplicationReadyEvent event) {
-		
 		TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
 		OAuth2Credential credential = new OAuth2Credential("twitch", configuration.getIrc());
-	
 		client = clientBuilder
 				.withClientId(configuration.getId())
 				.withClientSecret(configuration.getSecret())
@@ -48,7 +48,6 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 				.withChatAccount(credential)
 				.withEnableChat(true)
 				.build();
-		
 		registerFeatures();
 		connectToChannels();
 	}
@@ -60,13 +59,13 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		followNotification.register(manager);
 		subscriptionNotification.register(manager);
 		hostNotification.register(manager, client);
+		liveNotification.register(manager, client);
+		offlineNotification.register(manager, client);
 		chatNotification.register(manager, client);
 	}
 
 	private void connectToChannels() {
-
 		List<TwitchListener> listeners = listenerRepository.findAll();
-		
 		for(int i = 0; i < listeners.size(); i++) {
 			String channel = listeners.get(i).getName();
 			listen(channel);

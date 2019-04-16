@@ -1,8 +1,7 @@
 package com.bot.twitch.features.beans;
 
 import com.bot.twitch.user.TwitchUser;
-import com.github.twitch4j.TwitchClient;
-import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
+import com.github.twitch4j.helix.domain.User;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,9 +17,9 @@ public class TwitchChatMessage {
 	public TwitchChatMessage() {
 	}
 	
-	public TwitchChatMessage(ChannelMessageEvent event, TwitchClient client) {
-		this.channel = new TwitchUser(event.getChannel(), client);
-		this.user = new TwitchUser(event.getUser(), client);
-		this.message = event.getMessage();
+	public TwitchChatMessage(User channel, User user, String message) {
+		this.channel = new TwitchUser(channel);
+		this.user = new TwitchUser(user);
+		this.message = message;
 	}
 }

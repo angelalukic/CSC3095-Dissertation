@@ -12,12 +12,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bot.discord.DiscordServiceProxy;
 import com.bot.discord.server.DiscordServer;
 import com.bot.discord.server.DiscordServerRepository;
 import com.bot.twitter.TwitterStreamConnection;
 import com.bot.twitter.listener.TwitterListener;
-import com.bot.twitter.listener.TwitterListenerDTO;
 import com.bot.twitter.listener.TwitterListenerRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +27,6 @@ public class SubscriptionDAO {
 	
 	@Autowired private DiscordServerRepository discordRepository;
 	@Autowired private TwitterListenerRepository twitterRepository;
-	@Autowired private DiscordServiceProxy proxy;
 	@Autowired private TwitterStreamConnection connection;
 	
 	public ResponseEntity<Object> deleteSubscription(Subscription subscription) {

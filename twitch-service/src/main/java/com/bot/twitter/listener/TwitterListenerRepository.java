@@ -1,8 +1,8 @@
-package com.bot.h2;
+package com.bot.twitter.listener;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SubscriptionRepository extends JpaRepository<Subscription, Integer> {
+public interface TwitterListenerRepository extends JpaRepository<TwitterListener, Long> {
 }

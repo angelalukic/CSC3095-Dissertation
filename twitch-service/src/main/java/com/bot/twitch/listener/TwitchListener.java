@@ -4,11 +4,10 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.bot.discord.server.DiscordServer;
+import com.bot.twitter.listener.TwitterListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.Getter;
@@ -28,27 +27,21 @@ public class TwitchListener {
 	private long id;
 	
 	private String name;
-	
-	@ManyToMany
-	@JoinTable(
-			name = "subscription",
-			joinColumns = @JoinColumn(name = "twitch_id"),
-			inverseJoinColumns = @JoinColumn(name = "discord_id"))
+
+	@ManyToMany(mappedBy = "twitchListeners")
 	@JsonIgnore
 	private Set<DiscordServer> servers;
+	
+	@ManyToMany(mappedBy = "twitchListeners")
+	@JsonIgnore
+	private Set<TwitterListener> twitterListeners;
 	
 	public TwitchListener() {
 	}
 
-	public TwitchListener(long id, String name, Set<DiscordServer> servers) {
+	public TwitchListener(long id, String name, Set<DiscordServer> servers, Set<TwitterListener> twitterListener) {
 		this.id = id;
 		this.name = name;
 		this.servers = servers;
-	}
-	
-	public TwitchListener(TwitchListenerDTO listener) {
-		this.id = listener.getId();
-		this.name = listener.getName();
-		this.servers = listener.getServers();
 	}
 }

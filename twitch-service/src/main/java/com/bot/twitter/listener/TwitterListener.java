@@ -1,4 +1,4 @@
-package com.bot.discord.server;
+package com.bot.twitter.listener;
 
 import java.util.Set;
 
@@ -14,15 +14,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
-/*
- * @Getter and @Setter automatically insert Getter and Setter Methods
- * See: https://projectlombok.org/features/GetterSetter
- */
-
 @Getter
 @Setter
 @Entity
-public class DiscordServer {
+public class TwitterListener {
 	
 	@Id
 	private long id;
@@ -30,16 +25,16 @@ public class DiscordServer {
 	
 	@ManyToMany
 	@JoinTable(
-			name = "discord_subscription",
-			joinColumns = @JoinColumn(name = "discord_id"),
+			name = "twitter_subscription",
+			joinColumns = @JoinColumn(name = "twitter_id"),
 			inverseJoinColumns = @JoinColumn(name = "twitch_id"))
 	@JsonIgnore
 	private Set<TwitchListener> twitchListeners;
 	
-	public DiscordServer() {
+	public TwitterListener() {
 	}
-
-	public DiscordServer(long id, String name, Set<TwitchListener> twitchListeners) {
+	
+	public TwitterListener(long id, String name, Set<TwitchListener> twitchListeners) {
 		this.id = id;
 		this.name = name;
 		this.twitchListeners = twitchListeners;

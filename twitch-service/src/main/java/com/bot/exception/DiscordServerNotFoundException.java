@@ -1,13 +1,13 @@
-package com.bot.twitch.user;
+package com.bot.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @SuppressWarnings("serial")
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class TwitchUserNotFoundException extends RuntimeException {
+public class DiscordServerNotFoundException extends RuntimeException {
 	
-	public TwitchUserNotFoundException(String message) {
+	public DiscordServerNotFoundException(String message) {
 		super(message);
 	}
 }
