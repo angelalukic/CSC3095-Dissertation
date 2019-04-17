@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.bot.twitter.listener.TwitterListener;
+import com.bot.twitch.listener.TwitchListener;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,16 +21,16 @@ public class TwitterSubscriptionController {
 	@Autowired private TwitterSubscriptionDAO service;
 
 	
-	@DeleteMapping("/twitter/subscription/")
+	@DeleteMapping("/twitch/twitter/subscription/")
 	public ResponseEntity<Object> deleteTwitterSubscription(@RequestBody TwitterSubscription subscription) {
 		log.info("DELETE localhost:8082/twitter/subscription");
 		return service.deleteSubscription(subscription);
 	}
 	
-	@PostMapping("/twitter/subscription/")
+	@PostMapping("/twitch/twitter/subscription/")
 	public ResponseEntity<Object> createTwitterSubscription(@RequestBody TwitterSubscription subscription) {
 		log.info("POST localhost:8082/twitter/subscription");
-		TwitterListener listener = service.addSubscription(subscription);
+		TwitchListener listener = service.addSubscription(subscription);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")

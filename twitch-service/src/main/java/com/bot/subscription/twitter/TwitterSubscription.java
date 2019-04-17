@@ -10,15 +10,15 @@ import lombok.Setter;
 @Setter
 public class TwitterSubscription {
 	
-	private TwitterListener twitter;
 	private TwitchListener twitch;
+	private TwitterListener twitter;
 	
 	public TwitterSubscription() {
 	}
 	
-	public TwitterSubscription(TwitterListener twitter, TwitchListener twitch) {
-		this.twitter = twitter;
+	public TwitterSubscription(TwitchListener twitch, TwitterListener twitter) {
 		this.twitch = twitch;
+		this.twitter = twitter;
 	}
 
 }

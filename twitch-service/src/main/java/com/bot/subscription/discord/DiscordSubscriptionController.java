@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.bot.discord.server.DiscordServer;
+import com.bot.twitch.listener.TwitchListener;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -20,20 +20,20 @@ public class DiscordSubscriptionController {
 	
 	@Autowired private DiscordSubscriptionDAO service;
 	
-	@DeleteMapping("/discord/subscription/")
+	@DeleteMapping("/twitch/discord/subscription/")
 	public ResponseEntity<Object> deleteDiscordSubscription(@RequestBody DiscordSubscription subscription) {
 		log.info("DELETE localhost:8082/discord/subscription");
 		return service.deleteSubscription(subscription);
 	}
 	
-	@PostMapping("/discord/subscription/")
+	@PostMapping("/twitch/discord/subscription/")
 	public ResponseEntity<Object> createDiscordSubscription(@RequestBody DiscordSubscription subscription) {
 		log.info("POST localhost:8082/discord/subscription");
-		DiscordServer server = service.addSubscription(subscription);
+		TwitchListener listener = service.addSubscription(subscription);
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(server.getId()).toUri();
+				.buildAndExpand(listener.getId()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 }

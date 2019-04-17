@@ -4,8 +4,6 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.bot.twitch.listener.TwitchListener;
@@ -23,11 +21,7 @@ public class TwitterListener {
 	private long id;
 	private String name;
 	
-	@ManyToMany
-	@JoinTable(
-			name = "twitter_subscription",
-			joinColumns = @JoinColumn(name = "twitter_id"),
-			inverseJoinColumns = @JoinColumn(name = "twitch_id"))
+	@ManyToMany(mappedBy = "twitterListeners")
 	@JsonIgnore
 	private Set<TwitchListener> twitchListeners;
 	

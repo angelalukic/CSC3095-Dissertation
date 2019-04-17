@@ -14,12 +14,12 @@ public class TwitterListenerController {
 	private TwitterServiceProxy proxy;
 	
 	@DeleteMapping("/twitter/subscription/")
-	public ResponseEntity<Object> deleteSubscription(@RequestBody TwitterSubscription subscription) {
+	public ResponseEntity<Object> deleteSubscription(@RequestBody TwitterDiscordSubscription subscription) {
 		return proxy.deleteSubscription(subscription);
 	}
 	
 	@PostMapping("/twitter/subscription/")
-	public ResponseEntity<Object> addTwitterSubscription(@RequestBody TwitterSubscription subscription) {
+	public ResponseEntity<Object> addTwitterSubscription(@RequestBody TwitterDiscordSubscription subscription) {
 		return proxy.addTwitterSubscription(subscription);
 	}
 }

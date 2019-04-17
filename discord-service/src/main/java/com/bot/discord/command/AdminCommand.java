@@ -11,6 +11,7 @@ import com.bot.discord.DiscordUtils;
 import com.bot.discord.command.commands.admin.NotificationAdminCommand;
 import com.bot.discord.command.commands.admin.RegisterAdminCommand;
 import com.bot.discord.command.commands.admin.RoleAdminCommand;
+import com.bot.discord.command.commands.admin.TwitchAdminCommand;
 import com.bot.discord.command.commands.admin.TwitterAdminCommand;
 import com.bot.discord.command.commands.admin.WelcomeAdminCommand;
 import com.bot.discord.embed.template.ErrorEmbed;
@@ -24,6 +25,7 @@ public class AdminCommand {
 
 	@Autowired private RegisterAdminCommand registerAdminCommand;
 	@Autowired private TwitterAdminCommand twitterAdminCommand;
+	@Autowired private TwitchAdminCommand twitchAdminCommand;
 	@Autowired private NotificationAdminCommand notificationAdminCommand;
 	@Autowired private RoleAdminCommand roleAdminCommand;
 	@Autowired private WelcomeAdminCommand welcomeAdminCommand;
@@ -48,6 +50,8 @@ public class AdminCommand {
 			executeRegisterCommand();
 		else if(message.getContent().startsWith("rf@twitter"))
 			executeTwitterCommand();
+		else if(message.getContent().startsWith("rf@twitch"))
+			executeTwitchCommand();
 		else if (message.getContent().startsWith("rf@notification"))
 			executeNotificationCommand();
 		else if (message.getContent().startsWith("rf@role"))
@@ -68,6 +72,11 @@ public class AdminCommand {
 	private void executeTwitterCommand() {
 		log.info("[" + server.getName() + "] Twitter Admin Command Detected");
 		twitterAdminCommand.execute(event);
+	}
+	
+	private void executeTwitchCommand() {
+		log.info("[" + server.getName() + "] Twitch Admin Command Detected");
+		twitchAdminCommand.execute(event);
 	}
 	
 	private void executeNotificationCommand() {

@@ -4,6 +4,8 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
 import com.bot.discord.server.DiscordServer;
@@ -28,11 +30,19 @@ public class TwitchListener {
 	
 	private String name;
 
-	@ManyToMany(mappedBy = "twitchListeners")
+	@ManyToMany
+	@JoinTable(
+			name = "discord_subscription",
+			joinColumns = @JoinColumn(name = "twitch_id"),
+			inverseJoinColumns = @JoinColumn(name = "discord_id"))
 	@JsonIgnore
 	private Set<DiscordServer> servers;
 	
-	@ManyToMany(mappedBy = "twitchListeners")
+	@ManyToMany
+	@JoinTable(
+			name = "twitter_subscription",
+			joinColumns = @JoinColumn(name = "twitch_id"),
+			inverseJoinColumns = @JoinColumn(name = "twitter_id"))
 	@JsonIgnore
 	private Set<TwitterListener> twitterListeners;
 	

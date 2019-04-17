@@ -7,15 +7,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TwitterSubscription {
+public class TwitterDiscordSubscription {
 	
 	private DiscordServerDTO server;
 	private TwitterListener listener;
 	
-	public TwitterSubscription() {
+	public TwitterDiscordSubscription() {
 	}
 
-	public TwitterSubscription(TwitterListener listener, DiscordServerDTO server) {
+	public TwitterDiscordSubscription(TwitterListener listener, DiscordServerDTO server) {
 		this.listener = listener;
 		this.server = server;
 	}

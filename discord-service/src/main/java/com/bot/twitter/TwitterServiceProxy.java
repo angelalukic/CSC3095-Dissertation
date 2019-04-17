@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface TwitterServiceProxy {
 	
 	@DeleteMapping("/twitter/subscription/")
-	public ResponseEntity<Object> deleteSubscription(@RequestBody TwitterSubscription subscription);
+	public ResponseEntity<Object> deleteSubscription(@RequestBody TwitterDiscordSubscription subscription);
 	
 	@PostMapping("/twitter/subscription/")
-	public ResponseEntity<Object> addTwitterSubscription(@RequestBody TwitterSubscription subscription);
+	public ResponseEntity<Object> addTwitterSubscription(@RequestBody TwitterDiscordSubscription subscription);
 }

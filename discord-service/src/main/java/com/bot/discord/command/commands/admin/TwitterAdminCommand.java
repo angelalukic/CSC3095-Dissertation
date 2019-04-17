@@ -15,7 +15,7 @@ import com.bot.discord.server.DiscordServer;
 import com.bot.discord.server.DiscordServerDTO;
 import com.bot.twitter.TwitterListener;
 import com.bot.twitter.TwitterServiceProxy;
-import com.bot.twitter.TwitterSubscription;
+import com.bot.twitter.TwitterDiscordSubscription;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -45,37 +45,35 @@ public class TwitterAdminCommand {
 		server = utils.getServerFromServerOptional(event.getServer(), event.getMessageId());
 		Message message = event.getMessage();
 		try {
-			Twitter twitter = TwitterFactory.getSingleton();
-			DiscordServer discordServer = utils.getDiscordServerFromServerOptional(event.getServer(), event.getMessageId()); 	// Can throw ServerNotFoundException
-			String command = message.getContent().substring(11);																// Can throw IndexOutOfBoundsException
-			if(command.startsWith("add")) {
-				String username = message.getContent().substring(15);															// Can throw IndexOutOfBoundsException
-				user = twitter.showUser(username);																				// Can throw TwitterException
-				executeAdd(discordServer);																						// Can throw FeignException
-			}
-			else if (command.startsWith("remove")) {
-				String username = message.getContent().substring(18);															// Can throw IndexOutOfBoundsException
-				user = twitter.showUser(username);																				// Can throw TwitterExceptiton
-				executeRemove(discordServer);																					// Can throw FeignException
-			}
-			else if (command.startsWith("help"))
+			String command = message.getContent().substring(11);																	// Can throw IndexOutOfBoundsException
+			if(command.startsWith("help"))
 				sendHelpCommandMessage();
-			else
-				sendInvalidCommandErrorMessage();
+			else {
+				Twitter twitter = TwitterFactory.getSingleton();
+				DiscordServer discordServer = utils.getDiscordServerFromServerOptional(event.getServer(), event.getMessageId()); 	// Can throw ServerNotFoundException
+				if(command.startsWith("add")) {
+					String username = message.getContent().substring(15);															// Can throw IndexOutOfBoundsException
+					user = twitter.showUser(username);																				// Can throw TwitterException
+					executeAdd(discordServer);																						// Can throw FeignException
+				}
+				else if (command.startsWith("remove")) {
+					String username = message.getContent().substring(18);															// Can throw IndexOutOfBoundsException
+					user = twitter.showUser(username);																				// Can throw TwitterExceptiton
+					executeRemove(discordServer);																					// Can throw FeignException
+				}
+				else
+					sendInvalidCommandErrorMessage();
+			}
 		}
-		// message.getContent().substring() may throw error if command is not entered correctly
 		catch(IndexOutOfBoundsException e) {
 			sendInvalidCommandErrorMessage();
 		}
-		// twitter.showUser() may throw error if, for example, a twitter account with that username doesn't exist
 		catch(TwitterException e) {
 			sendTwitterErrorMessage();
 		}
-		// getDiscordServerFromServerOptional() may throw error is server is not registered in the JPA database
 		catch(ServerNotFoundException e) {
 			sendServerNotRegisteredErrorMessage();	
 		}
-		// If twitter-service returns a Status 404
 		catch(FeignException e) {
 			send404ErrorMessage();
 		}
@@ -91,7 +89,7 @@ public class TwitterAdminCommand {
 	private void executeRemove(DiscordServer discordServer) {
 		TwitterListener listener = new TwitterListener(user.getId(), user.getScreenName());
 		DiscordServerDTO serverDTO = new DiscordServerDTO(discordServer);
-		TwitterSubscription subscription = new TwitterSubscription(listener, serverDTO);
+		TwitterDiscordSubscription subscription = new TwitterDiscordSubscription(listener, serverDTO);
 		proxy.deleteSubscription(subscription);
 		sendDeletedMessage(user.getScreenName());			
 	}
@@ -99,7 +97,7 @@ public class TwitterAdminCommand {
 	private void sendListenertoTwitterService(DiscordServer discordServer) {
 		TwitterListener listener = new TwitterListener(user.getId(), user.getScreenName());
 		DiscordServerDTO serverDTO = new DiscordServerDTO(discordServer);
-		TwitterSubscription subscription = new TwitterSubscription(listener, serverDTO);
+		TwitterDiscordSubscription subscription = new TwitterDiscordSubscription(listener, serverDTO);
 		proxy.addTwitterSubscription(subscription);
 		sendCreatedMessage(user.getScreenName());
 	}
@@ -113,7 +111,7 @@ public class TwitterAdminCommand {
 	}
 	
 	private void sendTwitterErrorMessage() {
-		log.error("[" + server.getName() + "] Twitter returned error when trying to create listener for account: " + user.getName());
+		log.error("[" + server.getName() + "] Twitter returned error when trying to create listener.");
 		EmbedBuilder embed = errorEmbed.createEmbed(
 				"**Twitter Error**: An error occured when trying to create listener."
 				+ " That username may not exist, or Twitter is down.");

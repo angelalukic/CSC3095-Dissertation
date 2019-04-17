@@ -1,5 +1,6 @@
 package com.bot.discord;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,6 +20,8 @@ import com.bot.discord.exception.ServerNotFoundException;
 import com.bot.discord.exception.UserNotFoundException;
 import com.bot.discord.server.DiscordServer;
 import com.bot.discord.server.DiscordServerRepository;
+import com.github.twitch4j.TwitchClient;
+import com.github.twitch4j.TwitchClientBuilder;
 
 @Component
 public class DiscordUtils {
@@ -105,5 +108,13 @@ public class DiscordUtils {
 			User user = event.getUser();
 			user.sendMessage(embed);
 		}
+	}
+	
+	public com.github.twitch4j.helix.domain.User getTwitchUserFromHelix(String username) {
+		TwitchClient twitchClient = TwitchClientBuilder.builder()
+	            .withEnableHelix(true)
+	            .build();
+		List<com.github.twitch4j.helix.domain.User> users = twitchClient.getHelix().getUsers(null, null, Arrays.asList(username)).execute().getUsers();
+		return users.get(0);
 	}
 }

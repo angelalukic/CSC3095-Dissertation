@@ -58,7 +58,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		donationNotification.register(manager);
 		followNotification.register(manager);
 		subscriptionNotification.register(manager);
-		hostNotification.register(manager, client);
+		//hostNotification.register(manager, client);
 		liveNotification.register(manager, client);
 		offlineNotification.register(manager, client);
 		chatNotification.register(manager, client);
@@ -74,7 +74,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	
 	private void listen(String channel) {
 		client.getChat().joinChannel(channel);
-		//client.getClientHelper().enableStreamEventListener(channel);
-		//client.getClientHelper().enableFollowEventListener(channel);
+		client.getClientHelper().enableStreamEventListener(channel);
+		client.getClientHelper().enableFollowEventListener(channel);
 	}
 }
