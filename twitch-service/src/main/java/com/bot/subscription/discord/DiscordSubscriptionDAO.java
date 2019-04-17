@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.bot.discord.server.DiscordServer;
 import com.bot.discord.server.DiscordServerRepository;
 import com.bot.subscription.SubscriptionUtils;
+import com.bot.twitch.TwitchChannelConnection;
 import com.bot.twitch.listener.TwitchListener;
 import com.bot.twitch.listener.TwitchListenerRepository;
 
@@ -21,6 +22,7 @@ public class DiscordSubscriptionDAO {
 	@Autowired private SubscriptionUtils utils;
 	@Autowired private TwitchListenerRepository twitchRepository;
 	@Autowired private DiscordServerRepository discordRepository;
+	@Autowired private TwitchChannelConnection connection;
 	
 	public ResponseEntity<Object> deleteSubscription(DiscordSubscription subscription) {
 		TwitchListener listener = utils.getTwitchListenerInRepository(subscription.getListener().getId());
@@ -42,7 +44,7 @@ public class DiscordSubscriptionDAO {
 		if(!optionalListener.isPresent()) {
 			twitchRepository.save(listener);
 			log.info("Twitch Listener " + listener.getName() + " did not exist in repository. New Entry Created.");
-			// TODO Start listening to this twitch channel
+			connection.listenToChannel(listener.getName());
 		}
 		if(!optionalServer.isPresent()) {
 			discordRepository.save(server);
