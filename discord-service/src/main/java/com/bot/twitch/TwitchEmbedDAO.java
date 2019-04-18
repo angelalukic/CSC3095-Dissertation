@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordChannelConnection;
-import com.bot.discord.embed.template.TwitchEmbed;
+import com.bot.discord.beans.embed.template.TwitchEmbed;
 import com.bot.twitch.beans.events.TwitchChatMessage;
 import com.bot.twitch.beans.events.TwitchStreamHost;
 import com.bot.twitch.beans.events.TwitchStreamLive;

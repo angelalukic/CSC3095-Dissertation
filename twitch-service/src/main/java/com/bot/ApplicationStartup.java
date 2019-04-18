@@ -8,8 +8,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import com.bot.twitch.TwitchChannelConnection;
-import com.bot.twitch.listener.TwitchListener;
-import com.bot.twitch.listener.TwitchListenerRepository;
+import com.bot.twitch.beans.listener.TwitchListener;
+import com.bot.twitch.beans.listener.TwitchListenerRepository;
 import com.github.twitch4j.TwitchClientBuilder;
 
 @Component

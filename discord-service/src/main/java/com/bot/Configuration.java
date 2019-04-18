@@ -19,4 +19,5 @@ public class Configuration {
 	private String id;
 	private String secret;
 	private String token;
+	private String twitterAccessToken;
 }

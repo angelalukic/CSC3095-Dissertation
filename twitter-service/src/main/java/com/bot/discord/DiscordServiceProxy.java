@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.bot.twitter.status.TwitterStatus;
+import com.bot.twitter.beans.TwitterStatus;
 
 @FeignClient(name="discord-service", url="localhost:8080")
 public interface DiscordServiceProxy {

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bot.twitter.status.TwitterStatus;
+import com.bot.twitter.beans.TwitterStatus;
 
 @RestController
 public class DiscordEmbedController {

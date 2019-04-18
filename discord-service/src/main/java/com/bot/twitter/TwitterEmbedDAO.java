@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordChannelConnection;
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.embed.template.TwitterEmbed;
+import com.bot.discord.beans.embed.template.TwitterEmbed;
+import com.bot.twitter.beans.TwitterStatus;
 
 @Component
 public class TwitterEmbedDAO {

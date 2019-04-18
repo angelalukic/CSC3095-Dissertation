@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.embed.template.SuccessEmbed;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
+import com.bot.discord.beans.embed.template.SuccessEmbed;
+import com.bot.discord.beans.server.DiscordServer;
 import com.bot.discord.exception.ServerNotFoundException;
-import com.bot.discord.server.DiscordServer;
-import com.bot.twitch.TwitchListener;
 import com.bot.twitch.TwitchServiceProxy;
-import com.bot.twitch.subscription.TwitchDiscordSubscription;
+import com.bot.twitch.beans.TwitchListener;
+import com.bot.twitch.beans.TwitchSubscription;
 import com.github.twitch4j.helix.domain.User;
 
 import feign.FeignException;
@@ -77,14 +77,14 @@ public class TwitchAdminCommand {
 	
 	private void executeAdd(DiscordServer discordServer) {
 		TwitchListener listener = new TwitchListener(user.getId(), user.getDisplayName());
-		TwitchDiscordSubscription subscription = new TwitchDiscordSubscription(listener, discordServer);
+		TwitchSubscription subscription = new TwitchSubscription(listener, discordServer);
 		proxy.createDiscordSubscription(subscription);
 		sendCreatedMessage(user.getDisplayName());
 	}
 	
 	private void executeDelete(DiscordServer discordServer) {
 		TwitchListener listener = new TwitchListener(user.getId(), user.getDisplayName());
-		TwitchDiscordSubscription subscription = new TwitchDiscordSubscription(listener, discordServer);
+		TwitchSubscription subscription = new TwitchSubscription(listener, discordServer);
 		proxy.deleteDiscordSubscription(subscription);
 		sendDeletedMessage(user.getDisplayName());
 	}

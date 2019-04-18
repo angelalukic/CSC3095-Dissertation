@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
 import com.bot.discord.command.AdminCommand;
 import com.bot.discord.command.Command;
-import com.bot.discord.embed.template.ErrorEmbed;
 
 @Component
 public class MessageCreateListener {

@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
+import com.bot.discord.beans.embed.template.SuccessEmbed;
 import com.bot.discord.command.commands.admin.NotificationAdminCommand;
 import com.bot.discord.command.commands.admin.RegisterAdminCommand;
 import com.bot.discord.command.commands.admin.RoleAdminCommand;
 import com.bot.discord.command.commands.admin.TwitchAdminCommand;
 import com.bot.discord.command.commands.admin.TwitterAdminCommand;
 import com.bot.discord.command.commands.admin.WelcomeAdminCommand;
-import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.embed.template.SuccessEmbed;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -40,6 +40,7 @@ public class AdminCommand {
 	private static final String NOTIFICATION_COMMAND = "\n`rf@tnotification help`";
 	private static final String ROLE_COMMAND = "\n`rf@role help`";
 	private static final String WELCOME_COMMAND = "\n`rf@welcome help`";
+	private static final String SUBSCRIBE_COMMAND = "\n`rf@subscribe`";
 	private static final String HELP_COMMAND = "\n\nFor more information use the following command:\n`rf@help`";
 	
 	public void execute(MessageCreateEvent event) {
@@ -104,6 +105,7 @@ public class AdminCommand {
 			+ TWITTER_COMMAND + "\n Configure Twitter accounts. When a status is detected from these Twitter accounts, your Discord server will be notified.\n" 
 			+ NOTIFICATION_COMMAND + "\n Change the channels where different notifications get sent to within your Discord server.\n" 
 			+ ROLE_COMMAND + "\n Configure which roles users can assign to themselves.\n"
+			+ SUBSCRIBE_COMMAND + "\n Configure a Twitter account to make a post when a Twitch channel of choice goes live.\n"
 			+ WELCOME_COMMAND + "\n Change the welcome message that gets sent to users when they join your Discord server.");
 		utils.sendMessage(embed, event);
 	}
@@ -112,7 +114,7 @@ public class AdminCommand {
 		log.error("[" + server.getName() + "] Invalid Admin Command");
 		EmbedBuilder embed = errorEmbed.createEmbed(
 				"**Invalid Command**: Valid commands are as follows:"
-				+ REGISTER_COMMAND + TWITTER_COMMAND + NOTIFICATION_COMMAND + ROLE_COMMAND + WELCOME_COMMAND + HELP_COMMAND);
+				+ REGISTER_COMMAND + TWITTER_COMMAND + NOTIFICATION_COMMAND + ROLE_COMMAND + WELCOME_COMMAND + SUBSCRIBE_COMMAND + HELP_COMMAND);
 		utils.sendMessage(embed, event);
 	}	
 }

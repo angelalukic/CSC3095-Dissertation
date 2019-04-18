@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.embed.template.SuccessEmbed;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
+import com.bot.discord.beans.embed.template.SuccessEmbed;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.discord.beans.server.DiscordServerDTO;
 import com.bot.discord.exception.ServerNotFoundException;
-import com.bot.discord.server.DiscordServer;
-import com.bot.discord.server.DiscordServerDTO;
-import com.bot.twitter.TwitterListener;
 import com.bot.twitter.TwitterServiceProxy;
-import com.bot.twitter.TwitterDiscordSubscription;
+import com.bot.twitter.beans.TwitterSubscription;
+import com.bot.twitter.beans.listener.TwitterListener;
 
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +58,7 @@ public class TwitterAdminCommand {
 				}
 				else if (command.startsWith("remove")) {
 					String username = message.getContent().substring(18);															// Can throw IndexOutOfBoundsException
-					user = twitter.showUser(username);																				// Can throw TwitterExceptiton
+					user = twitter.showUser(username);																				// Can throw TwitterException
 					executeRemove(discordServer);																					// Can throw FeignException
 				}
 				else
@@ -89,7 +89,7 @@ public class TwitterAdminCommand {
 	private void executeRemove(DiscordServer discordServer) {
 		TwitterListener listener = new TwitterListener(user.getId(), user.getScreenName());
 		DiscordServerDTO serverDTO = new DiscordServerDTO(discordServer);
-		TwitterDiscordSubscription subscription = new TwitterDiscordSubscription(listener, serverDTO);
+		TwitterSubscription subscription = new TwitterSubscription(listener, serverDTO);
 		proxy.deleteSubscription(subscription);
 		sendDeletedMessage(user.getScreenName());			
 	}
@@ -97,7 +97,7 @@ public class TwitterAdminCommand {
 	private void sendListenertoTwitterService(DiscordServer discordServer) {
 		TwitterListener listener = new TwitterListener(user.getId(), user.getScreenName());
 		DiscordServerDTO serverDTO = new DiscordServerDTO(discordServer);
-		TwitterDiscordSubscription subscription = new TwitterDiscordSubscription(listener, serverDTO);
+		TwitterSubscription subscription = new TwitterSubscription(listener, serverDTO);
 		proxy.addTwitterSubscription(subscription);
 		sendCreatedMessage(user.getScreenName());
 	}
