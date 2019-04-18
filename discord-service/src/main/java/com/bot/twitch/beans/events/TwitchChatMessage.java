@@ -1,6 +1,6 @@
-package com.bot.twitch.events;
+package com.bot.twitch.beans.events;
 
-import com.bot.twitch.TwitchUser;
+import com.bot.twitch.beans.TwitchUser;
 
 import lombok.Getter;
 import lombok.Setter;

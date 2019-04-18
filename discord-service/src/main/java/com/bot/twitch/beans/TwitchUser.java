@@ -1,4 +1,4 @@
-package com.bot.twitch;
+package com.bot.twitch.beans;
 
 import lombok.Setter;
 import lombok.Getter;

@@ -42,6 +42,7 @@ public class TwitchChannelConnection {
 				.withEnableHelix(true)
 				.withChatAccount(credential)
 				.withEnableChat(true)
+				.withTimeout(120*1000)
 				.build();
 	}
 	

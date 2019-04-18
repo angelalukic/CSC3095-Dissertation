@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.bot.twitch.TwitchEmbedDAO;
-import com.bot.twitch.events.TwitchStreamHost;
-import com.bot.twitch.events.TwitchChatMessage;
 import com.bot.twitter.TwitterEmbedDAO;
 import com.bot.twitter.TwitterStatus;
 
@@ -25,9 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 public class DiscordEmbedController {
 	
 	@Autowired private TwitterEmbedDAO twitterService;
-	@Autowired private TwitchEmbedDAO twitchService;
-	
-	private static final String ID = "/{id}";
 	
 	@PostMapping("twitter/embed/status/{server}")
 	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitterStatus status, @PathVariable long server) throws InterruptedException, ExecutionException {
@@ -36,35 +30,9 @@ public class DiscordEmbedController {
 		
 		URI location = ServletUriComponentsBuilder
 				.fromCurrentRequest()
-				.path(ID)
+				.path("/{id}")
 				.buildAndExpand(savedEmbed.getId()).toUri();
 		
 		return ResponseEntity.created(location).build();
-	}
-	
-	@PostMapping("twitch/embed/host/{server}")
-	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitchStreamHost event, @PathVariable long server) throws InterruptedException, ExecutionException {
-		log.info("localhost:8080/twitch/embed/host/{server}");
-		Message savedEmbed = twitchService.postEmbed(event, server);
-		
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path(ID)
-				.buildAndExpand(savedEmbed.getId()).toUri();
-		
-		return ResponseEntity.created(location).build();
-	}
-	
-	@PostMapping("twitch/embed/chat/{server}")
-	public ResponseEntity<Object> createDiscordEmbed(@RequestBody TwitchChatMessage message, @PathVariable long server) throws InterruptedException, ExecutionException {
-		log.info("localhost:8080/twitch/embed/chat/{server}");
-		Message savedEmbed = twitchService.postEmbed(message, server);
-		
-		URI location = ServletUriComponentsBuilder
-				.fromCurrentRequest()
-				.path(ID)
-				.buildAndExpand(savedEmbed.getId()).toUri();
-		
-		return ResponseEntity.created(location).build();
-	}		
+	}	
 }

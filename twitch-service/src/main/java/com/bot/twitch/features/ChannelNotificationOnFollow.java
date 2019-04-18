@@ -18,7 +18,7 @@ public class ChannelNotificationOnFollow {
     public void onFollow(FollowEvent event) {
     	log.info("[" + event.getChannel().getName() + "] FollowEvent Detected");
         String message = String.format(
-                "%s has just followed us! Thank you so much!",
+                "%s has just followed!",
                 event.getUser().getName()
         );
         

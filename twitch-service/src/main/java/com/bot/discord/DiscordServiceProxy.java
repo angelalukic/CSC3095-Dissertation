@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import com.bot.twitch.features.beans.TwitchChatMessage;
 import com.bot.twitch.features.beans.TwitchStreamHost;
 import com.bot.twitch.features.beans.TwitchStreamLive;
+import com.bot.twitch.features.beans.TwitchStreamOffline;
 
 @FeignClient(name="discord-service", url="localhost:8080")
 public interface DiscordServiceProxy {
@@ -18,6 +19,9 @@ public interface DiscordServiceProxy {
 	
 	@PostMapping("twitch/embed/stream/{server}")
 	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitchStreamLive event, @PathVariable("server") long server);
+	
+	@PostMapping("twitch/embed/offline/{server}")
+	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitchStreamOffline event, @PathVariable("server") long server);
 	
 	@PostMapping("twitch/embed/chat/{server}")
 	public ResponseEntity<Object> sendToDiscord(@RequestBody TwitchChatMessage message, @PathVariable("server") long server);

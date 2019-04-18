@@ -51,7 +51,7 @@ public class DiscordNotificationOnHost {
 	}
 
 	private void sendToDiscordServers(TwitchStreamHost host, List<DiscordServer> servers) {
-		for(int j = 0; j < servers.size(); j++)
-			proxy.sendToDiscord(host, servers.get(j).getId());
+		for(int i = 0; i < servers.size(); i++)
+			proxy.sendToDiscord(host, servers.get(i).getId());
 	}
 }

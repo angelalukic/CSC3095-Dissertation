@@ -1,16 +1,23 @@
 package com.bot.twitch.features;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bot.Configuration;
 import com.bot.discord.DiscordServiceProxy;
-import com.bot.discord.server.DiscordServerRepository;
+import com.bot.discord.server.DiscordServer;
 import com.bot.twitch.TwitchUtils;
-import com.bot.twitch.listener.TwitchListenerRepository;
+import com.bot.twitch.features.beans.TwitchStreamLive;
 import com.bot.twitter.TwitterServiceProxy;
+import com.bot.twitter.listener.TwitterListener;
 import com.github.philippheuer.events4j.EventManager;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.common.events.channel.ChannelGoLiveEvent;
+import com.github.twitch4j.helix.domain.Game;
+import com.github.twitch4j.helix.domain.Stream;
+import com.github.twitch4j.helix.domain.User;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,11 +25,10 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 public class DiscordNotificationOnLive {
 	
-	@Autowired private DiscordServerRepository discordRepository;
-	@Autowired private TwitchListenerRepository twitterRepository;
 	@Autowired private DiscordServiceProxy discordProxy;
 	@Autowired private TwitterServiceProxy twitterProxy;
 	@Autowired private TwitchUtils utils;
+	@Autowired private Configuration configuration;
 	
 	public void register(EventManager eventManager, TwitchClient client) {
 		eventManager.onEvent(ChannelGoLiveEvent.class).subscribe(event -> onGoLive(event, client));
@@ -30,5 +36,45 @@ public class DiscordNotificationOnLive {
 	
 	public void onGoLive(ChannelGoLiveEvent event, TwitchClient client) {
 		log.info("[" + event.getChannel().getName() + "] Has Started Broadcasting");
+		TwitchStreamLive live = getTwitchStreamLive(event, client);
+		sendToDiscordServers(live);
+		//sendToTwitterChannels(live);
+	}
+	
+	private TwitchStreamLive getTwitchStreamLive(ChannelGoLiveEvent event, TwitchClient client) {
+		sleep(10); // Wait for 10 seconds before pulling information from Helix to give Twitch a chance to catch up.
+		String title = event.getTitle();
+		User user = utils.getUserFromHelix(event.getChannel().getName(), client);
+		Stream stream = utils.getStreamFromHelix(event.getChannel().getId(), client, configuration.getIrc());
+		Game game = utils.getGameFromHelix(event.getGameId().toString(), client, configuration.getIrc());
+		return new TwitchStreamLive(title, user, stream, game);
+	}
+	
+	private void sendToDiscordServers(TwitchStreamLive live) {
+		long id = live.getUser().getId();
+		List<DiscordServer> servers = utils.retrieveDiscordServersForTwitchListener(id);
+		if(!servers.isEmpty()) {
+			for(int i = 0; i < servers.size(); i++)
+				discordProxy.sendToDiscord(live, servers.get(i).getId());
+		}
+	}
+	
+	private void sendToTwitterChannels(TwitchStreamLive live) {
+		long id = live.getUser().getId();
+		List<TwitterListener> listeners = utils.retrieveTwitterListenersFromTwitchListener(id);
+		if(listeners.isEmpty()) {
+			for(int i = 0; i < listeners.size(); i++) {
+				//twitterProxy.sendToTwitter(live, listeners.get(i).getId());
+			}
+		}
+	}
+	
+	private void sleep(int seconds) {
+		try {
+			Thread.sleep(seconds*1000L); 
+		} catch (InterruptedException e) {
+			log.error("Error Was Thrown when trying to Sleep on GoLiveEvent");
+			Thread.currentThread().interrupt();
+		}
 	}
 }

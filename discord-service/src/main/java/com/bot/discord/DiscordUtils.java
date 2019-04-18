@@ -1,5 +1,6 @@
 package com.bot.discord;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,9 @@ import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.event.server.member.ServerMemberJoinEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.bot.discord.exception.ChannelNotFoundException;
 import com.bot.discord.exception.ServerNotFoundException;
@@ -116,5 +119,13 @@ public class DiscordUtils {
 	            .build();
 		List<com.github.twitch4j.helix.domain.User> users = twitchClient.getHelix().getUsers(null, null, Arrays.asList(username)).execute().getUsers();
 		return users.get(0);
+	}
+	
+	public ResponseEntity<Object> getResponseEntity(Message savedEmbed) {
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest()
+				.path("/{id}")
+				.buildAndExpand(savedEmbed.getId()).toUri();
+		return ResponseEntity.created(location).build();
 	}
 }

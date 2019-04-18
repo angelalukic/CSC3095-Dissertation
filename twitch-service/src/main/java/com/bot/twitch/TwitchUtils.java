@@ -14,6 +14,7 @@ import com.bot.exception.TwitchStreamNotFoundException;
 import com.bot.exception.TwitchUserNotFoundException;
 import com.bot.twitch.listener.TwitchListener;
 import com.bot.twitch.listener.TwitchListenerRepository;
+import com.bot.twitter.listener.TwitterListener;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.helix.domain.Game;
 import com.github.twitch4j.helix.domain.Stream;
@@ -23,18 +24,28 @@ import com.github.twitch4j.helix.domain.User;
 @Transactional
 public class TwitchUtils {
 	
-	@Autowired private TwitchListenerRepository repository;
+	@Autowired private TwitchListenerRepository twitchRepository;
 	
 	public List<DiscordServer> retrieveDiscordServersForTwitchListener(long id) {
-		List<TwitchListener> listeners = repository.findAll();
+		List<TwitchListener> listeners = twitchRepository.findAll();
 		List<DiscordServer> servers = new ArrayList<>();
 		for(int i = 0; i < listeners.size(); i++) {
 			TwitchListener listener = listeners.get(i);
-			if(listener.getId() == id) {
+			if(listener.getId() == id)
 				servers.addAll(listener.getServers());
-			}
 		}
 		return servers;
+	}
+	
+	public List<TwitterListener> retrieveTwitterListenersFromTwitchListener(long id) {
+		List<TwitchListener> twitchListeners = twitchRepository.findAll();
+		List<TwitterListener> twitterListeners = new ArrayList<>();
+		for(int i = 0; i < twitchListeners.size(); i++) {
+			TwitchListener twitchListener = twitchListeners.get(i);
+			if(twitchListener.getId() == id) 
+				twitterListeners.addAll(twitchListener.getTwitterListeners());
+		}
+		return twitterListeners;
 	}
 	
 	public Game getGameFromHelix(String gameId, TwitchClient client, String authToken) {
