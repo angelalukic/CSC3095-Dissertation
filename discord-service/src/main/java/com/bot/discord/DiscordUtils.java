@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 import org.javacord.api.entity.channel.ServerTextChannel;
 import org.javacord.api.entity.channel.TextChannel;
@@ -12,6 +13,7 @@ import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.entity.server.Server;
 import org.javacord.api.entity.user.User;
 import org.javacord.api.event.message.MessageCreateEvent;
+import org.javacord.api.event.message.reaction.ReactionAddEvent;
 import org.javacord.api.event.server.member.ServerMemberJoinEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,11 @@ public class DiscordUtils {
 		if(channel.isPresent())
 			return channel.get();
 		return null;		
+	}
+	
+	public Message sendMessageToServerOwner(TextChannel channel, EmbedBuilder embed) throws InterruptedException, ExecutionException {
+		User serverOwner = retrieveServerOwnerFromTextChannel(channel);
+		return serverOwner.sendMessage(embed).get();
 	}
 	
 	public User retrieveServerOwnerFromTextChannel(TextChannel channel) {
@@ -104,6 +111,17 @@ public class DiscordUtils {
 		}
 	}
 	
+	public void sendMessageToUser(EmbedBuilder embed, MessageCreateEvent event) {
+		Optional<User> optionalUser = event.getMessageAuthor().asUser();
+		if(optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			user.sendMessage(embed);
+		}
+		else
+			throw new UserNotFoundException("id=" + event.getMessageId());
+	}
+	
+	
 	public void sendMessage(EmbedBuilder embed, ServerMemberJoinEvent event, ServerTextChannel channel) {
 		if(channel.canYouWrite())
 			channel.sendMessage(embed);
@@ -113,6 +131,21 @@ public class DiscordUtils {
 		}
 	}
 	
+	public void sendMessage(EmbedBuilder embed, ReactionAddEvent event) {
+		Optional<TextChannel> optionalChannel = event.getChannel().asTextChannel();
+		if(optionalChannel.isPresent()) {
+			TextChannel channel = optionalChannel.get();
+			if(channel.canYouWrite())
+				channel.sendMessage(embed);
+			else {
+				User user = retrieveServerOwnerFromTextChannel(channel);
+				user.sendMessage(embed);
+			}
+		}
+		else
+			throw new ChannelNotFoundException("id=" + event.getMessageId());
+	}
+
 	public com.github.twitch4j.helix.domain.User getTwitchUserFromHelix(String username) {
 		TwitchClient twitchClient = TwitchClientBuilder.builder()
 	            .withEnableHelix(true)

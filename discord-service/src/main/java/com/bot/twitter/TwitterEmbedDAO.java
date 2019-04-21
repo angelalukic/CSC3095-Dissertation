@@ -5,7 +5,6 @@ import java.util.concurrent.ExecutionException;
 import org.javacord.api.entity.channel.TextChannel;
 import org.javacord.api.entity.message.Message;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
-import org.javacord.api.entity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +18,8 @@ public class TwitterEmbedDAO {
 	
 	private static final String NOTIFICATION = "notification";
 	
-	@Autowired
-	private DiscordChannelConnection discordChannel;
+	@Autowired private DiscordChannelConnection discordChannel;
+	@Autowired private DiscordUtils utils;
 	
 	public Message postEmbed(TwitterStatus status, long server) throws InterruptedException, ExecutionException {
 		TextChannel channel = discordChannel.connect(server, NOTIFICATION);
@@ -28,12 +27,6 @@ public class TwitterEmbedDAO {
 		if(channel.getId() != 0L && channel.canYouWrite())
 			return channel.sendMessage(builder).get();
 		else
-			return sendMessageToServerOwner(channel, builder);
-	}
-	
-	private Message sendMessageToServerOwner(TextChannel channel, EmbedBuilder builder)	throws InterruptedException, ExecutionException {
-		DiscordUtils utils = new DiscordUtils();
-		User serverOwner = utils.retrieveServerOwnerFromTextChannel(channel);
-		return serverOwner.sendMessage(builder).get();
+			return utils.sendMessageToServerOwner(channel, builder);
 	}
 }
