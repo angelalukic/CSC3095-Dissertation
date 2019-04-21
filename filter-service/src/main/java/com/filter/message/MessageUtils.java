@@ -102,11 +102,12 @@ public class MessageUtils {
 		return judgement;
 	}
 	
-	private String sanitizeInput(String message) {
-		log.debug("Message Before Sanitation: " + message);
-		StringBuilder builder = new StringBuilder(message);
-		for(int i = 0; i < builder.length(); i++) {
-			char currentChar = builder.charAt(i);
+	private String sanitizeInput(String input) {
+		log.debug("Message Before Sanitation: " + input);
+		String inputNoDupes = input.toLowerCase().replaceAll("(.)(\\1)+", "$1");
+		StringBuilder builder = new StringBuilder(inputNoDupes);
+		for(int i = 0; i < inputNoDupes.length(); i++) {
+			char currentChar = inputNoDupes.charAt(i);
 			switch(currentChar) {
 				case '0':
 					builder.setCharAt(i, 'o');
@@ -151,9 +152,9 @@ public class MessageUtils {
 					break;
 			}
 		}
-		String sanitizedMessage = builder.toString().replaceAll("/[^A-Za-z]/g", "");
-		log.debug("Message After Sanitation: " + sanitizedMessage);
-		return sanitizedMessage;
+		String sanitizedInput = inputNoDupes.replaceAll("/[^A-Za-z]/g", "");
+		log.debug("Message After Sanitation: " + sanitizedInput);
+		return sanitizedInput;
 	}
 	
 	private List<Word> sanitizeWords(List<Word> words) {
