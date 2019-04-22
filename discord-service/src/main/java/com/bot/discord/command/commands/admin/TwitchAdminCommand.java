@@ -140,9 +140,9 @@ public class TwitchAdminCommand {
 		log.info("[" + server.getName() + "] Sending Twitter Admin Command Help");
 		EmbedBuilder embed = successEmbed.createEmbed(
 				"These commands allow you to add and remove the Twitch channels I listen to."
-				+ " When your channel goes live or hosts another channel, I will notify the channel "
-				+ " specified with the `rf@notification channel <channel>` command. "
-				+ " I will also copy the chatroom for your channel to the channel specified with the "
+				+ " When your channel goes live or hosts another channel, I will notify the channel"
+				+ " specified with the `rf@notification channel <channel>` command."
+				+ " I will also copy the chatroom for your channel to the channel specified with the"
 				+ " `rf@notification twitchlogs <channel>` command."
 				+ " Only users with the 'Administrator' permission can use these commands."
 				+ " Commands are as follows:\n" 

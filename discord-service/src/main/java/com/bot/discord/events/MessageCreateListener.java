@@ -39,7 +39,8 @@ public class MessageCreateListener {
 				else
 					sendInvalidPermissionsErrorMessage();
 			}
-			filter.assessMessage(event);
+			if(!event.getMessage().getAuthor().isServerAdmin() || !event.getMessageContent().startsWith("rf@filter"))
+				filter.assessMessage(event);
 		}
 		else
 			addReactionToEmbed(event);

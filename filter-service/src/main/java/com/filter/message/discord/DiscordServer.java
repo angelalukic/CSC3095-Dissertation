@@ -2,6 +2,7 @@ package com.filter.message.discord;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -23,7 +24,7 @@ public class DiscordServer {
 	private long id;
 	private String name;
 	
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "discord_words",
 			joinColumns = @JoinColumn(name = "discord_id"),
@@ -37,5 +38,10 @@ public class DiscordServer {
 	public DiscordServer(DiscordServer discordServer) {
 		this.id = discordServer.getId();
 		this.name = discordServer.getName();
+	}
+	
+	public DiscordServer(DiscordServerDTO dto) {
+		this.id = dto.getId();
+		this.name = dto.getName();
 	}
 }

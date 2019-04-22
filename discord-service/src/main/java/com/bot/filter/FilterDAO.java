@@ -29,7 +29,7 @@ public class FilterDAO {
 	@Autowired DiscordChannelConnection connection;
 	@Autowired DiscordUtils utils;
 	
-	public void assessMessage(MessageCreateEvent event) {
+	public JudgementLevel assessMessage(MessageCreateEvent event) {
 		DiscordMessage message = new DiscordMessage(event.getMessageId(), event.getMessage().toString());
 		Server server = utils.getServerFromServerOptional(event.getServer(), event.getMessageId());
 		MessageJudgement judgement = proxy.checkMessage(message, server.getId());
@@ -43,6 +43,7 @@ public class FilterDAO {
 			log.error("Exception thrown when trying to send Violation Messages");
 			 Thread.currentThread().interrupt();
 		}
+		return judgement.getJudgement();
 	}
 
 	private void sendViolationMessages(Server server, MessageCreateEvent event, MessageJudgement judgement) throws InterruptedException, ExecutionException {
