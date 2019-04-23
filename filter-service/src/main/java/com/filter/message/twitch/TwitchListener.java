@@ -21,7 +21,6 @@ public class TwitchListener {
 	
 	@Id
 	private long id;
-	private String name;
 	
 	@ManyToMany
 	@JoinTable(
@@ -34,8 +33,7 @@ public class TwitchListener {
 	public TwitchListener() {
 	}
 
-	public TwitchListener(TwitchListener listener) {
-		this.id = listener.getId();
-		this.name = listener.getName();		
+	public TwitchListener(long id) {
+		this.id = id;
 	}
 }

@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.filter.message.JudgementLevel;
 import com.filter.message.discord.DiscordServer;
 import com.filter.message.discord.DiscordServerRepository;
+import com.filter.message.twitch.TwitchListener;
+import com.filter.message.twitch.TwitchListenerRepository;
 import com.filter.words.Word;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +25,14 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class SubscriptionDAO {
 	
-	@Autowired private DiscordServerRepository repository;
+	@Autowired private DiscordServerRepository discordRepository;
+	@Autowired private TwitchListenerRepository twitchRepository;
 
 	public DiscordServer addToBlacklist(DiscordServer server, String input) {
 		Word word = new Word(input, JudgementLevel.RED);
-		Optional<DiscordServer> optionalServer = repository.findById(server.getId());
+		Optional<DiscordServer> optionalServer = discordRepository.findById(server.getId());
 		if(!optionalServer.isPresent()) {
-			repository.save(server);
+			discordRepository.save(server);
 			log.info("Server " + server.getName() + " did not exist in repository. New Entry Created.");
 		}
 		return addWordToServer(server, word);
@@ -48,9 +51,9 @@ public class SubscriptionDAO {
 	
 	public DiscordServer addToGreylist(DiscordServer server, String input) {
 		Word word = new Word(input, JudgementLevel.YELLOW);
-		Optional<DiscordServer> optionalServer = repository.findById(server.getId());
+		Optional<DiscordServer> optionalServer = discordRepository.findById(server.getId());
 		if(!optionalServer.isPresent()) {
-			repository.save(server);
+			discordRepository.save(server);
 			log.info("Server " + server.getName() + " did not exist in repository. New Entry Created.");
 		}
 		return addWordToServer(server, word);
@@ -69,9 +72,9 @@ public class SubscriptionDAO {
 
 	public DiscordServer addToWhitelist(DiscordServer server, String input) {
 		Word word = new Word(input, JudgementLevel.GREEN);
-		Optional<DiscordServer> optionalServer = repository.findById(server.getId());
+		Optional<DiscordServer> optionalServer = discordRepository.findById(server.getId());
 		if(!optionalServer.isPresent()) {
-			repository.save(server);
+			discordRepository.save(server);
 			log.info("Server " + server.getName() + " did not exist in repository. New Entry Created.");
 		}
 		return addWordToServer(server, word);
@@ -88,16 +91,33 @@ public class SubscriptionDAO {
 		return ResponseEntity.ok().build();
 	}
 
-	public ResponseEntity<Object> syncToTwitchChannel(DiscordServer server, long channel) {
-		// TODO Auto-generated method stub
+	public ResponseEntity<Object> syncToTwitchChannel(DiscordServer discordServer, long channel) {
+		DiscordServer server = getServerInRepository(discordServer.getId());
+		if(server == null)
+			return ResponseEntity.notFound().build();
+		List<Word> words = new ArrayList<>(server.getWords());
+		if(words.isEmpty())
+			return ResponseEntity.notFound().build();
+		TwitchListener listener = getListenerInRepository(channel);
+		if(listener == null)
+			listener = twitchRepository.save(new TwitchListener(channel));
+		syncWords(listener, words);
 		return ResponseEntity.ok().build();
 	}
 	
 	private DiscordServer getServerInRepository(long id) {
-		Optional<DiscordServer> optionalServer = repository.findById(id);
+		Optional<DiscordServer> optionalServer = discordRepository.findById(id);
 		if(optionalServer.isPresent())
 			return optionalServer.get();
 		log.error("Server with ID " + id + " doesn't exist in repository.");
+		return null;
+	}
+	
+	private TwitchListener getListenerInRepository(long id) {
+		Optional<TwitchListener> optionalListener = twitchRepository.findById(id);
+		if(optionalListener.isPresent())
+			return optionalListener.get();
+		log.error("Listener with ID " + id + " doesn't exist in repository.");
 		return null;
 	}
 	
@@ -109,7 +129,7 @@ public class SubscriptionDAO {
 				words.remove(i);
 				Set<Word> updatedWords = new HashSet<>(words);
 				server.setWords(updatedWords);
-				repository.save(server);
+				discordRepository.save(server);
 				log.info("Word " + input.getWord() + " will no longer be flagged in Discord Server " + server.getName());
 				return true;
 			}
@@ -119,14 +139,23 @@ public class SubscriptionDAO {
 	}
 	
 	private DiscordServer addWordToServer(DiscordServer discordServer, Word word) {
-		DiscordServer repositoryServer = repository.getOne(discordServer.getId());
+		DiscordServer repositoryServer = discordRepository.getOne(discordServer.getId());
 		Set<Word> words = repositoryServer.getWords();
 		if(words == null)
 			words = new HashSet<>();
 		words.add(word);
 		repositoryServer.setWords(words);	
-		DiscordServer savedServer = repository.save(repositoryServer);
+		DiscordServer savedServer = discordRepository.save(repositoryServer);
 		log.info("Discord Server database entry updated for: " + word.getWord());
 		return savedServer;
+	}
+	
+	private void syncWords(TwitchListener listener, List<Word> words) {
+		Set<Word> twitchWords = new HashSet<>();
+		for(int i = 0; i < words.size(); i++)
+			twitchWords.add(words.get(i));
+		listener.setWords(twitchWords);
+		twitchRepository.save(listener);
+		log.info(words.size() + " words synced with Twitch Listener with ID: " + listener.getId());
 	}
 }
