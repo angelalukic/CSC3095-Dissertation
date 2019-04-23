@@ -77,11 +77,4 @@ public class SubscriptionController {
 		DiscordServer server = new DiscordServer(dto);
 		return service.removeFromWhitelist(server, word);
 	}
-	
-	@PostMapping("/filter/twitch/sync/{channel}")
-	public ResponseEntity<Object> syncToTwitchChannel(@RequestBody DiscordServerDTO dto, @PathVariable long channel) {
-		log.info("POST localhost:8083/filter/twitch/sync/{channel}");
-		DiscordServer server = new DiscordServer(dto);
-		return service.syncToTwitchChannel(server, channel);
-	}
 }

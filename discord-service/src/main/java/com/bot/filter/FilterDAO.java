@@ -16,6 +16,7 @@ import com.bot.discord.beans.embed.template.FilterViolationEmbed;
 import com.bot.discord.beans.embed.template.FilterWarningEmbed;
 import com.bot.filter.beans.JudgementLevel;
 import com.bot.filter.beans.MessageJudgement;
+import com.bot.twitch.beans.events.TwitchChatMessage;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,10 +30,25 @@ public class FilterDAO {
 	@Autowired DiscordChannelConnection connection;
 	@Autowired DiscordUtils utils;
 	
-	public JudgementLevel assessMessage(MessageCreateEvent event) {
+	public void assessMessage(MessageCreateEvent event) {
 		DiscordMessage message = new DiscordMessage(event.getMessageId(), event.getMessage().toString());
 		Server server = utils.getServerFromServerOptional(event.getServer(), event.getMessageId());
 		MessageJudgement judgement = proxy.checkMessage(message, server.getId());
+		try {
+			if(judgement.getJudgement() == JudgementLevel.RED)
+				sendViolationMessages(server.getId(), event, judgement);
+			else if(judgement.getJudgement() == JudgementLevel.YELLOW)
+				sendWarningMessages(server.getId(), event, judgement);
+		}
+		catch (InterruptedException | ExecutionException e) {
+			log.error("Exception thrown when trying to send Violation Messages");
+			 Thread.currentThread().interrupt();
+		}
+	}
+	
+	public void assessMessage(TwitchChatMessage event, long server) {
+		DiscordMessage message = new DiscordMessage(event.getChannel().getId(), event.getMessage());
+		MessageJudgement judgement = proxy.checkMessage(message, server);
 		try {
 			if(judgement.getJudgement() == JudgementLevel.RED)
 				sendViolationMessages(server, event, judgement);
@@ -43,10 +59,9 @@ public class FilterDAO {
 			log.error("Exception thrown when trying to send Violation Messages");
 			 Thread.currentThread().interrupt();
 		}
-		return judgement.getJudgement();
 	}
 
-	private void sendViolationMessages(Server server, MessageCreateEvent event, MessageJudgement judgement) throws InterruptedException, ExecutionException {
+	private void sendViolationMessages(long server, MessageCreateEvent event, MessageJudgement judgement) throws InterruptedException, ExecutionException {
 		EmbedBuilder embed;
 		if(event.getMessage().canYouDelete()) {
 			event.getMessage().delete("Automatic Word Filter");
@@ -59,13 +74,23 @@ public class FilterDAO {
 		utils.sendMessageToUser(userEmbed, event);
 	}
 	
-	private void sendWarningMessages(Server server, MessageCreateEvent event, MessageJudgement judgement) throws InterruptedException, ExecutionException {
+	private void sendViolationMessages(long server, TwitchChatMessage event, MessageJudgement judgement) throws InterruptedException, ExecutionException {
+		EmbedBuilder embed = violationEmbed.createEmbed(event, judgement);
+		notifyWordFilterChannel(server, embed);
+	}
+	
+	private void sendWarningMessages(long server, MessageCreateEvent event, MessageJudgement judgement) throws InterruptedException, ExecutionException {
 		EmbedBuilder embed = warningEmbed.createEmbed(event, judgement);
 		notifyWordFilterChannel(server, embed);
 	}
 	
-	private void notifyWordFilterChannel(Server server, EmbedBuilder embed)	throws InterruptedException, ExecutionException {
-		TextChannel channel = connection.connect(server.getId(), "wordfilter");
+	private void sendWarningMessages(long server, TwitchChatMessage event, MessageJudgement judgement) throws InterruptedException, ExecutionException {
+		EmbedBuilder embed = warningEmbed.createEmbed(event, judgement);
+		notifyWordFilterChannel(server, embed);
+	}
+	
+	private void notifyWordFilterChannel(long server, EmbedBuilder embed)	throws InterruptedException, ExecutionException {
+		TextChannel channel = connection.connect(server, "wordfilter");
 		if(channel.getId() != 0L && channel.canYouWrite())
 			channel.sendMessage(embed);
 		else

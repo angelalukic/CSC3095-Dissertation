@@ -13,7 +13,6 @@ import javax.persistence.ManyToMany;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.filter.message.JudgementLevel;
 import com.filter.message.discord.DiscordServer;
-import com.filter.message.twitch.TwitchListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -32,10 +31,6 @@ public class Word {
 	@ManyToMany(mappedBy = "words")
 	@JsonIgnore
 	private Set<DiscordServer> servers;
-	
-	@ManyToMany(mappedBy = "words")
-	@JsonIgnore
-	private Set<TwitchListener> listeners;
 	
 	@Enumerated(EnumType.STRING)
 	private JudgementLevel level;

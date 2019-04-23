@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
 import com.bot.filter.beans.MessageJudgement;
+import com.bot.twitch.beans.TwitchUser;
+import com.bot.twitch.beans.events.TwitchChatMessage;
 
 @Component
 public class FilterViolationEmbed {
@@ -50,6 +52,21 @@ public class FilterViolationEmbed {
 				.addInlineField("Violations Detected", wordViolations.toString())
 				.addField("Message", event.getMessageContent())
 				.setColor(new Color(255, 0, 0))
+				.setFooter(new Date().toString());
+	}
+	
+	public EmbedBuilder createEmbed(TwitchChatMessage event, MessageJudgement judgement) {
+		TwitchUser channel = new TwitchUser(event.getChannel());
+		TwitchUser user = new TwitchUser(event.getUser());
+		List<String> wordViolations = judgement.getBlacklist();
+		return new EmbedBuilder().setTitle("Twitch: Word Filter Violation")
+				.setDescription("Word Filter Violation detected on Twitch Channel.")
+				.addInlineField("Username", user.getDisplayName())
+				.addInlineField("Channel", channel.getDisplayName())
+				.addInlineField("Violations Detected", wordViolations.toString())
+				.addField("Message", event.getMessage())
+				.setThumbnail(channel.getImage())
+				.setColor(new Color(100, 65, 164))
 				.setFooter(new Date().toString());
 	}
 	

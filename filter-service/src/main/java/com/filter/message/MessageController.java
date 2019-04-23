@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.filter.message.discord.DiscordMessage;
-import com.filter.message.twitch.TwitchMessage;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,12 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageController {
 
 	@Autowired private MessageDAO service;
-	
-	@PostMapping("/filter/twitch/{channel}")
-	public MessageJudgement checkTwitchMessage(@RequestBody TwitchMessage message, @PathVariable long channel) {
-		log.debug("POST localhost:8083/filter/twitch/{channel}");
-		return service.assessMessage(message, channel);
-	}
 	
 	@PostMapping("/filter/discord/{channel}")
 	public MessageJudgement checkDiscordMessage(@RequestBody DiscordMessage message, @PathVariable long channel) {

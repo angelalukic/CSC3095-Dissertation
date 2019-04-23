@@ -33,7 +33,4 @@ public interface FilterServiceProxy {
 	
 	@PostMapping("/filter/discord/whitelist/remove/{word}")
 	public ResponseEntity<Object> removeFromWhitelist(@RequestBody DiscordServer server, @PathVariable("word") String word);
-	
-	@PostMapping("/filter/twitch/sync/{channel}")
-	public ResponseEntity<Object> syncToTwitchChannel(@RequestBody DiscordServer server, @PathVariable("channel") long channel);
 }

@@ -33,7 +33,6 @@ public class FilterAdminCommand {
 	private static final String BLACKLIST_COMMANDS = "\n`rf@filter blacklist add/remove <word>`";
 	private static final String GREYLIST_COMMANDS = "\n`rf@filter greylist add/remove <word>`";
 	private static final String WHITELIST_COMMANDS = "\n`rf@filter whitelist add/remove <word>`";
-	private static final String SYNC_COMMAND = "\n`rf@sync <twitch>`";
 	private static final String HELP_COMMAND = "\n\nFor more information use the following command:\n`rf@filter help`";
 	
 	public void execute(MessageCreateEvent event) {
@@ -69,11 +68,6 @@ public class FilterAdminCommand {
 				else if(command.startsWith("whitelist remove")) {
 					String word = message.getContent().substring(27);																// Can throw IndexOutOfBoundsException
 					executeRemoveFromWhitelist(discordServer, word);																// Can throw FeignException
-				}
-				else if(command.startsWith("sync")) {
-					String username = message.getContent().substring(15);															// Can throw IndexOutOfBoundsException
-					user = utils.getTwitchUserFromHelix(username);																	// Can throw NullPointerException
-					executeSync(discordServer);																									// Can throw FeignException
 				}
 				else
 					sendInvalidCommandErrorMessage();
@@ -123,16 +117,11 @@ public class FilterAdminCommand {
 		sendSuccessfullyDeletedMessage("Whitelist", word);
 	}
 	
-	private void executeSync(DiscordServer server) {
-		proxy.syncToTwitchChannel(server, user.getId());
-		sendSuccessfullySyncedMessage();
-	}
-	
 	private void sendInvalidCommandErrorMessage() {
 		log.error("[" + server.getName() + "] Invalid Filter Admin Command");
 		EmbedBuilder embed = errorEmbed.createEmbed(
 				"**Invalid Command**: Valid commands are as follows:"
-				+ BLACKLIST_COMMANDS + GREYLIST_COMMANDS + WHITELIST_COMMANDS + SYNC_COMMAND + HELP_COMMAND);
+				+ BLACKLIST_COMMANDS + GREYLIST_COMMANDS + WHITELIST_COMMANDS + HELP_COMMAND);
 		utils.sendMessage(embed, event);
 	}
 	
@@ -174,12 +163,6 @@ public class FilterAdminCommand {
 		utils.sendMessage(embed, event);
 	}
 	
-	private void sendSuccessfullySyncedMessage() {
-		log.info("[" + server.getName() + "] Successfully synced wordfilter with Twitch Account: " + user.getDisplayName());
-		EmbedBuilder embed = successEmbed.createEmbed("Word Filter has been successfully synced with **" + user.getDisplayName() + "**.");
-		utils.sendMessage(embed, event);
-	}
-	
 	private void sendHelpCommandMessage() {
 		log.info("[" + server.getName() + "] Sending Filter Admin Command Help");
 		EmbedBuilder embed = successEmbed.createEmbed(
@@ -192,7 +175,6 @@ public class FilterAdminCommand {
 				+ GREYLIST_COMMANDS + "\n Greylisted words will notify admins. If commanded to, I will delete the message and notify the user as with blacklisted words.\n"
 				+ WHITELIST_COMMANDS + "\n Whitelisted words will prevent messages which are flagged as blacklisted from immediately being deleted if a whitelisted word is detected"
 						+ " in the same sentence. Admins will still be notified, and if commanded to, I will delete the message and notify the user.\n"
-				+ SYNC_COMMAND + "\n Discord server will be notified when word filter violations occur in the specified Twitch channel.\n"
 				+ "\nYour server will need to be registered with our database before you can use these commands."
 				+ "To manually register use the following command:\n`rf@register`");
 		utils.sendMessage(embed, event);

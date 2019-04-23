@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.filter.message.JudgementLevel;
 import com.filter.message.discord.DiscordServer;
 import com.filter.message.discord.DiscordServerRepository;
-import com.filter.message.twitch.TwitchListener;
-import com.filter.message.twitch.TwitchListenerRepository;
 import com.filter.words.Word;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 public class SubscriptionDAO {
 	
 	@Autowired private DiscordServerRepository discordRepository;
-	@Autowired private TwitchListenerRepository twitchRepository;
 
 	public DiscordServer addToBlacklist(DiscordServer server, String input) {
 		Word word = new Word(input, JudgementLevel.RED);
@@ -90,34 +87,12 @@ public class SubscriptionDAO {
 			return ResponseEntity.notFound().build();
 		return ResponseEntity.ok().build();
 	}
-
-	public ResponseEntity<Object> syncToTwitchChannel(DiscordServer discordServer, long channel) {
-		DiscordServer server = getServerInRepository(discordServer.getId());
-		if(server == null)
-			return ResponseEntity.notFound().build();
-		List<Word> words = new ArrayList<>(server.getWords());
-		if(words.isEmpty())
-			return ResponseEntity.notFound().build();
-		TwitchListener listener = getListenerInRepository(channel);
-		if(listener == null)
-			listener = twitchRepository.save(new TwitchListener(channel));
-		syncWords(listener, words);
-		return ResponseEntity.ok().build();
-	}
 	
 	private DiscordServer getServerInRepository(long id) {
 		Optional<DiscordServer> optionalServer = discordRepository.findById(id);
 		if(optionalServer.isPresent())
 			return optionalServer.get();
 		log.error("Server with ID " + id + " doesn't exist in repository.");
-		return null;
-	}
-	
-	private TwitchListener getListenerInRepository(long id) {
-		Optional<TwitchListener> optionalListener = twitchRepository.findById(id);
-		if(optionalListener.isPresent())
-			return optionalListener.get();
-		log.error("Listener with ID " + id + " doesn't exist in repository.");
 		return null;
 	}
 	
@@ -148,14 +123,5 @@ public class SubscriptionDAO {
 		DiscordServer savedServer = discordRepository.save(repositoryServer);
 		log.info("Discord Server database entry updated for: " + word.getWord());
 		return savedServer;
-	}
-	
-	private void syncWords(TwitchListener listener, List<Word> words) {
-		Set<Word> twitchWords = new HashSet<>();
-		for(int i = 0; i < words.size(); i++)
-			twitchWords.add(words.get(i));
-		listener.setWords(twitchWords);
-		twitchRepository.save(listener);
-		log.info(words.size() + " words synced with Twitch Listener with ID: " + listener.getId());
 	}
 }

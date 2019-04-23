@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordChannelConnection;
 import com.bot.discord.beans.embed.template.TwitchEmbed;
+import com.bot.filter.FilterDAO;
 import com.bot.twitch.beans.events.TwitchChatMessage;
 import com.bot.twitch.beans.events.TwitchStreamHost;
 import com.bot.twitch.beans.events.TwitchStreamLive;
@@ -23,6 +24,7 @@ public class TwitchEmbedDAO {
 	
 	@Autowired private DiscordChannelConnection discordChannel;
 	@Autowired private TwitchEmbed embed;
+	@Autowired FilterDAO filter;
 	
 	public Message postEmbed(TwitchStreamHost event, long server) throws InterruptedException, ExecutionException {
 		TextChannel channel = discordChannel.connect(server, NOTIFICATION);
@@ -45,6 +47,8 @@ public class TwitchEmbedDAO {
 	public Message postEmbed(TwitchChatMessage event, long server) throws InterruptedException, ExecutionException {
 		TextChannel channel = discordChannel.connect(server, TWITCH_LOGS);
 		EmbedBuilder builder = embed.createEmbed(event);
-		return channel.sendMessage(builder).get();
+		Message savedMessage = channel.sendMessage(builder).get();
+		filter.assessMessage(event, server);
+		return savedMessage;
 	}
 }
