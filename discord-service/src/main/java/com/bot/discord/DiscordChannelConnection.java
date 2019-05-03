@@ -55,6 +55,8 @@ public class DiscordChannelConnection {
 			id = server.getTwitchLogChannel();	
 		else if (channel.equalsIgnoreCase("wordfilter"))
 			id = server.getReportChannel();
+		else if (channel.equalsIgnoreCase("ai"))
+			id = server.getAiChannel();
 		return id;
 	}
 }

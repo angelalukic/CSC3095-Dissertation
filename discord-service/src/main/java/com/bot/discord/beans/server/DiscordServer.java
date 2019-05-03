@@ -20,6 +20,8 @@ public class DiscordServer {
 	private long serverJoinChannel;
 	private String serverJoinMessage;
 	private String roleColour;
+	private boolean aiEnabled;
+	private long aiChannel;
 	
 	public DiscordServer() {
 	}

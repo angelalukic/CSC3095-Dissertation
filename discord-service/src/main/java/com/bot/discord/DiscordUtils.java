@@ -112,15 +112,14 @@ public class DiscordUtils {
 	}
 	
 	public void sendMessageToUser(EmbedBuilder embed, MessageCreateEvent event) {
-		Optional<User> optionalUser = event.getMessageAuthor().asUser();
-		if(optionalUser.isPresent()) {
-			User user = optionalUser.get();
-			user.sendMessage(embed);
-		}
-		else
-			throw new UserNotFoundException("id=" + event.getMessageId());
+		User user = getUserFromUserOptional(event.getMessage().getUserAuthor(), event.getMessageId());
+		user.sendMessage(embed);
 	}
 	
+	public void sendMessageToUser(String reply, MessageCreateEvent event) {
+		User user = getUserFromUserOptional(event.getMessage().getUserAuthor(), event.getMessageId());
+		user.sendMessage(reply);
+	}
 	
 	public void sendMessage(EmbedBuilder embed, ServerMemberJoinEvent event, ServerTextChannel channel) {
 		if(channel.canYouWrite())
