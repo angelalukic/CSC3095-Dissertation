@@ -8,8 +8,8 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import com.bot.twitter.TwitterStreamConnection;
-import com.bot.twitter.listener.TwitterListener;
-import com.bot.twitter.listener.TwitterListenerRepository;
+import com.bot.twitter.beans.listener.TwitterListener;
+import com.bot.twitter.beans.listener.TwitterListenerRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -18,7 +18,7 @@ public class ChannelNotificationOnCheer {
 	public void onCheer(CheerEvent event) {
 		log.info("[" + event.getChannel().getName() + "] CheerEvent Detected");
         String message = String.format(
-                "%s has just cheered %s bits! Thank you so much!",
+                "[Automated Message] @%s has just cheered %s bits! Thank you so much!",
                 event.getUser().getName(), event.getBits()
         );
         event.getTwitchChat().sendMessage(event.getChannel().getName(), message);

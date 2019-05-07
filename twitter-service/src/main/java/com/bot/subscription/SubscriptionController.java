@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.bot.twitter.listener.TwitterListener;
+import com.bot.twitter.beans.listener.TwitterListener;
 
 import lombok.extern.slf4j.Slf4j;
 

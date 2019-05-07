@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bot.discord.server.DiscordServer;
-import com.bot.discord.server.DiscordServerRepository;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.discord.beans.server.DiscordServerRepository;
 import com.bot.twitter.TwitterStreamConnection;
-import com.bot.twitter.listener.TwitterListener;
-import com.bot.twitter.listener.TwitterListenerRepository;
+import com.bot.twitter.beans.listener.TwitterListener;
+import com.bot.twitter.beans.listener.TwitterListenerRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

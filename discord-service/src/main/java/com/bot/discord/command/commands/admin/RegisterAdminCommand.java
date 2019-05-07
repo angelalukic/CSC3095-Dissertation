@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.embed.template.SuccessEmbed;
-import com.bot.discord.server.DiscordServer;
-import com.bot.discord.server.DiscordServerRepository;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
+import com.bot.discord.beans.embed.template.SuccessEmbed;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.discord.beans.server.DiscordServerRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,7 +46,7 @@ public class RegisterAdminCommand {
 		long serverId = server.getId();
 		String name = server.getName();
 		long channelId = utils.retrieveWritableChannelId(server);
-		DiscordServer discordServer = new DiscordServer(serverId, name, channelId, channelId, channelId, channelId, channelId, "", "#99aab5");
+		DiscordServer discordServer = new DiscordServer(serverId, name, channelId, channelId, channelId, channelId, channelId, "", "#99aab5", false, channelId);
 		repository.save(discordServer);
 		sendServerRegisteredMessage(channelId);
 	}

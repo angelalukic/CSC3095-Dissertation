@@ -15,13 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.embed.template.SuccessEmbed;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
+import com.bot.discord.beans.embed.template.SuccessEmbed;
+import com.bot.discord.beans.role.DiscordRole;
+import com.bot.discord.beans.role.DiscordRoleRepository;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.discord.beans.server.DiscordServerRepository;
 import com.bot.discord.exception.ServerNotFoundException;
-import com.bot.discord.role.DiscordRole;
-import com.bot.discord.role.DiscordRoleRepository;
-import com.bot.discord.server.DiscordServer;
-import com.bot.discord.server.DiscordServerRepository;
 
 import lombok.extern.slf4j.Slf4j;
 

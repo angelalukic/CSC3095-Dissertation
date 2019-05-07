@@ -1,7 +1,7 @@
 package com.bot.subscription;
 
-import com.bot.discord.server.DiscordServer;
-import com.bot.twitter.listener.TwitterListener;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.twitter.beans.listener.TwitterListener;
 
 import lombok.Getter;
 import lombok.Setter;

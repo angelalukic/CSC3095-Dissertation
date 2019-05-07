@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bot.twitch.features.beans.TwitchChatMessage;
-import com.bot.twitch.features.beans.TwitchStreamHost;
-import com.bot.twitch.features.beans.TwitchStreamLive;
+import com.bot.twitch.beans.events.TwitchChatMessage;
+import com.bot.twitch.beans.events.TwitchStreamHost;
+import com.bot.twitch.beans.events.TwitchStreamLive;
 
 @RestController
 public class DiscordEmbedController {

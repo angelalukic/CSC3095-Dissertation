@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.events.MessageCreateListener;
+import com.bot.discord.events.ReactionAddListener;
 import com.bot.discord.events.ServerJoinListener;
 import com.bot.discord.events.ServerMemberJoinListener;
 
@@ -26,13 +27,14 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 	@Autowired private ServerJoinListener serverJoinListener;
 	@Autowired private ServerMemberJoinListener serverMemberJoinListener;
 	@Autowired private MessageCreateListener messageCreateListener;
+	@Autowired private ReactionAddListener reactionAddListener;
 
 	@Override
 	public void onApplicationEvent(final ApplicationReadyEvent applicationReadyEvent) {
 		
 		String token = configuration.getToken();
 		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
-		
+
 		// ChatBot joins a server
 		api.addServerJoinListener(event -> {
 			log.info("[" + event.getServer().getName() + "] ServerJoinEvent");
@@ -47,8 +49,13 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		
 		// Message is sent in the server the chatbot is in
 		api.addMessageCreateListener(event -> {
-			//log.info("[" + event.getServer().get().getName() + "] MessageCreateEvent");
+			log.info("MessageCreateEvent");
             messageCreateListener.execute(event);
         });
+		
+		api.addReactionAddListener(event -> {
+			log.info("[" + event.getServer().get().getName() + "] ReactionAddListener");
+			reactionAddListener.execute(api, event);
+		});
 	}
 }

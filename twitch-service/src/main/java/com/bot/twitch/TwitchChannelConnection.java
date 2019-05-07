@@ -1,4 +1,4 @@
-package com.bot.twitch;
+	package com.bot.twitch;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -8,10 +8,10 @@ import com.bot.twitch.features.ChannelNotificationOnCheer;
 import com.bot.twitch.features.ChannelNotificationOnDonation;
 import com.bot.twitch.features.ChannelNotificationOnFollow;
 import com.bot.twitch.features.ChannelNotificationOnSubscription;
-import com.bot.twitch.features.DiscordNotificationOnHost;
-import com.bot.twitch.features.DiscordNotificationOnLive;
-import com.bot.twitch.features.DiscordNotificationOnOffline;
-import com.bot.twitch.features.WriteChannelChatToDiscord;
+import com.bot.twitch.features.discord.DiscordNotificationOnHost;
+import com.bot.twitch.features.discord.DiscordNotificationOnLive;
+import com.bot.twitch.features.discord.DiscordNotificationOnOffline;
+import com.bot.twitch.features.discord.WriteChannelChatToDiscord;
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.EventManager;
 import com.github.twitch4j.TwitchClient;
@@ -40,8 +40,9 @@ public class TwitchChannelConnection {
 				.withClientId(configuration.getId())
 				.withClientSecret(configuration.getSecret())
 				.withEnableHelix(true)
-				.withChatAccount(credential)
 				.withEnableChat(true)
+				.withChatAccount(credential)
+				.withTimeout(120*1000)
 				.build();
 	}
 	

@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.embed.template.SuccessEmbed;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
+import com.bot.discord.beans.embed.template.SuccessEmbed;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.discord.beans.server.DiscordServerRepository;
 import com.bot.discord.exception.ServerNotFoundException;
-import com.bot.discord.server.DiscordServer;
-import com.bot.discord.server.DiscordServerRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -127,7 +127,7 @@ public class NotificationAdminCommand {
 			+ ADMIN_COMMAND + "\n Changes the channel where notifications are send by default.\n"
 			+ CHANNEL_COMMAND + "\n Changes the channel where Twitter and Twitch updates are posted to.\n" 
 			+ FILTER_COMMAND + "\n Changes the channel where word filter violation notifications are posted to.\n" 
-			+ LOGS_COMMAND + "\n Changes the channel where Twitch Chat Logs are posted to."
+			+ LOGS_COMMAND + "\n Changes the channel where Twitch Chat Logs are posted to.\n"
 			+ WELCOME_COMMAND + "\n Changes the channel where welcome messages to users who join the Discord server are posted to.\n"
 			+ "\n\nYour server will need to be registered with our database before you can use these commands."
 			+ "To manually register use the following command:\n`rf@register`");

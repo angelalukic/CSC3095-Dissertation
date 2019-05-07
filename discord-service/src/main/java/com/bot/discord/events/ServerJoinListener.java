@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.server.DiscordServer;
-import com.bot.discord.server.DiscordServerRepository;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.discord.beans.server.DiscordServerRepository;
 
 
 @Component
@@ -58,7 +58,7 @@ public class ServerJoinListener {
 		if(discordOptional.isPresent())
 			sendDiscordServerConfigurationExists();
 		else {
-			DiscordServer server = new DiscordServer(id, serverName, channelId, channelId, channelId, channelId, channelId, "", "#99aab5");
+			DiscordServer server = new DiscordServer(id, serverName, channelId, channelId, channelId, channelId, channelId, "", "#99aab5", false, channelId);
 			repository.save(server);
 			sendDiscordServerConfigurationCreated();
 		}

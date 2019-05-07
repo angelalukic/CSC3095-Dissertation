@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.discord.DiscordUtils;
-import com.bot.discord.embed.template.ErrorEmbed;
-import com.bot.discord.embed.template.SuccessEmbed;
+import com.bot.discord.beans.embed.template.ErrorEmbed;
+import com.bot.discord.beans.embed.template.SuccessEmbed;
+import com.bot.discord.beans.server.DiscordServer;
 import com.bot.discord.exception.ServerNotFoundException;
-import com.bot.discord.server.DiscordServer;
-import com.bot.twitch.TwitchListener;
 import com.bot.twitch.TwitchServiceProxy;
-import com.bot.twitch.subscription.TwitchDiscordSubscription;
+import com.bot.twitch.beans.TwitchListener;
+import com.bot.twitch.beans.TwitchSubscription;
 import com.github.twitch4j.helix.domain.User;
 
 import feign.FeignException;
@@ -77,14 +77,14 @@ public class TwitchAdminCommand {
 	
 	private void executeAdd(DiscordServer discordServer) {
 		TwitchListener listener = new TwitchListener(user.getId(), user.getDisplayName());
-		TwitchDiscordSubscription subscription = new TwitchDiscordSubscription(listener, discordServer);
+		TwitchSubscription subscription = new TwitchSubscription(listener, discordServer);
 		proxy.createDiscordSubscription(subscription);
 		sendCreatedMessage(user.getDisplayName());
 	}
 	
 	private void executeDelete(DiscordServer discordServer) {
 		TwitchListener listener = new TwitchListener(user.getId(), user.getDisplayName());
-		TwitchDiscordSubscription subscription = new TwitchDiscordSubscription(listener, discordServer);
+		TwitchSubscription subscription = new TwitchSubscription(listener, discordServer);
 		proxy.deleteDiscordSubscription(subscription);
 		sendDeletedMessage(user.getDisplayName());
 	}
@@ -140,9 +140,9 @@ public class TwitchAdminCommand {
 		log.info("[" + server.getName() + "] Sending Twitter Admin Command Help");
 		EmbedBuilder embed = successEmbed.createEmbed(
 				"These commands allow you to add and remove the Twitch channels I listen to."
-				+ " When your channel goes live or hosts another channel, I will notify the channel "
-				+ " specified with the `rf@notification channel <channel>` command. "
-				+ " I will also copy the chatroom for your channel to the channel specified with the "
+				+ " When your channel goes live or hosts another channel, I will notify the channel"
+				+ " specified with the `rf@notification channel <channel>` command."
+				+ " I will also copy the chatroom for your channel to the channel specified with the"
 				+ " `rf@notification twitchlogs <channel>` command."
 				+ " Only users with the 'Administrator' permission can use these commands."
 				+ " Commands are as follows:\n" 

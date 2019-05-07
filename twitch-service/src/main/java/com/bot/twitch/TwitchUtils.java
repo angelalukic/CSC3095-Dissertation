@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bot.discord.server.DiscordServer;
-import com.bot.exception.TwitchGameNotFoundException;
-import com.bot.exception.TwitchStreamNotFoundException;
-import com.bot.exception.TwitchUserNotFoundException;
-import com.bot.twitch.listener.TwitchListener;
-import com.bot.twitch.listener.TwitchListenerRepository;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.twitch.beans.listener.TwitchListener;
+import com.bot.twitch.beans.listener.TwitchListenerRepository;
+import com.bot.twitch.exception.TwitchGameNotFoundException;
+import com.bot.twitch.exception.TwitchStreamNotFoundException;
+import com.bot.twitch.exception.TwitchUserNotFoundException;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.helix.domain.Game;
 import com.github.twitch4j.helix.domain.Stream;
@@ -23,16 +23,15 @@ import com.github.twitch4j.helix.domain.User;
 @Transactional
 public class TwitchUtils {
 	
-	@Autowired private TwitchListenerRepository repository;
+	@Autowired private TwitchListenerRepository twitchRepository;
 	
 	public List<DiscordServer> retrieveDiscordServersForTwitchListener(long id) {
-		List<TwitchListener> listeners = repository.findAll();
+		List<TwitchListener> listeners = twitchRepository.findAll();
 		List<DiscordServer> servers = new ArrayList<>();
 		for(int i = 0; i < listeners.size(); i++) {
 			TwitchListener listener = listeners.get(i);
-			if(listener.getId() == id) {
+			if(listener.getId() == id)
 				servers.addAll(listener.getServers());
-			}
 		}
 		return servers;
 	}

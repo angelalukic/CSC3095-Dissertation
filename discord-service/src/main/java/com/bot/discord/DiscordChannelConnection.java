@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.bot.Configuration;
+import com.bot.discord.beans.server.DiscordServer;
+import com.bot.discord.beans.server.DiscordServerRepository;
 import com.bot.discord.exception.ChannelNotFoundException;
 import com.bot.discord.exception.ServerNotFoundException;
-import com.bot.discord.server.DiscordServer;
-import com.bot.discord.server.DiscordServerRepository;
 
 @Component
 public class DiscordChannelConnection {
@@ -55,6 +55,8 @@ public class DiscordChannelConnection {
 			id = server.getTwitchLogChannel();	
 		else if (channel.equalsIgnoreCase("wordfilter"))
 			id = server.getReportChannel();
+		else if (channel.equalsIgnoreCase("ai"))
+			id = server.getAiChannel();
 		return id;
 	}
 }
