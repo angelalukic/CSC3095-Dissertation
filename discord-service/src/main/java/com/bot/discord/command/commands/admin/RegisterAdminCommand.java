@@ -46,7 +46,7 @@ public class RegisterAdminCommand {
 		long serverId = server.getId();
 		String name = server.getName();
 		long channelId = utils.retrieveWritableChannelId(server);
-		DiscordServer discordServer = new DiscordServer(serverId, name, channelId, channelId, channelId, channelId, channelId, "", "#99aab5");
+		DiscordServer discordServer = new DiscordServer(serverId, name, channelId, channelId, channelId, channelId, channelId, "", "#99aab5", false, channelId);
 		repository.save(discordServer);
 		sendServerRegisteredMessage(channelId);
 	}

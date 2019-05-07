@@ -9,6 +9,7 @@ import org.javacord.api.event.message.MessageCreateEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.bot.ai.AiDAO;
 import com.bot.discord.DiscordUtils;
 import com.bot.discord.beans.embed.template.ErrorEmbed;
 import com.bot.discord.command.AdminCommand;
@@ -26,11 +27,13 @@ public class MessageCreateListener {
 	@Autowired ErrorEmbed errorEmbed;
 	@Autowired DiscordUtils utils;
 	@Autowired FilterDAO filter;
+	@Autowired AiDAO ai;
 	private MessageCreateEvent event;
 
 	public void execute(MessageCreateEvent event) {
-		this.event= event;
+		this.event = event;
 		if(!event.getMessageAuthor().isYourself()) {
+			ai.sendMessageToAi(event);
 			if (event.getMessageContent().startsWith("rf!"))
 			    command.execute(event);
 			else if (event.getMessageContent().startsWith("rf@")) {
@@ -41,9 +44,9 @@ public class MessageCreateListener {
 			}
 			if(!event.getMessage().getAuthor().isServerAdmin() || !event.getMessageContent().startsWith("rf@filter"))
 				filter.assessMessage(event);
-		}
+		}	
 		else
-			addReactionToEmbed(event);
+			addReactionToEmbed();
 	}
 	
 	private void sendInvalidPermissionsErrorMessage() {
@@ -51,7 +54,7 @@ public class MessageCreateListener {
 		utils.sendMessage(embed, event);
 	}
 	
-	private void addReactionToEmbed(MessageCreateEvent event) {
+	private void addReactionToEmbed() {
 		List<Embed> embeds = event.getMessage().getEmbeds();
 		if(!embeds.isEmpty()) {
 			Embed embed = embeds.get(0);

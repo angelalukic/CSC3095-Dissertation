@@ -20,11 +20,11 @@ public class ChannelNotificationOnSubscription {
 	    String message = "";
 	    // New Subscription
 	    if (event.getMonths() <= 1) 
-	        message = String.format("%s has just subscribed!", event.getUser().getName());
+	        message = String.format("[Automated Message] @%s has just subscribed! Thank you so much!", event.getUser().getName());
 	    // Recurring Subscription
 	    if (event.getMonths() > 1) {
 	        message = String.format(
-	                "%s has just resubscribed! They have been subscribed for %s months!",
+	                "[Automated Message] @%s has just resubscribed! They have been subscribed for %s months! Thank you so much!",
 	                event.getUser().getName(), event.getMonths()
 	        );
 	    }  
