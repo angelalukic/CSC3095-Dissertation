@@ -14,6 +14,7 @@ import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.helix.domain.User;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -32,8 +33,15 @@ public class WriteChannelChatToDiscord {
 		TwitchChatMessage message = getTwitchChatMessage(event, client);
 		long id = message.getChannel().getId();
 		List<DiscordServer> servers = utils.retrieveDiscordServersForTwitchListener(id);
-		if(!servers.isEmpty())
-			sendToDiscordServers(message, servers);
+		if(!servers.isEmpty()) {
+			try {
+				sendToDiscordServers(message, servers);
+			}
+			catch(FeignException e) {
+				log.error("Connection to Discord Service Refused.");
+			}
+		}
+			
 	}
 	
 	private TwitchChatMessage getTwitchChatMessage(ChannelMessageEvent event, TwitchClient client) {

@@ -27,7 +27,7 @@ public class DiscordServer {
 	}
 
 	public DiscordServer(long id, String name, long notificationChannel, long adminChannel, long reportChannel, long twitchLogChannel, 
-			long serverJoinChannel, String serverJoinMessage, String roleColour) {
+			long serverJoinChannel, String serverJoinMessage, String roleColour, boolean aiEnabled, long aiChannel) {
 		this.id = id;
 		this.name = name;
 		this.notificationChannel = notificationChannel;
@@ -37,5 +37,7 @@ public class DiscordServer {
 		this.serverJoinChannel = serverJoinChannel;
 		this.serverJoinMessage = serverJoinMessage;
 		this.roleColour = roleColour;
+		this.aiEnabled = aiEnabled;
+		this.aiChannel = aiChannel;
 	}
 }

@@ -34,7 +34,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		
 		String token = configuration.getToken();
 		DiscordApi api = new DiscordApiBuilder().setToken(token).login().join();
-		
+
 		// ChatBot joins a server
 		api.addServerJoinListener(event -> {
 			log.info("[" + event.getServer().getName() + "] ServerJoinEvent");
@@ -49,7 +49,7 @@ public class ApplicationStartup implements ApplicationListener<ApplicationReadyE
 		
 		// Message is sent in the server the chatbot is in
 		api.addMessageCreateListener(event -> {
-			log.debug("MessageCreateEvent");
+			log.info("MessageCreateEvent");
             messageCreateListener.execute(event);
         });
 		

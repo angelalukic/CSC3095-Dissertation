@@ -18,7 +18,7 @@ public class ChannelNotificationOnDonation {
 	private void onDonation(DonationEvent event) {
 		log.info("[" + event.getChannel().getName() + "] DonationEvent Detected");
 	    String message = String.format(
-	            "%s just donated %s using %s!",
+	            "[Automated Message] @%s just donated %s using %s! Thank you so much!",
 	            event.getUser().getName(),
 	            event.getAmount(),
 	            event.getSource()

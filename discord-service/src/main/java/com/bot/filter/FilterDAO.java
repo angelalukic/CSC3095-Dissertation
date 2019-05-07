@@ -18,6 +18,7 @@ import com.bot.filter.beans.JudgementLevel;
 import com.bot.filter.beans.MessageJudgement;
 import com.bot.twitch.beans.events.TwitchChatMessage;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,8 +34,8 @@ public class FilterDAO {
 	public void assessMessage(MessageCreateEvent event) {
 		DiscordMessage message = new DiscordMessage(event.getMessageId(), event.getMessage().toString());
 		Server server = utils.getServerFromServerOptional(event.getServer(), event.getMessageId());
-		MessageJudgement judgement = proxy.checkMessage(message, server.getId());
 		try {
+			MessageJudgement judgement = proxy.checkMessage(message, server.getId());
 			if(judgement.getJudgement() == JudgementLevel.RED)
 				sendViolationMessages(server.getId(), event, judgement);
 			else if(judgement.getJudgement() == JudgementLevel.YELLOW)
@@ -43,6 +44,9 @@ public class FilterDAO {
 		catch (InterruptedException | ExecutionException e) {
 			log.error("Exception thrown when trying to send Violation Messages");
 			 Thread.currentThread().interrupt();
+		}
+		catch(FeignException e) {
+			log.error("Connection to filter-service refused.");
 		}
 	}
 	

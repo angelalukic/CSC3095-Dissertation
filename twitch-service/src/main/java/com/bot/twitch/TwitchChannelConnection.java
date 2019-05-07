@@ -1,4 +1,4 @@
-package com.bot.twitch;
+	package com.bot.twitch;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -40,8 +40,8 @@ public class TwitchChannelConnection {
 				.withClientId(configuration.getId())
 				.withClientSecret(configuration.getSecret())
 				.withEnableHelix(true)
-				.withChatAccount(credential)
 				.withEnableChat(true)
+				.withChatAccount(credential)
 				.withTimeout(120*1000)
 				.build();
 	}

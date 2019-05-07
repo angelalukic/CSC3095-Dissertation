@@ -18,7 +18,7 @@ public class MessageController {
 	
 	@PostMapping("/filter/discord/{channel}")
 	public MessageJudgement checkDiscordMessage(@RequestBody DiscordMessage message, @PathVariable long channel) {
-		log.debug("POST localhost:8083/filter/discord/{channel}");
+		log.info("POST localhost:8083/filter/discord/{channel}");
 		return service.assessMessage(message, channel);
 	}
 }
