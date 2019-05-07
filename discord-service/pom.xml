@@ -26,6 +26,11 @@
 		</dependency>
 		
 		<dependency>
+  			<groupId>io.micrometer</groupId>
+  			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -58,6 +63,13 @@
 			<version>1.18.4</version>
 			<scope>provided</scope>
 		</dependency>
+		
+		<dependency>
+    		<groupId>com.github.twitch4j</groupId>
+    		<artifactId>twitch4j</artifactId>
+    		<version>1.0.0-alpha.11</version>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -76,6 +88,29 @@
            <artifactId>twitter4j-core</artifactId>
            <version>[4.0,)</version>
        </dependency>
+       
+       	<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+       
+       	<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<dependency>
+    		<groupId>com.github.twitch4j</groupId>
+    		<artifactId>twitch4j</artifactId>
+    		<version>1.0.0-alpha.8</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.beryx</groupId>
+		    <artifactId>awt-color-factory</artifactId>
+		    <version>1.0.0</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -100,6 +135,14 @@
 	</build>
 
 	<repositories>
+	    <repository>
+    	 	<id>jcenter</id>
+      		<url>https://jcenter.bintray.com/</url>
+    	</repository>
+    	<repository>
+	  		<id>jcenter-snapshot</id>
+	  		<url>https://oss.jfrog.org/artifactory/libs-release/</url>
+		</repository>
 		<repository>
 			<id>spring-milestones</id>
 			<name>Spring Milestones</name>

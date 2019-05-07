@@ -1,0 +1,10 @@
+### STS ###
+.mvn
+.settings
+.classpath
+.project
+/src/test/
+/src/main/resources/
+/target/
+mvnw
+mvnw.cmd
